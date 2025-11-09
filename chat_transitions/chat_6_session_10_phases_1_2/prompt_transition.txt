@@ -1,0 +1,187 @@
+# 🚀 Prompt de Transition : Chat 6 → Chat 7 (Desktop-Mate)
+
+Salut ! 👋
+
+Je continue le développement de **Desktop-Mate**, mon projet d'avatar VRM interactif sur le bureau Windows. Je viens de terminer le **Chat 6** qui a complété les **Phases 1-2 de la Session 10 (IA Conversationnelle)**.
+
+## 📍 Contexte Session 10
+
+**Objectif** : Implémenter un système d'IA conversationnelle complet pour l'avatar "Kira" avec :
+- 🖥️ Chat local (GUI Desktop-Mate)
+- 🤖 Bot Discord avec commandes
+- 🧠 LLM local (Zephyr-7B, 6.8 GB, Q5_K_M)
+- 💾 Mémoire conversationnelle SQLite
+- 🎭 Analyse émotionnelle pour expressions faciales
+- 🔒 2FA TOTP pour actions critiques
+
+**Plan complet** : 14 phases détaillées dans `docs/sessions/session_10_ai_chat/PLAN_SESSION_10.md`
+
+---
+
+## ✅ Ce qui a été fait (Chat 6 - Phases 1-2)
+
+### Phase 1 : Architecture de Base (30 min)
+- ✅ Dossiers créés : `src/ai/`, `src/discord_bot/`, `src/auth/`, `models/`
+- ✅ Fichiers `__init__.py` pour tous les modules
+- ✅ Modèle LLM copié : `models/zephyr-7b-beta.Q5_K_M.gguf` (6.8 GB)
+- ✅ Configuration : `.env`, `.env.example`, `.gitignore`, `requirements.txt`
+- ✅ Documentation : `README.md`, `PLAN_SESSION_10.md`, `INDEX.md` mis à jour
+
+### Phase 2 : Base de Données & Mémoire (1h)
+- ✅ `src/ai/memory.py` (430 lignes) - Système conversationnel complet
+- ✅ SQLite `data/chat_history.db` avec 4 indexes optimisés
+- ✅ Tests `tests/test_memory.py` - **11/11 tests passent** ✅
+- ✅ Singleton pattern avec `get_memory()`
+- ✅ Context manager thread-safe
+
+**Progression** : 2/14 phases (14%)
+
+---
+
+## 🎯 Objectif Chat 7 (Phases 3-5)
+
+### Phase 3 : Configuration IA (1h)
+- Créer `src/ai/config.py` avec classe `AIConfig`
+- Définir `GPU_PROFILES` (performance, balanced, cpu_fallback)
+- Étendre `data/config.json` avec section IA
+- Tests : `tests/test_config.py`
+
+### Phase 4 : Model Manager (2-3h)
+- Créer `src/ai/model_manager.py`
+- Charger LLM avec llama-cpp-python
+- Détecter GPU avec pynvml
+- Appliquer profils GPU adaptatifs
+- Génération texte avec contexte
+- Tests : `tests/test_model_manager.py`
+
+### Phase 5 : Chat Engine (2-3h)
+- Créer `src/ai/chat_engine.py`
+- Moteur conversationnel unifié
+- Orchestration mémoire + model manager
+- Construction prompts avec system_prompt
+- Détection émotionnelle basique
+- Tests : `tests/test_chat_engine.py`
+
+**Phase 6 optionnelle** : Emotion Analyzer (1-2h) si on a le temps
+
+**Durée estimée Chat 7** : 5-9h
+
+---
+
+## 📚 Documents à Lire
+
+**OBLIGATOIRES** :
+- `docs/chat_transitions/chat_6_session_10_phases_1_2/CONTEXT_FOR_NEXT_CHAT.md` ← **LE PLUS IMPORTANT**
+- `docs/chat_transitions/chat_6_session_10_phases_1_2/CURRENT_STATE.md` ← État technique complet
+- `docs/chat_transitions/chat_6_session_10_phases_1_2/CHAT_SUMMARY.md` ← Résumé Chat 6
+- `docs/sessions/session_10_ai_chat/PLAN_SESSION_10.md` ← Plan 14 phases détaillé
+
+**OPTIONNELS** :
+- `.github/instructions/copilot-instructions.instructions.md` ← Règles projet
+- `src/ai/memory.py` ← Exemple code qualité (référence)
+
+---
+
+## 🔧 Informations Techniques Clés
+
+**Modèle LLM** :
+- Fichier : `models/zephyr-7b-beta.Q5_K_M.gguf` (6.8 GB)
+- Type : Mistral 7B fine-tuned, Q5_K_M quantization
+- Performance : ~20-30 tokens/sec sur RTX 4050
+
+**Base de données** :
+- SQLite : `data/chat_history.db`
+- Table : `chat_history` (7 colonnes, 4 indexes)
+- Status : ✅ Opérationnelle, testée (11/11 tests)
+
+**GPU** :
+- Modèle : NVIDIA RTX 4050 (6 GB VRAM)
+- Profil recommandé : `balanced` (35 layers GPU, 2048 ctx)
+
+**Variables d'environnement** :
+- `.env` configuré avec `DISCORD_TOKEN`
+
+**Tests actuels** :
+```powershell
+pytest tests/test_memory.py -v
+# 11 passed in 0.70s ✅
+```
+
+---
+
+## 🚀 Plan d'Action Chat 7
+
+**Ordre recommandé** :
+1. Lire `CONTEXT_FOR_NEXT_CHAT.md` (contient TOUT)
+2. Commencer Phase 3 : Configuration IA
+3. Enchaîner Phase 4 : Model Manager
+4. Terminer avec Phase 5 : Chat Engine
+5. *(Optionnel)* Phase 6 : Emotion Analyzer
+
+**Après chaque phase** :
+- ✅ Exécuter les tests
+- ✅ Mettre à jour documentation (`docs/INDEX.md`, `docs/sessions/session_10_ai_chat/README.md`)
+- ✅ Afficher récapitulatif
+
+---
+
+## 🎯 Résultat Attendu Fin Chat 7
+
+Desktop-Mate devrait pouvoir :
+
+✅ Charger le modèle LLM (Zephyr-7B)  
+✅ Détecter et utiliser le GPU NVIDIA  
+✅ Générer des réponses conversationnelles  
+✅ Maintenir un contexte de conversation  
+✅ Sauvegarder toutes les conversations  
+✅ Détecter des émotions basiques  
+✅ Être testé avec 25-30 tests unitaires  
+
+**Prêt pour Chat 8** : Discord Bot + GUI Chat
+
+---
+
+## 💡 Instructions Spécifiques
+
+**Pour toi (IA)** :
+- 🇫🇷 Toujours communiquer en français
+- 📖 Expliquer clairement les concepts techniques (je ne suis pas expert)
+- ⚠️ Demander confirmation avant changements majeurs
+- 📚 **TOUJOURS** mettre à jour la documentation après chaque phase
+- 🧪 Tester au fur et à mesure (ne pas attendre la fin)
+- ✅ Afficher récapitulatif avec template après chaque phase
+
+**Système de documentation** :
+- Suivre `.github/instructions/copilot-instructions.instructions.md`
+- Mettre à jour `docs/INDEX.md`, `README.md`, `docs/sessions/session_10_ai_chat/README.md`
+- Règle d'or : "L'utilisateur ne devrait JAMAIS avoir à demander si la documentation est à jour"
+
+---
+
+## 🔑 Points d'Attention Chat 7
+
+### 1. Chargement Modèle (Phase 4)
+⚠️ Peut être lent (20-30s pour 6.8 GB)
+→ Logger progression, afficher message utilisateur
+
+### 2. Gestion Mémoire GPU (Phase 4)
+⚠️ Risque OOM si profil trop élevé
+→ Démarrer avec `balanced`, fallback automatique vers `cpu_fallback`
+
+### 3. Contexte Conversations (Phase 5)
+⚠️ Limite 2048 tokens (profil balanced)
+→ Limiter historique à 10 messages, warning si contexte plein
+
+### 4. Tests Longs (Phase 4-5)
+⚠️ Tests LLM = 5-10s chacun
+→ `@pytest.mark.slow` pour tests LLM, permettre `pytest -m "not slow"`
+
+---
+
+## 🎊 Message Final
+
+Chat 6 a posé des **bases solides** ! L'architecture est propre, la mémoire fonctionne parfaitement, et le modèle LLM est prêt.
+
+**Chat 7 va donner vie à Kira** en lui permettant de penser, converser et ressentir.
+
+**Prêt à commencer ? C'est parti ! 🚀🎭**

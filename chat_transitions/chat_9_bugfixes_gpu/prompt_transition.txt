@@ -1,0 +1,174 @@
+# 🚀 Prompt de Transition - Chat 9 → Chat 10 (Session 11)
+
+**Copiez ce prompt dans le nouveau chat (Chat 10) pour continuité parfaite**
+
+---
+
+Bonjour ! Je reprends le développement de **Desktop-Mate** après le **Chat 9 (Bugfixes & Optimisations GPU)**.
+
+## 📋 Contexte du Projet
+
+**Desktop-Mate** est une application hybride **Unity + Python** qui affiche un avatar VRM interactif sur le bureau Windows avec IA conversationnelle (Kira utilisant LLM Zephyr-7B).
+
+**Version actuelle** : v0.12.0-alpha  
+**Date** : 27 octobre 2025
+
+## ✅ Chat 9 - Accomplissements
+
+Le Chat 9 a résolu **6 bugs critiques** et ajouté **5 features UX** :
+
+### Bugs Résolus
+1. ✅ **Chat input bloqué** → Signal Qt `chat_input_ready` (thread-safe)
+2. ✅ **Émotions Discord non sync GUI** → Signal `emotion_detected` + shared UnityBridge
+3. ✅ **GUI sliders non mis à jour** → Signal `expression_changed`
+4. ✅ **LLM sur RAM au lieu de GPU** → Profil "performance" + CUDA recompilé
+5. ✅ **Compteur messages DB total** → Compteur session local
+6. ✅ **Oubli activation venv** → Documentation système critique
+
+### Features Ajoutées
+1. ✅ Indicateur "✍️ Kira écrit..." pendant génération
+2. ✅ Compteur messages session actuelle (pas DB total)
+3. ✅ Menu Options restructuré (sous-menus IA/Discord)
+4. ✅ Compteur émotions supprimé (simplification UX)
+5. ✅ Documentation venv critique (.github/instructions/)
+
+### Métriques Performance
+- ⚡ **Vitesse LLM** : 2-5 tok/s → **25-35 tok/s** (5-7x plus rapide)
+- 💾 **VRAM** : 0 GB (RAM) → **5.4 GB** (GPU activé)
+- 🎮 **GPU layers** : 35/43 → **43/43** (100%)
+- 📏 **Context** : 2048 → **4096** tokens (doublé)
+
+### Fichiers Modifiés
+- `src/gui/app.py` (~100 lignes)
+- `src/discord_bot/bot.py` (~15 lignes)
+- `src/ai/config.py` (1 ligne)
+- `data/config.json` (1 ligne)
+- `.github/instructions/copilot-instructions.instructions.md` (~10 lignes)
+
+## 🎯 Session 11 - Performance Optimizations
+
+Je veux maintenant démarrer la **Session 11** pour optimiser les performances sur **4 axes** :
+
+### Phase 1 : Memory Profiling (1-2h)
+- Installer `memory-profiler`, `psutil`
+- Créer `scripts/profile_memory.py`
+- Mesurer baseline RAM/VRAM (démarrage, après LLM, après 10/50/100 messages)
+- Identifier fuites mémoire potentielles
+- Documenter : `docs/sessions/session_11_performance/MEMORY_PROFILING.md`
+
+### Phase 2 : LLM Cache Optimization (1-2h)
+- Analyser paramètres `n_ctx`, `n_batch`, `use_mlock`
+- Tester préchargement cache (warming)
+- Benchmarker latences (cold vs warm cache)
+- Optimiser première génération
+- Documenter : `docs/sessions/session_11_performance/LLM_CACHE_OPTIMIZATION.md`
+
+### Phase 3 : Unity IPC Overhead (1-2h)
+- Mesurer latence IPC actuelle (`set_expression()`, `load_model()`)
+- Identifier goulots : JSON sérialisation, TCP overhead, Queue Unity
+- Tester : batching commandes, compression, Protocol Buffers
+- Implémenter optimisations validées
+- Documenter : `docs/sessions/session_11_performance/IPC_OPTIMIZATION.md`
+
+### Phase 4 : CPU Optimization (1h)
+- Auto-détecter CPU (cœurs physiques/logiques)
+- Benchmarker `n_threads` (4, 6, 8, 10)
+- Implémenter auto-détection optimale
+- Documenter : `docs/sessions/session_11_performance/CPU_OPTIMIZATION.md`
+
+### Phase 5 : GPU Profiling & Tuning (2h)
+- Monitoring GPU continu (`scripts/monitor_gpu.py`)
+- Mesurer : GPU %, VRAM, temperature, power
+- Benchmarker 3 profils (performance, balanced, cpu_fallback)
+- Créer profil dynamique (ajuste `n_gpu_layers` auto)
+- Documenter : `docs/sessions/session_11_performance/GPU_PROFILING.md`
+
+### Phase 6 : Tests & Documentation (1h)
+- Tests unitaires (270+ doivent passer)
+- Benchmarks comparatifs avant/après
+- Documentation Session 11 complète
+- Scripts profiling archivés dans `docs/sessions/session_11_performance/scripts/`
+
+## 📊 Baseline à Mesurer
+
+**LLM** : 25-35 tok/s, latence première génération ?, latence suivante ?  
+**Mémoire** : RAM démarrage ?, RAM après LLM ?, VRAM 5.4 GB  
+**CPU** : 6 threads fixe, usage % pendant génération ?  
+**GPU** : 43/43 layers, usage %, temperature ?, power ?  
+**IPC** : Latence `set_expression()` ?, `load_model()` ?, throughput ?
+
+## 🛠️ Outils à Installer
+
+```powershell
+# Activer venv TOUJOURS
+venv\Scripts\Activate.ps1
+
+# Installer outils profiling
+pip install memory-profiler psutil pytest-benchmark
+```
+
+## 📁 Structure Attendue
+
+```
+docs/sessions/session_11_performance/
+├── README.md (vue d'ensemble)
+├── MEMORY_PROFILING.md
+├── LLM_CACHE_OPTIMIZATION.md
+├── IPC_OPTIMIZATION.md
+├── CPU_OPTIMIZATION.md
+├── GPU_PROFILING.md
+└── scripts/
+    ├── profile_memory.py
+    ├── monitor_gpu.py
+    ├── benchmark_llm.py
+    └── benchmark_ipc.py
+```
+
+## ⚠️ Points d'Attention
+
+1. **Ne pas régresser** : 270 tests doivent passer, vitesse ≥ 25-35 tok/s
+2. **Mesures scientifiques** : Baseline AVANT, comparaison APRÈS, moyenne 5-10 runs
+3. **Documentation systématique** : Chaque optimisation documentée avec benchmarks
+4. **Règle venv** : TOUJOURS activer `venv\Scripts\Activate.ps1` AVANT commandes Python
+
+## 📖 Documentation Disponible
+
+Consulter ces fichiers pour contexte complet :
+- `docs/chat_transitions/chat_9_bugfixes_gpu/README.md` - Détails Chat 9
+- `docs/chat_transitions/chat_9_bugfixes_gpu/CURRENT_STATE.md` - État actuel projet
+- `docs/chat_transitions/chat_9_bugfixes_gpu/CONTEXT_FOR_NEXT_CHAT.md` - Plan détaillé Session 11
+- `README.md` - Documentation principale projet
+- `docs/INDEX.md` - Index complet documentation
+- `.github/instructions/copilot-instructions.instructions.md` - Instructions système
+
+## 🎯 Objectifs Session 11
+
+**Minimaux** :
+- ✅ Baseline métriques documentée
+- ✅ CPU `n_threads` auto-détecté
+- ✅ GPU profiling complet
+
+**Optimaux** :
+- ✅ RAM usage -10-20%
+- ✅ Latence première génération -20-30%
+- ✅ IPC latence -20-30%
+
+**Stretch** :
+- ✅ Profil GPU dynamique
+- ✅ Suite profiling réutilisable
+- ✅ Guide performance utilisateur
+
+## 🚀 Prochaine Étape Immédiate
+
+1. Créer dossier `docs/sessions/session_11_performance/`
+2. Installer outils profiling
+3. Créer `scripts/profile_memory.py`
+4. Mesurer baseline RAM/VRAM
+
+**Durée estimée Session 11** : 8-10 heures (1-2 jours)
+
+---
+
+**Peux-tu m'aider à démarrer la Phase 1 (Memory Profiling) ?**
+
+Merci de confirmer que tu as bien compris le contexte et nous pouvons commencer ! 🚀

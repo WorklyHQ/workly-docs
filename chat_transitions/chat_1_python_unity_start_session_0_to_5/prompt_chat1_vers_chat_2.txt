@@ -1,0 +1,33 @@
+Projet Desktop-Mate - Assistant virtuel VRM
+
+⚠️ AVANT DE COMMENCER : Lis ces fichiers obligatoires pour la documentation :
+1. docs/DOCUMENTATION_CHECKLIST.md (checklist systématique)
+2. docs/AI_DOCUMENTATION_PROMPT.md (instructions IA)
+
+RÈGLE ABSOLUE : Toujours mettre à jour INDEX.md, README.md, et CURRENT_STATE.md !
+
+---
+
+CONTEXTE :
+- Application hybride Python (GUI Qt) + Unity (rendu 3D)
+- Communication via TCP Socket JSON (port 5555)
+- Modèle VRM affiché et fonctionnel
+- 5 sessions complétées (setup, Unity, UniVRM, IPC, VRM loading)
+- Documentation complète dans docs/
+
+ÉTAT ACTUEL :
+- Python 3.10.9 + PySide6
+- Unity 2022.3 LTS + UniVRM
+- Avatar "Mura Mura" s'affiche dans Unity
+- Thread-safety résolu (Queue + Update pattern)
+- 8 tests unitaires passants
+
+OBJECTIF SESSION 6 :
+Implémenter contrôle blendshapes VRM pour expressions faciales (happy, sad, angry, etc.)
+
+FICHIERS À LIRE :
+1. docs/chat_1_python_unity_start_session_0_to_5/CURRENT_STATE.md (état complet)
+2. README.md (vue d'ensemble)
+3. docs/sessions/session_5_vrm_loading/SESSION_VRM_LOADING_SUCCESS.md
+
+Peux-tu m'aider à démarrer la Session 6 ?

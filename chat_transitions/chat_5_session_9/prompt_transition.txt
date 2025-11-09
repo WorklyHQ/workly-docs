@@ -1,0 +1,111 @@
+Tu es l'IA qui va continuer le développement de Desktop-Mate dans un nouveau chat (Chat 6).
+
+# 📋 CONTEXTE PROJET
+
+**Desktop-Mate** est une application hybride Python + Unity qui affiche un avatar VRM interactif sur le bureau Windows.
+
+**Objectif final :** Assistant virtuel personnalisé avec IA conversationnelle.
+
+# ✅ SESSIONS COMPLÉTÉES (0-9)
+
+- Session 0 : Git Configuration
+- Session 1 : Setup Python (PySide6, architecture)
+- Session 2 : Unity 2022.3 LTS + URP
+- Session 3 : UniVRM 0.127.3+
+- Session 4 : IPC Python ↔ Unity (Socket TCP port 5555)
+- Session 5 : Chargement VRM
+- Session 6 : Expressions faciales (5 blendshapes)
+- Session 7 : Animations & Transitions (Lerp)
+- Session 8 : Clignement automatique (SmoothStep)
+- Session 9 : Mouvements de tête + Réorganisation UI (3 onglets)
+
+# 🎯 ÉTAT ACTUEL
+
+**Interface Python (3 onglets) :**
+- Connexion → Boutons connexion Unity + load VRM
+- Expressions → 5 sliders expressions faciales + reset
+- Animations → Auto-blink (checkbox) + Head movements (checkbox + 2 sliders freq/amp) + reset
+- Options → Vitesse transition (slider) + reset
+
+**Unity C# :**
+- PythonBridge.cs (serveur IPC, 7 commandes)
+- VRMLoader.cs (load/unload VRM)
+- VRMBlendshapeController.cs (expressions + Lerp)
+- VRMAutoBlinkController.cs (clignement SmoothStep)
+- VRMHeadMovementController.cs (mouvements tête Coroutine + SmoothStep)
+
+**Tout fonctionne :** IPC stable, VRM chargeable, expressions contrôlables, auto-blink opérationnel, head movements opérationnels.
+
+# 📚 DOCUMENTATION
+
+**Sessions 0-9 :** Documentation complète dans `docs/sessions/session_N/`
+- README.md (vue d'ensemble)
+- Guides techniques
+- Scripts de référence dans `scripts/`
+
+**Fichiers clés :**
+- `docs/INDEX.md` → ✅ À JOUR (arborescence complète)
+- `docs/chat_transitions/chat_5_session_9/CURRENT_STATE.md` → État technique détaillé
+- `docs/chat_transitions/chat_5_session_9/CONTEXT_FOR_NEXT_CHAT.md` → Contexte complet
+
+**À FAIRE (optionnel, priorité basse) :**
+- Mettre à jour `README.md` (racine) avec nouvelles features Session 9
+- Mettre à jour `docs/README.md` avec Session 9
+
+# 🚨 RÈGLES CRITIQUES
+
+**1. DOCUMENTATION OBLIGATOIRE**
+- **JAMAIS** dire "Terminé" sans mettre à jour INDEX.md, README.md, CURRENT_STATE.md
+- Lire `.github/instructions/copilot-instructions.instructions.md` pour les règles complètes
+- Workflow : Implémenter → Tester → **Documenter** → Commit
+
+**2. ORGANISATION FICHIERS**
+- Toute documentation dans `docs/`
+- Sessions dans `docs/sessions/session_N/`
+- **OBLIGATOIRE :** Créer `docs/sessions/session_N/scripts/` et copier TOUS les scripts modifiés
+
+**3. COMMUNICATION**
+- Toujours en français
+- Expliquer clairement (utilisateur débutant Unity/C#)
+- Demander confirmation avant changements majeurs
+
+# 🔧 PROBLÈMES CONNUS
+
+1. **VRMAutoBlinkController (Unity)** doit être **désactivé** dans l'Inspector (sinon conflit avec notre système)
+2. **Threading Unity** : Toujours utiliser commandQueue + Update() pour exécuter commandes IPC
+3. **Déconnexion Unity** : Bien gérer reset état (vrm_loaded, texte boutons)
+
+# 🚀 SESSIONS FUTURES POSSIBLES
+
+**Session 10 : Audio & Lip-sync** 🎤
+- Capture audio mic
+- Analyse amplitude
+- Lip-sync VRM (blendshapes A,I,U,E,O)
+
+**Session 11 : IA Conversationnelle** 🤖
+- ChatGPT/Claude API
+- Chatbot avec mémoire
+- Réactions émotionnelles
+
+**Session 12 : Interactions Souris** 🖱️
+- Avatar suit curseur
+- Réaction clics
+- Drag & drop
+
+# 📖 POUR BIEN DÉMARRER
+
+1. Lire `docs/INDEX.md` → Vue d'ensemble arborescence
+2. Lire `docs/chat_transitions/chat_5_session_9/CURRENT_STATE.md` → État technique
+3. Lire `docs/chat_transitions/chat_5_session_9/CONTEXT_FOR_NEXT_CHAT.md` → Contexte détaillé
+4. Demander à l'utilisateur ce qu'il veut faire (nouvelle session ou autre)
+
+# 💡 CONSEILS
+
+- **Planifier** avant de coder (architecture, fichiers à modifier)
+- **Tester** au fur et à mesure (pas tout en une fois)
+- **Documenter** immédiatement (ne pas oublier !)
+- **Expliquer** clairement (utilisateur ne connaît pas Unity/C#)
+
+---
+
+**Bonne continuation sur Desktop-Mate ! 🚀**

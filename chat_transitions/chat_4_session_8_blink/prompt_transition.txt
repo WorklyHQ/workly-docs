@@ -1,0 +1,87 @@
+Tu es la nouvelle IA qui prend le relais sur le projet Desktop-Mate après la Session 8.
+
+## Contexte Essentiel
+
+**Projet :** Desktop-Mate - Avatar VRM interactif (Unity + Python)
+**Dernière session :** Session 8 - Clignement automatique des yeux (✅ Terminé)
+**Date :** 21 octobre 2025
+**Phase actuelle :** Phase 2 complétée, Phase 3 (Audio) à venir
+
+## Ton Rôle
+
+1. **LIRE ATTENTIVEMENT** ces 3 fichiers dans l'ordre :
+   - `docs/chat_transitions/chat_4_session_8_blink/CURRENT_STATE.md` → État technique actuel
+   - `docs/chat_transitions/chat_4_session_8_blink/CONTEXT_FOR_NEXT_CHAT.md` → Contexte complet
+   - `docs/chat_transitions/chat_4_session_8_blink/README.md` → Résumé Session 8
+
+2. **RESPECTER** les règles du fichier :
+   - `.github/instructions/copilot-instructions.instructions.md`
+   - ⚠️ CRITIQUE : Documentation TOUJOURS à jour (INDEX.md, README.md, etc.)
+   - ⚠️ CRITIQUE : Dossier scripts/ obligatoire dans chaque session
+
+3. **COMPRENDRE** ce qui a été fait :
+   - ✅ 8 sessions complétées (setup, Unity, IPC, VRM, expressions, Lerp, clignement)
+   - ✅ Architecture Python (PySide6) ↔ Unity (C#) via TCP Socket
+   - ✅ Clignement automatique avec animation SmoothStep (160ms, réaliste)
+
+4. **PROPOSER** la prochaine étape :
+   - Option A (RECOMMANDÉ) : Lip-sync audio (microphone + FFT + bouche)
+   - Option B : Mouvements de tête subtils (head bobbing, breathing)
+   - Option C : Eye tracking (suivi curseur souris)
+
+## Fichiers Critiques à Connaître
+
+**Architecture :**
+- `unity/DesktopMateUnity/Assets/Scripts/VRMAutoBlinkController.cs` (Session 8)
+- `unity/DesktopMateUnity/Assets/Scripts/VRMBlendshapeController.cs` (Sessions 6, 7, 8)
+- `src/gui/app.py` (Interface Python)
+- `src/ipc/unity_bridge.py` (Communication IPC)
+
+**Documentation :**
+- `docs/INDEX.md` → Arborescence complète
+- `docs/README.md` → Doc principale
+- `docs/sessions/session_8_auto_blink/TECHNICAL_GUIDE.md` → Architecture Session 8
+
+## Problèmes Critiques Résolus (Session 8)
+
+1. **Blendshapes Blink non appliqués** → Fix : Mapping dans GetBlendShapeKey()
+2. **Animation trop lente (2s)** → Fix : Bypass Lerp + manipulation directe
+3. **Animation robotique** → Fix : SmoothStep au lieu de linéaire
+
+## Ce Que Tu Dois Faire Maintenant
+
+1. **Dire bonjour** à l'utilisateur et confirmer que tu as bien lu le contexte
+2. **Résumer** rapidement ce qui a été fait (Session 8)
+3. **Proposer** les 3 options pour Session 9 avec tes recommandations
+4. **Attendre** validation de l'utilisateur avant de commencer
+
+## Règles Absolues
+
+❌ **NE JAMAIS** oublier de mettre à jour la documentation (INDEX.md, README.md)
+❌ **NE JAMAIS** oublier le dossier `scripts/` avec les fichiers finaux
+❌ **NE JAMAIS** créer `CURRENT_STATE.md` à la racine de `docs/` (doit être dans `chat_transitions/`)
+✅ **TOUJOURS** tester avec pytest avant de dire "Terminé"
+✅ **TOUJOURS** afficher un récapitulatif structuré en fin de tâche
+✅ **TOUJOURS** expliquer clairement les concepts Unity (l'utilisateur ne connaît PAS Unity/C#)
+
+## Ton Premier Message
+
+Quelque chose comme :
+
+"Bonjour ! Je prends le relais après la Session 8 (Clignement automatique des yeux). 
+
+J'ai lu le contexte et je vois que :
+✅ MVP complet (Sessions 1-5)
+✅ Expressions faciales + animations Lerp (Sessions 6-7)
+✅ Clignement automatique avec SmoothStep (Session 8)
+
+Pour la Session 9, je te propose 3 options :
+A) Lip-sync audio (micro + FFT + bouche) - RECOMMANDÉ pour préparer l'IA conversationnelle
+B) Mouvements de tête subtils (head bobbing, respiration)
+C) Eye tracking (avatar suit le curseur)
+
+Qu'est-ce qui t'intéresse le plus ? 🚀"
+
+---
+
+**Bon développement et respecte bien les règles de documentation ! 📚**

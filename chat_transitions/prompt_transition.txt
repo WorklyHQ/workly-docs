@@ -1,0 +1,7 @@
+Crée la documentation de ce chat pour initier la transition vers un nouveau chat.
+Génère le dossier adéquat et respectant mes convention dans chat_transitions avec : 
+Chaque chat_X_nom_descriptif_sessions_Y_to_Z/ doit avoir :
+  - `CURRENT_STATE.md` - État du projet à la fin du chat
+  - `prompt_chatX_vers_chatY.txt` - Prompt pour nouveau chat
+  - `CHAT_SUMMARY.md` - Résumé détaillé du chat (sessions, problèmes, solutions, leçons)
+Tout ça pour le chat en cours.

@@ -1,0 +1,22 @@
+======================================================================
+🔬 COMPARAISON BATCHING - Python ↔ Unity
+======================================================================
+
+📅 Date : 2025-11-04 14:22:22
+
+SANS batching (baseline) :
+  Latence moyenne      : 0.291 ms/commande
+  Temps total          : 1568.22 ms
+  Throughput           : 63.77 msg/s
+
+AVEC batching (optimisé) :
+  Latence par commande : 0.060 ms
+  Temps total          : 155.69 ms
+  Throughput           : 642.30 msg/s
+
+AMÉLIORATION :
+  Latence : +79.3%
+  Temps   : +90.1%
+  Throughput : +907.3%
+
+======================================================================

@@ -1,0 +1,164 @@
+# Context Chat 9 - Phase 10 GUI Discord Control
+
+## Completed in Chat 8
+- ✅ Phase 9: Fix chargement GPU (CUDA) terminée
+- ✅ llama-cpp-python recompilé avec CUDA support
+- ✅ Performance: 6-7x plus rapide (33 tok/s vs 5 tok/s)
+- ✅ GPU: RTX 4050 (6GB), 35 layers, 3-4 GB VRAM utilisée
+- ✅ Documentation complète (README + CUDA_INSTALLATION_GUIDE)
+- ✅ Tests: 158/158 passent (100%)
+
+## Current State
+- Desktop-Mate v0.9.0-alpha
+- 158/158 tests passing
+- ChatEngine + EmotionAnalyzer fonctionnels
+- Discord Bot Kira fonctionnel (src/discord_bot/bot.py)
+- GUI Chat Desktop fonctionnel (onglet 💬 Chat)
+- **GPU CUDA actif et optimisé** (llama_supports_gpu_offload = True)
+- Génération réponses: 2.63 secondes
+- VRAM usage: 3-4 GB (profil balanced)
+
+## Task for Chat 9
+**Phase 10: GUI Discord Control (2-3h)**
+
+Implement Discord control interface in Desktop-Mate GUI:
+1. New "🤖 Discord" tab after Chat tab
+2. Start/Stop bot buttons with visual states
+3. Real-time connection status display
+4. Discord configuration:
+   - Token Discord (QLineEdit password mode)
+   - Auto-reply channels list (QListWidget)
+   - Rate limit delay (QSpinBox)
+5. Display recent messages (QTextEdit, max 50)
+6. Discord statistics (messages received/treated, active channels)
+
+## Technical Requirements
+
+### Thread-Safety Qt
+```python
+class DiscordSignals(QObject):
+    status_changed = Signal(bool, str)  # (connected, bot_name)
+    message_received = Signal(str)      # formatted_message
+    stats_updated = Signal(dict)        # stats_dict
+```
+
+### Asyncio Discord Bot in Separate Thread
+```python
+class DiscordBotThread(QThread):
+    signals = DiscordSignals()
+    
+    def run(self):
+        asyncio.run(self.bot.start(self.token))
+```
+
+### Secure Token Storage
+- Store in config.json (user home: ~/.desktop-mate/)
+- Never commit token to Git
+- QLineEdit echoMode = Password
+
+## Files to Modify
+
+1. **src/gui/app.py** (main changes)
+   - Add Discord tab after Chat tab
+   - Create DiscordSignals class
+   - Implement Discord UI components
+   - Methods: start_discord_bot(), stop_discord_bot()
+   - Thread management for asyncio
+
+2. **src/discord_bot/bot.py** (if needed)
+   - Add get_status() method
+   - Add get_stats() method
+   - Add callback for GUI updates
+   - Thread-safe Queue for communication
+
+3. **data/config.json**
+   - Section discord: token, auto_reply_channels, rate_limit
+
+## Documentation to Create
+
+1. **docs/sessions/session_10_ai_chat/phase_10_gui_discord/README.md**
+   - Overview Phase 10
+   - Technical architecture
+   - User guide
+
+2. **docs/sessions/session_10_ai_chat/phase_10_gui_discord/GUI_DISCORD_GUIDE.md**
+   - Step-by-step configuration
+   - How to get Discord token
+   - Add auto-reply channels
+   - Troubleshooting
+
+3. **Update docs/INDEX.md**
+   - Add Phase 10 in Session 10 tree
+
+4. **Update README.md (4 sections)**
+   - Sessions documentées (Session 10 Phase 10)
+   - Guides spécifiques (GUI_DISCORD_GUIDE)
+   - Changelog (Version 0.10.0-alpha Phase 10)
+   - Status final (Phase 10 COMPLETE)
+
+5. **Copy scripts**
+   - docs/sessions/session_10_ai_chat/scripts/app.py (final version)
+   - docs/sessions/session_10_ai_chat/scripts/bot.py (if modified)
+
+## Important Reminders
+
+⚠️ **Always activate venv in commands:**
+```powershell
+.\venv\Scripts\Activate.ps1 ; python ...
+```
+
+⚠️ **GPU CUDA is active** - don't recompile llama-cpp-python!
+
+⚠️ **Token security** - NEVER hardcode, use config.json
+
+⚠️ **Thread-safety** - Only use Qt Signals for UI updates from thread
+
+⚠️ **Documentation** - Update ALL docs before saying "Done"
+
+## Success Criteria
+
+- [ ] Discord tab functional in GUI
+- [ ] Start/Stop bot from interface
+- [ ] Real-time connection status displayed
+- [ ] Discord configuration saved
+- [ ] Recent messages displayed (max 50)
+- [ ] Discord statistics updated
+- [ ] Token secure (no Git commit)
+- [ ] Qt thread-safety respected
+- [ ] Tests created and passing (160+/160+)
+- [ ] Complete documentation created
+- [ ] README.md and INDEX.md updated
+
+## Useful Commands
+
+```powershell
+# Activate venv
+cd C:\Dev\desktop-mate
+.\venv\Scripts\Activate.ps1
+
+# Run application
+python main.py
+
+# Run tests
+pytest tests/ -v
+
+# Check GPU CUDA
+python -c "import llama_cpp.llama_cpp as lc; print('GPU:', lc.llama_supports_gpu_offload())"
+```
+
+## Starting Point
+- **Working directory**: `C:\Dev\desktop-mate\`
+- **Python**: venv activated (Python 3.10.9)
+- **Unity**: Not needed for Phase 10
+- **Current file**: `src/gui/app.py` (1329 lines)
+- **Tests**: 158/158 passing
+- **GPU**: RTX 4050, CUDA active, 35 layers
+
+---
+
+**🚀 Ready for Phase 10: GUI Discord Control! 🤖✨**
+
+**Goal**: Complete Discord control interface in Desktop-Mate  
+**Duration**: 2-3 hours  
+**Difficulty**: Medium (Qt + asyncio + thread-safety)  
+**Reward**: Unified Desktop-Mate + Discord Bot interface 🎊

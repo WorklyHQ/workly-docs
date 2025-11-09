@@ -1,0 +1,808 @@
+# 🔄 Prompt de transition : Chat 2 → Chat 3
+
+**Date de transition :** 19 octobre 2025  
+**Chat précédent :** Chat 2 - Session 6 : Expressions faciales VRM  
+**Chat suivant :** Chat 3 - Session 7 : Transitions smooth et animations
+
+---
+
+## 📋 Contexte du projet
+
+Tu travailles sur **Desktop-Mate**, une application hybride Python + Unity qui affiche un avatar VRM interactif sur le bureau Windows.
+
+**Objectif global :** Créer un assistant virtuel personnalisé qui peut parler, réagir émotionnellement et se déplacer librement sur le bureau.
+
+---
+
+## ✅ État actuel du projet (fin Chat 2)
+
+### Sessions complétées (0-6)
+
+| Session | Objectif | Status |
+|---------|----------|--------|
+| Session 0 | Configuration Git Unity | ✅ Terminée |
+| Session 1 | Setup projet Python/Unity | ✅ Terminée |
+| Session 2 | Installation Unity | ✅ Terminée |
+| Session 3 | Installation UniVRM | ✅ Terminée |
+| Session 4 | Connexion Python ↔ Unity (IPC) | ✅ Terminée |
+| Session 5 | Chargement modèle VRM | ✅ Terminée |
+| **Session 6** | **Expressions faciales** | ✅ **100% TERMINÉE** |
+
+### Fonctionnalités opérationnelles
+
+**Infrastructure (Sessions 0-5) :**
+- ✅ Projet Unity 2022.3 LTS (URP)
+- ✅ UniVRM 0.127.3 installé
+- ✅ Interface Python PySide6 avec onglets
+- ✅ Communication IPC via socket TCP (port 5555)
+- ✅ Chargement VRM depuis Python vers Unity
+- ✅ Thread-safety Unity (Queue<Action> + Update)
+
+**Expressions faciales (Session 6) ⭐ NOUVEAU :**
+- ✅ VRMBlendshapeController.cs VERSION 1.6 (330+ lignes)
+- ✅ 5 expressions fonctionnelles :
+  - 😊 Joy (Joyeux)
+  - 😠 Angry (En colère)
+  - 😢 Sorrow (Triste)
+  - 😄 Fun (Amusé)
+  - 😲 Surprised (Surpris)
+- ✅ Interface Python avec sliders 0-100%
+- ✅ Bouton "Reset All Expressions"
+- ✅ Update en temps réel (IPC + rendering)
+
+---
+
+## 🏗️ Architecture technique actuelle
+
+```
+Python Qt (PySide6)
+├─ TabWidget
+│  ├─ Connection (load VRM)
+│  └─ Expressions ⭐
+│     ├─ 5 sliders (Joy, Angry, Sorrow, Fun, Surprised)
+│     └─ Reset All button
+│
+└─ UnityBridge (unity_bridge.py)
+   ├─ connect_to_unity()
+   ├─ load_vrm_model(path)
+   ├─ set_expression(name, value) ⭐
+   └─ reset_expressions() ⭐
+        │
+        │ TCP Socket (port 5555)
+        │ JSON: {"command": "...", "data": {...}}
+        │
+        ▼
+Unity Engine (2022.3 LTS)
+├─ PythonBridge.cs
+│  ├─ StartServer() : port 5555
+│  ├─ HandleMessage(json)
+│  └─ Commands: load_model, set_expression, reset_expressions
+│
+├─ VRMLoader.cs
+│  └─ LoadVRMModel(path)
+│
+└─ VRMBlendshapeController.cs ⭐ VERSION 1.6
+   ├─ SetExpression(name, value)  [Thread-safe]
+   ├─ ResetExpressions()
+   ├─ Update()  [Exécute Queue<Action>]
+   └─ LateUpdate()  [Apply() garanti chaque frame]
+        │
+        ▼
+   VRMBlendShapeProxy (UniVRM)
+   ├─ ImmediatelySetValue(key, value)
+   └─ Apply() ← CRITIQUE !
+        │
+        ▼
+   Avatar VRM (Mura Mura - Model)
+   🎭 Affiche expressions ! 😊😠😢😄😲
+```
+
+---
+
+## 🔑 Code clé à connaître (VERSION FINALE)
+
+### VRMBlendshapeController.cs (VERSION 1.6)
+
+**Localisation :** `unity/DesktopMateUnity/Assets/Scripts/VRMBlendshapeController.cs`
+
+**Points critiques :**
+
+#### 1. Deux méthodes pour créer BlendShapeKey
+
+**Expressions VRM standard (presets) :**
+```csharp
+// Joy, Angry, Sorrow, Fun utilisent CreateFromPreset()
+BlendShapePreset? preset = null;
+switch (expressionName.ToLower())
+{
+    case "joy": preset = BlendShapePreset.Joy; break;
+    case "angry": preset = BlendShapePreset.Angry; break;
+    case "sorrow": preset = BlendShapePreset.Sorrow; break;
+    case "fun": preset = BlendShapePreset.Fun; break;
+}
+
+if (preset.HasValue)
+{
+    key = BlendShapeKey.CreateFromPreset(preset.Value);
+}
+```
+
+**Expressions custom (non-standard) :**
+```csharp
+// Surprised utilise CreateUnknown() avec CASSE IMPORTANTE
+else
+{
+    string capitalizedName = char.ToUpper(expressionName[0]) + expressionName.Substring(1).ToLower();
+    key = BlendShapeKey.CreateUnknown(capitalizedName); // "Surprised" pas "surprised"
+}
+```
+
+⚠️ **IMPORTANT :** CreateUnknown() est **case-sensitive** !
+
+---
+
+#### 2. Apply() obligatoire à DEUX endroits
+
+**Appel 1 : Dans SetExpressionInternal() - Application immédiate**
+```csharp
+blendShapeProxy.ImmediatelySetValue(key, value);
+blendShapeProxy.Apply(); // ← Flush le buffer
+```
+
+**Appel 2 : Dans LateUpdate() - Garantie de rendu**
+```csharp
+void LateUpdate()
+{
+    if (blendShapeProxy != null)
+    {
+        blendShapeProxy.Apply(); // ← Assure rendu chaque frame
+    }
+}
+```
+
+⚠️ **IMPORTANT :** Sans les deux Apply(), les expressions peuvent ne pas s'afficher !
+
+---
+
+#### 3. Thread-safety avec Queue<Action>
+
+```csharp
+private Queue<Action> actionQueue = new Queue<Action>();
+
+// Thread IPC appelle ceci (thread-safe)
+public void SetExpression(string expressionName, float value)
+{
+    actionQueue.Enqueue(() => SetExpressionInternal(expressionName, value));
+}
+
+// Main thread Unity exécute
+void Update()
+{
+    while (actionQueue.Count > 0)
+    {
+        Action action = actionQueue.Dequeue();
+        action.Invoke();
+    }
+}
+```
+
+⚠️ **IMPORTANT :** Unity API (GameObject, BlendShapeProxy) interdit sur threads secondaires !
+
+---
+
+#### 4. Fallback automatique pour robustesse
+
+```csharp
+// Vérification après Apply()
+float actualValue = blendShapeProxy.GetValue(key);
+
+if (actualValue < 0.01f && value > 0.0f)
+{
+    // Le preset ne fonctionne pas, essayer avec nom capitalisé
+    string capitalizedName = char.ToUpper(expressionName[0]) + expressionName.Substring(1).ToLower();
+    key = BlendShapeKey.CreateUnknown(capitalizedName);
+    
+    blendShapeProxy.ImmediatelySetValue(key, value);
+    blendShapeProxy.Apply();
+}
+```
+
+Cette logique améliore la compatibilité avec différents modèles VRM.
+
+---
+
+### Python API (unity_bridge.py)
+
+**Nouvelles méthodes ajoutées en Session 6 :**
+
+```python
+def set_expression(self, expression_name: str, value: float) -> bool:
+    """
+    Définit une expression faciale de l'avatar VRM.
+    
+    Args:
+        expression_name: "joy", "angry", "sorrow", "fun", "surprised"
+        value: Intensité de 0.0 à 1.0
+        
+    Returns:
+        True si commande envoyée avec succès
+    """
+    # Validation whitelist
+    valid_expressions = ["joy", "angry", "sorrow", "fun", "surprised"]
+    if expression_name.lower() not in valid_expressions:
+        raise ValueError(f"Expression invalide : {expression_name}")
+    
+    # Clamping 0.0-1.0
+    value = max(0.0, min(1.0, value))
+    
+    # Envoi IPC
+    command = {
+        "command": "set_expression",
+        "data": {
+            "name": expression_name.lower(),
+            "value": value
+        }
+    }
+    
+    return self._send_command(command)
+
+def reset_expressions(self) -> bool:
+    """Réinitialise toutes les expressions à neutre (0.0)."""
+    command = {"command": "reset_expressions"}
+    return self._send_command(command)
+```
+
+---
+
+## 📁 Structure du projet (essentiel)
+
+```
+desktop-mate/
+├── main.py                          # Point d'entrée Python
+├── requirements.txt                 # Dépendances Python
+├── README.md                        # Doc principale
+│
+├── src/
+│   ├── gui/
+│   │   └── app.py                   # Interface Qt (onglets Connection + Expressions)
+│   ├── ipc/
+│   │   └── unity_bridge.py          # Client TCP + set_expression()
+│   └── utils/
+│       ├── config.py
+│       └── logger.py
+│
+├── unity/
+│   └── DesktopMateUnity/
+│       └── Assets/
+│           ├── Scripts/
+│           │   ├── IPC/
+│           │   │   └── PythonBridge.cs          # Serveur TCP
+│           │   ├── VRMLoader.cs                 # Chargeur VRM
+│           │   └── VRMBlendshapeController.cs   # ⭐ VERSION 1.6
+│           └── VRM/                 # Package UniVRM 0.127.3
+│
+├── assets/
+│   └── Mura Mura - Model.vrm        # Modèle de test
+│
+└── docs/
+    ├── docs/sessions/session_6_expressions/       # ⭐ Documentation Session 6
+    │   ├── README.md
+    │   ├── BLENDSHAPES_GUIDE.md
+    │   ├── UNITY_SETUP_GUIDE.md
+    │   ├── SESSION_SUCCESS.md
+    │   ├── FINAL_SUCCESS.md
+    │   ├── COMPLETE_SUCCESS.md
+    │   └── scripts/
+    │       └── VRMBlendshapeController.cs (copie référence)
+    └── chat_transitions/
+        ├── chat_1_python_unity_start_session_0_to_5/
+        └── chat_2_expressions_session_6/  # ⭐ Chat précédent
+            ├── CURRENT_STATE.md
+            ├── CHAT_SUMMARY.md
+            └── prompt_chat2_vers_chat3.txt  # ← Vous êtes ici
+```
+
+---
+
+## 🎓 Leçons apprises (CRITIQUE pour Session 7)
+
+### 1. UniVRM a deux APIs distinctes
+
+**CreateFromPreset() :** Pour expressions VRM standard  
+→ Joy, Angry, Sorrow, Fun, Blink, Phonèmes (A, I, U, E, O), Look directions
+
+**CreateUnknown() :** Pour expressions custom  
+→ Surprised, et toutes les expressions non-standard  
+→ ⚠️ **Case-sensitive** : "Surprised" ≠ "surprised"
+
+---
+
+### 2. Apply() timing critical
+
+**Pattern à respecter :**
+1. `ImmediatelySetValue(key, value)` → Stocke dans buffer
+2. `Apply()` immédiat → Flush vers mesh
+3. `Apply()` dans LateUpdate() → Garantie rendu chaque frame
+
+Sans les deux appels, expressions peuvent disparaître ou ne pas s'afficher.
+
+---
+
+### 3. Unity compilation cache
+
+**Symptômes :** Code modifié mais Unity utilise ancienne version
+
+**Solutions :**
+1. Version detection logs dans `Start()` : `Debug.Log("[...] VERSION X.Y")`
+2. Assets → Refresh (Ctrl+R)
+3. Restart Unity
+4. En dernier recours : supprimer `Library/ScriptAssemblies/`
+
+---
+
+### 4. Thread-safety Unity
+
+**Règle absolue :** Unity API (GameObject, Transform, BlendShapeProxy) **INTERDIT** sur threads secondaires.
+
+**Pattern validé :** Queue<Action> + exécution dans Update() sur main thread.
+
+Utilisé dans :
+- VRMLoader.cs
+- VRMBlendshapeController.cs
+- PythonBridge.cs (réseau sur thread séparé)
+
+---
+
+### 5. GetValue() pour debugging
+
+```csharp
+blendShapeProxy.ImmediatelySetValue(key, value);
+blendShapeProxy.Apply();
+
+float actualValue = blendShapeProxy.GetValue(key);
+Debug.Log($"Demandé : {value:F2} | Stocké : {actualValue:F2}");
+
+if (actualValue < 0.01f && value > 0.0f)
+{
+    Debug.LogWarning("⚠️ La clé n'existe pas dans le modèle !");
+}
+```
+
+Permet de diagnostiquer si le problème vient de :
+- La clé inexistante (actualValue == 0)
+- L'Apply() timing
+- La méthode CreateFromPreset vs CreateUnknown
+
+---
+
+## 🚀 Objectifs Session 7 (ce nouveau chat)
+
+### Priorité HAUTE : Transitions smooth
+
+**Problème actuel :**
+- Changement d'expression instantané (0% → 100% en 1 frame)
+- Visuellement "robotique", pas naturel
+
+**Solution proposée :** Interpolation linéaire (Lerp)
+
+```csharp
+private Dictionary<BlendShapeKey, float> currentValues;
+private Dictionary<BlendShapeKey, float> targetValues;
+private float transitionSpeed = 2.0f; // Units per second
+
+void Update()
+{
+    // Lerp vers les valeurs cibles
+    foreach (var key in currentValues.Keys.ToList())
+    {
+        float current = currentValues[key];
+        float target = targetValues[key];
+        
+        float newValue = Mathf.Lerp(current, target, Time.deltaTime * transitionSpeed);
+        currentValues[key] = newValue;
+        
+        blendShapeProxy.ImmediatelySetValue(key, newValue);
+    }
+}
+```
+
+**Modifications nécessaires :**
+- Refactoring `SetExpressionInternal()` pour stocker target au lieu d'appliquer immédiatement
+- Ajout dictionnaires currentValues/targetValues
+- Lerp dans Update() vers target
+- Interface Python : slider "Transition Speed" (0.1s - 2.0s)
+
+---
+
+### Priorité MOYENNE : Clignements automatiques
+
+**Concept :** Blink aléatoire toutes les 3-5 secondes
+
+**Implémentation suggérée :**
+```csharp
+private float nextBlinkTime;
+private bool isBlinking = false;
+
+void Start()
+{
+    nextBlinkTime = Time.time + Random.Range(3f, 5f);
+}
+
+void Update()
+{
+    if (!isBlinking && Time.time >= nextBlinkTime)
+    {
+        StartCoroutine(BlinkCoroutine());
+        nextBlinkTime = Time.time + Random.Range(3f, 5f);
+    }
+}
+
+IEnumerator BlinkCoroutine()
+{
+    isBlinking = true;
+    BlendShapeKey blinkKey = BlendShapeKey.CreateFromPreset(BlendShapePreset.Blink);
+    
+    // Fermeture rapide (100ms)
+    blendShapeProxy.ImmediatelySetValue(blinkKey, 1.0f);
+    blendShapeProxy.Apply();
+    yield return new WaitForSeconds(0.1f);
+    
+    // Ouverture (150ms)
+    blendShapeProxy.ImmediatelySetValue(blinkKey, 0.0f);
+    blendShapeProxy.Apply();
+    isBlinking = false;
+}
+```
+
+**Interface Python :**
+- Checkbox "Auto Blink" (on/off)
+- Slider "Blink Frequency" (2-8 secondes entre clignements)
+
+---
+
+### Priorité BASSE : Présets d'émotions
+
+**Concept :** Boutons quick-action définissant plusieurs expressions simultanément
+
+**Exemples :**
+```json
+{
+  "Happy": {
+    "joy": 0.8,
+    "fun": 0.5,
+    "sorrow": 0.0,
+    "angry": 0.0,
+    "surprised": 0.0
+  },
+  "Sad": {
+    "joy": 0.0,
+    "fun": 0.0,
+    "sorrow": 0.9,
+    "angry": 0.0,
+    "surprised": 0.0
+  }
+}
+```
+
+**Interface Python :**
+- Grid de boutons "😊 Happy", "😢 Sad", "😠 Angry", "😐 Neutral"
+- Bouton "Save Custom Preset"
+- Persistance dans config JSON
+
+---
+
+## ⚠️ Points d'attention critiques
+
+### 1. Ne PAS casser le code VERSION 1.6
+
+Le code VRMBlendshapeController.cs VERSION 1.6 est **FONCTIONNEL**.
+
+**Avant toute modification :**
+- Créer une copie de backup : `VRMBlendshapeController_V1.6_BACKUP.cs`
+- Tester chaque changement incrémentalement
+- Vérifier les 5 expressions de base après chaque modification
+
+---
+
+### 2. Vérifier version au démarrage Unity
+
+**Toujours inclure version detection log :**
+```csharp
+void Start()
+{
+    Debug.Log("[VRMBlendshape] 🎭 VERSION 2.0 - SMOOTH TRANSITIONS");
+    // ...
+}
+```
+
+Si le log ne change pas après modification → Unity utilise ancien .dll → Restart Unity
+
+---
+
+### 3. Thread-safety pour nouvelles fonctionnalités
+
+**Coroutines et IPC :**
+- `StartCoroutine()` doit être appelé sur main thread
+- Si commande IPC lance coroutine → passer par Queue<Action>
+
+**Exemple :**
+```csharp
+// Thread IPC (via PythonBridge)
+public void StartAutoBlink(bool enabled)
+{
+    actionQueue.Enqueue(() => StartAutoBlinkInternal(enabled));
+}
+
+// Main thread Unity
+private void StartAutoBlinkInternal(bool enabled)
+{
+    if (enabled)
+    {
+        StartCoroutine(AutoBlinkLoop());
+    }
+}
+```
+
+---
+
+### 4. Documentation obligatoire
+
+**Après CHAQUE modification :**
+- ✅ Mettre à jour `docs/INDEX.md` (nouveaux fichiers)
+- ✅ Mettre à jour `docs/README.md` (aperçu général)
+- ✅ Mettre à jour `docs/CURRENT_STATE.md` (état technique)
+- ✅ Mettre à jour `README.md` racine (features)
+- ✅ Créer/mettre à jour `docs/sessions/session_7_animations/`
+
+**Rappel utilisateur :**
+> "la documentation c'est très important"
+
+Ne JAMAIS dire "Terminé" sans avoir mis à jour la documentation.
+
+---
+
+## 📚 Documentation à consulter
+
+### Documentation Session 6 (référence)
+
+**Pour comprendre le code actuel :**
+- `docs/sessions/session_6_expressions/BLENDSHAPES_GUIDE.md` → API UniVRM détaillée
+- `docs/sessions/session_6_expressions/SESSION_SUCCESS.md` → Problèmes résolus
+- `docs/sessions/session_6_expressions/COMPLETE_SUCCESS.md` → Timeline complète + troubleshooting
+
+**Code de référence :**
+- `docs/sessions/session_6_expressions/scripts/VRMBlendshapeController.cs` → VERSION 1.6 complète
+
+---
+
+### Documentation transition Chat 2
+
+**État du projet en fin de Chat 2 :**
+- `docs/chat_transitions/chat_2_expressions_session_6/CURRENT_STATE.md` → État technique
+- `docs/chat_transitions/chat_2_expressions_session_6/CHAT_SUMMARY.md` → Résumé session
+
+---
+
+## 🛠️ Configuration requise
+
+### Environnement de développement
+
+**Python :**
+- Python 3.10+
+- PySide6 6.5+
+- Virtual environment actif : `desktop-mate/venv/`
+
+**Unity :**
+- Unity 2022.3 LTS (URP)
+- UniVRM 0.127.3
+- Windows 10/11 (64-bit)
+
+**Assets :**
+- Modèle VRM : "Mura Mura - Model.vrm"
+- 57 blendshapes sur Face mesh
+- Presets : Joy, Angry, Sorrow, Fun, Surprised, Blink, Phonèmes, Look directions
+
+### Ports réseau
+
+- **TCP 5555** : Communication IPC Python ↔ Unity (localhost)
+
+---
+
+## ✅ Checklist pré-Session 7
+
+**Avant de commencer, vérifier :**
+
+**Code Unity :**
+- [ ] VRMBlendshapeController.cs VERSION 1.6 présent
+- [ ] Logs Unity montrent "VERSION 1.6 - SURPRISED FIX" au démarrage
+- [ ] Console Unity sans erreurs
+
+**Code Python :**
+- [ ] Interface Python avec onglet Expressions
+- [ ] 5 sliders fonctionnels
+- [ ] Tests unitaires passent : `pytest tests/`
+
+**Tests fonctionnels :**
+- [ ] Connexion Python → Unity OK
+- [ ] Chargement VRM OK
+- [ ] Slider Joy (😊) modifie le visage
+- [ ] Slider Angry (😠) modifie le visage
+- [ ] Slider Sorrow (😢) modifie le visage
+- [ ] Slider Fun (😄) modifie le visage
+- [ ] Slider Surprised (😲) modifie le visage
+- [ ] Bouton Reset All ramène à neutre
+
+**Si TOUS les points sont cochés → Prêt pour Session 7 ! ✅**
+
+---
+
+## 🎯 Tâches immédiates pour Chat 3
+
+### Phase 1 : Diagnostic initial
+
+1. **Vérifier que tout fonctionne encore**
+   - Lancer Unity → Vérifier logs VERSION 1.6
+   - Lancer Python → Tester les 5 expressions
+   - Confirmer aucune régression
+
+2. **Lire la documentation Session 6**
+   - `BLENDSHAPES_GUIDE.md` pour comprendre API
+   - `COMPLETE_SUCCESS.md` pour connaître les pièges
+
+---
+
+### Phase 2 : Planification Session 7
+
+1. **Décider de l'ordre des fonctionnalités**
+   - Transitions smooth en premier ? (RECOMMANDÉ)
+   - Ou clignements automatiques ?
+   - Ou presets d'émotions ?
+
+2. **Créer dossier documentation**
+   - `docs/sessions/session_7_animations/`
+   - `docs/sessions/session_7_animations/README.md` (objectifs)
+
+---
+
+### Phase 3 : Implémentation
+
+**Pour chaque fonctionnalité :**
+1. ✅ Expliquer le concept à l'utilisateur
+2. ✅ Proposer l'architecture technique
+3. ✅ Demander confirmation avant de coder
+4. ✅ Implémenter incrémentalement (petits changements testables)
+5. ✅ Tester chaque modification (ne pas tout casser)
+6. ✅ Documenter problèmes + solutions
+7. ✅ Mettre à jour INDEX, README, CURRENT_STATE
+
+**Rappel :** L'utilisateur ne connaît **PAS** Unity ni C#, donc :
+- Expliquer clairement chaque concept
+- Donner instructions pas-à-pas
+- Screenshots mentaux ("dans Unity, tu verras...")
+- Vérifier compréhension
+
+---
+
+## 💡 Conseils pour le nouveau chat
+
+### Communication avec l'utilisateur
+
+**L'utilisateur :**
+- N'est **pas** expert en développement
+- Ne connaît **pas** Unity ni C#
+- A besoin d'**explications claires** et de **guidance**
+- Considère la **documentation très importante**
+
+**Toi (l'IA) :**
+- **TOUJOURS** en français 🇫🇷
+- **TOUJOURS** expliquer les concepts Unity/C#
+- **TOUJOURS** demander confirmation avant changements majeurs
+- **JAMAIS** oublier de mettre à jour la documentation
+
+---
+
+### Pattern de réponse obligatoire
+
+**Après CHAQUE tâche terminée :**
+```markdown
+✅ Tâche terminée !
+
+📚 **Documentation mise à jour :**
+- ✅ docs/INDEX.md → [ce qui a changé]
+- ✅ docs/README.md → [ce qui a changé]
+- ✅ docs/CURRENT_STATE.md → [ce qui a changé]
+- ✅ README.md → [ce qui a changé]
+- ✅ docs/sessions/session_7_animations/[fichier].md → [ce qui a changé]
+
+🎯 **Prochaines étapes :**
+[...]
+```
+
+**Si l'utilisateur demande "As-tu mis à jour la documentation ?" → TU AS ÉCHOUÉ.**
+
+La documentation doit être **automatiquement synchronisée** avec chaque changement de code.
+
+---
+
+### Debugging Unity (si problèmes)
+
+**Si expressions ne marchent plus après modification :**
+
+1. **Vérifier logs version :**
+   ```
+   [VRMBlendshape] VERSION X.Y
+   ```
+   Si version ancienne → Restart Unity
+
+2. **Vérifier Apply() présent :**
+   - Dans SetExpressionInternal()
+   - Dans LateUpdate()
+
+3. **Vérifier GetValue() :**
+   ```csharp
+   float actualValue = blendShapeProxy.GetValue(key);
+   Debug.Log($"Demandé : {value} | Stocké : {actualValue}");
+   ```
+   Si actualValue == 0 → Clé n'existe pas
+
+4. **Vérifier capitalization :**
+   - Presets : `CreateFromPreset(BlendShapePreset.Joy)`
+   - Custom : `CreateUnknown("Surprised")` avec majuscule
+
+5. **Dernier recours :**
+   - Restaurer backup VERSION 1.6
+   - Recommencer les modifications une par une
+
+---
+
+## 📖 Ressources finales
+
+### Fichiers clés à avoir sous la main
+
+**Code Unity :**
+- `unity/DesktopMateUnity/Assets/Scripts/VRMBlendshapeController.cs` (VERSION 1.6)
+- `unity/DesktopMateUnity/Assets/Scripts/IPC/PythonBridge.cs`
+
+**Code Python :**
+- `src/gui/app.py` (onglet Expressions)
+- `src/ipc/unity_bridge.py` (set_expression, reset_expressions)
+
+**Documentation :**
+- `docs/sessions/session_6_expressions/COMPLETE_SUCCESS.md` (guide troubleshooting)
+- `docs/chat_transitions/chat_2_expressions_session_6/CURRENT_STATE.md`
+- `.github/instructions/copilot-instructions.instructions.md` (règles projet)
+
+---
+
+### Instructions système projet
+
+**Fichier :** `.github/instructions/copilot-instructions.instructions.md`
+
+**Contient :**
+- Principes de collaboration
+- Niveau utilisateur (débutant Unity/C#)
+- Organisation documentation (sessions, INDEX, README)
+- Système anti-oubli (checklist pré-finition)
+- Règles absolues de documentation
+- Conventional commits
+
+**À LIRE en priorité pour comprendre le workflow du projet.**
+
+---
+
+## 🎉 Bon courage pour Session 7 !
+
+**État de départ :** ✅ Expressions faciales 100% fonctionnelles  
+**Objectif Session 7 :** Animations smooth + clignements automatiques  
+**Documentation :** 6 fichiers Session 6 + transition Chat 2 disponibles  
+**Code stable :** VRMBlendshapeController.cs VERSION 1.6 validé
+
+**Tu as toutes les ressources pour réussir ! 🚀**
+
+---
+
+**Date de création de ce prompt :** 19 octobre 2025  
+**Créé par :** Chat 2 (Session 6 - Expressions faciales)  
+**Pour :** Chat 3 (Session 7 - Transitions smooth et animations)
+
+**Rappel final :** La documentation c'est **très important** ! 📚

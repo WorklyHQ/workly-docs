@@ -1,0 +1,351 @@
+# 🤖 PROMPT DE TRANSITION - Chat 3 → Chat 4
+
+**Date de transition** : 20 octobre 2025  
+**Chat précédent** : Chat 3 (Session 7 - Animations fluides)  
+**Chat suivant** : Chat 4 (Session 8 - À définir)
+
+---
+
+## 📋 Instructions pour l'IA du Chat 4
+
+Bonjour ! Je continue le développement de **Desktop-Mate**, une application hybride Unity + Python pour afficher un avatar VRM interactif sur le bureau Windows.
+
+### 🎯 Contexte rapide
+
+**Projet** : Desktop-Mate (avatar VRM desktop companion)  
+**Technologie** : Unity 2022.3 LTS + Python 3.10.9 + PySide6  
+**Communication** : IPC via socket TCP (port 5555)  
+**État actuel** : Session 7 complétée (animations fluides avec Lerp)
+
+### ✅ Ce qui fonctionne actuellement
+
+**Chat 1 (Sessions 0-5)** - MVP ✅
+- Configuration Git
+- Setup Python + Unity
+- Installation Unity 2022.3 LTS + UniVRM 0.127.3
+- Communication IPC Python ↔ Unity (socket TCP)
+- Chargement modèles VRM
+
+**Chat 2 (Session 6)** - Expressions ✅
+- 5 expressions faciales (Joy, Angry, Sorrow, Surprised, Fun)
+- Contrôle via sliders Python
+- VRMBlendshapeController v1.6
+
+**Chat 3 (Session 7)** - Animations ✅ (NOUVEAU)
+- Transitions smooth avec Lerp interpolation
+- Vitesse ajustable (1.0-10.0)
+- Interface française avec icône
+- Système modèle VRM par défaut
+- Chargement/déchargement dynamique
+- Thread-safety complet (Queue<Action> pattern)
+- VRMBlendshapeController v2.0
+
+### 📚 Documentation disponible
+
+**IMPORTANT** : Avant de commencer, **LIS CES FICHIERS** :
+
+1. **État du projet** :
+   - `docs/chat_transitions/chat_3_animations_session_7/CURRENT_STATE.md` ← État technique complet
+   - `docs/chat_transitions/chat_3_animations_session_7/CHAT_SUMMARY.md` ← Résumé du Chat 3
+
+2. **Session 7 (contexte immédiat)** :
+   - `docs/sessions/session_7_animations/README.md` ← Vue d'ensemble
+   - `docs/sessions/session_7_animations/TRANSITIONS_GUIDE.md` ← Guide technique Lerp (900+ lignes)
+   - `docs/sessions/session_7_animations/SESSION_SUCCESS.md` ← Récapitulatif succès
+
+3. **Session 6 (expressions de base)** :
+   - `docs/sessions/session_6_expressions/BLENDSHAPES_GUIDE.md` ← Système expressions v1.6
+
+4. **Architecture générale** :
+   - `docs/INDEX.md` ← Arborescence complète du projet
+   - `docs/README.md` ← Documentation principale
+   - `README.md` ← README racine
+
+5. **Instructions système** :
+   - `.github/instructions/copilot-instructions.instructions.md` ← Règles de collaboration
+
+### 🚀 Prochaine étape recommandée : Session 8
+
+**Option A : Clignement automatique** (🟢 RECOMMANDÉ)
+- Difficulté : FAIBLE (2-3 heures)
+- Impact : ÉLEVÉ (réalisme++)
+- Tâches :
+  1. Timer aléatoire dans Unity (2-5 secondes)
+  2. Blendshape "Blink" via système Lerp existant
+  3. Toggle on/off dans interface Python
+  4. Paramètres configurables (fréquence, durée)
+
+**Option B : Lip-sync audio**
+- Difficulté : MOYENNE (6-8 heures)
+- Nécessite : sounddevice, numpy, analyse FFT
+
+**Option C : Face tracking**
+- Difficulté : ÉLEVÉE (10-15 heures)
+- Nécessite : MediaPipe, webcam
+
+**Option D : IA conversationnelle**
+- Difficulté : TRÈS ÉLEVÉE (15-20 heures)
+- Nécessite : API LLM (OpenAI, Anthropic)
+
+### 🔧 Informations techniques critiques
+
+**Python** :
+- Environnement : Python 3.10.9
+- Framework : PySide6 (Qt 6)
+- Tests : pytest (8/8 passent)
+- IPC Client : `src/ipc/unity_bridge.py`
+- Config : `src/utils/config.py` (JSON persistant dans `~/.desktop-mate/config.json`)
+
+**Unity** :
+- Version : Unity 2022.3.50f1 LTS
+- Render Pipeline : URP
+- Plugin : UniVRM v0.127.3
+- Scripts principaux :
+  - `Assets/Scripts/VRMLoader.cs` - Chargement VRM
+  - `Assets/Scripts/VRMBlendshapeController.cs` (v2.0) - Expressions + Lerp
+  - `Assets/Scripts/IPC/PythonBridge.cs` - Serveur IPC
+- Scène : `Assets/Scenes/MainScene.unity`
+
+**IPC Protocol** (JSON over TCP) :
+- Port : 5555 (localhost)
+- Commandes disponibles :
+  - `load_model` - Charger VRM
+  - `unload_model` - Décharger VRM
+  - `set_expression` - Définir expression (name, value 0.0-1.0)
+  - `reset_expressions` - Reset toutes
+  - `set_transition_speed` - Vitesse Lerp (0.1-10.0)
+
+**Thread-safety Unity** :
+- TOUJOURS utiliser pattern `Queue<Action>` + `Update()`
+- Exemple :
+  ```csharp
+  private Queue<Action> mainThreadActions = new Queue<Action>();
+  
+  void Update() {
+      lock (mainThreadActions) {
+          while (mainThreadActions.Count > 0) {
+              mainThreadActions.Dequeue()?.Invoke();
+          }
+      }
+  }
+  
+  // Depuis thread réseau :
+  lock (mainThreadActions) {
+      mainThreadActions.Enqueue(() => {
+          // Unity API call ici
+      });
+  }
+  ```
+
+### 🎨 Architecture du système Lerp (Session 7)
+
+**VRMBlendshapeController.cs v2.0** :
+```csharp
+// Dictionnaires pour transitions smooth
+private Dictionary<BlendShapeKey, float> currentValues;
+private Dictionary<BlendShapeKey, float> targetValues;
+public float transitionSpeed = 2.0f;
+
+// Update() : Lerp chaque frame
+void Update() {
+    // 1. Exécuter actions IPC (Queue)
+    // 2. Lerp vers cibles
+    foreach (var key in currentValues.Keys.ToList()) {
+        float current = currentValues[key];
+        float target = targetValues[key];
+        float newValue = Mathf.Lerp(current, target, Time.deltaTime * transitionSpeed);
+        currentValues[key] = newValue;
+        blendShapeProxy.ImmediatelySetValue(key, currentValues[key]);
+    }
+}
+
+// LateUpdate() : Apply final
+void LateUpdate() {
+    if (blendShapeProxy != null) {
+        blendShapeProxy.Apply();
+    }
+}
+```
+
+**Formule Lerp** : `newValue = Mathf.Lerp(current, target, Time.deltaTime * transitionSpeed)`
+- Plus `transitionSpeed` est élevé, plus c'est **rapide**
+- 1.0 = très lent, 3.0 = normal, 10.0 = très rapide
+
+### 📋 Règles de collaboration (IMPORTANT)
+
+**LIRE ABSOLUMENT** : `.github/instructions/copilot-instructions.instructions.md`
+
+**Règles critiques** :
+1. **🇫🇷 FRANÇAIS** : Toute communication en français
+2. **📚 DOCUMENTATION** : Après CHAQUE changement, mettre à jour :
+   - `docs/INDEX.md` (si nouveaux fichiers)
+   - `docs/README.md` (si architecture modifiée)
+   - `docs/session_X/` (documentation de session)
+3. **📂 SCRIPTS DANS SESSIONS** : Copier scripts finaux dans `docs/session_X/scripts/`
+4. **🎓 PÉDAGOGIE** : L'utilisateur ne connaît PAS Unity ni C#, expliquer clairement
+5. **✅ TESTS** : Lancer `pytest` avant de dire "Terminé"
+6. **📝 RÉCAPITULATIF** : Toujours afficher récapitulatif avec template :
+   ```markdown
+   ✅ Tâche terminée !
+   
+   📚 Documentation mise à jour :
+   - ✅ fichier1.md → [changements]
+   - ✅ fichier2.md → [changements]
+   
+   🎯 Prochaines étapes :
+   [...]
+   ```
+
+### 🚦 Comment démarrer
+
+**1. Vérifier l'environnement** :
+```powershell
+cd C:\Dev\desktop-mate
+python -m pytest  # Doit passer 8/8 tests
+```
+
+**2. Lancer Unity** :
+- Ouvrir `unity/DesktopMateUnity/` dans Unity Hub
+- Ouvrir scène `Assets/Scenes/MainScene.unity`
+- Play mode
+
+**3. Lancer Python** :
+```powershell
+python main.py
+```
+
+**4. Tester fonctionnalités existantes** :
+- Connexion à Unity
+- Charger modèle VRM (modèle par défaut si défini)
+- Tester expressions avec sliders
+- Tester vitesse de transition (slider 1.0-10.0)
+- Tester load/unload
+
+**5. Lire documentation Session 7** :
+- `docs/sessions/session_7_animations/README.md` pour contexte
+- `docs/sessions/session_7_animations/TRANSITIONS_GUIDE.md` pour détails techniques
+
+### 🎯 Objectif suggéré pour Chat 4
+
+**Session 8 : Clignement automatique** (Recommandé)
+
+**Pourquoi** :
+- Faible difficulté (parfait pour démarrer un nouveau chat)
+- Réutilise système Lerp existant (déjà éprouvé)
+- Impact visuel élevé (réalisme++)
+- Documentation complète disponible
+
+**Tâches** :
+1. Créer `VRMAutoBlinkController.cs` dans Unity
+   - Timer avec `Random.Range(2f, 5f)` pour intervalles
+   - Méthode `StartBlink()` qui :
+     - Met blendshape "Blink" à 1.0 (cible)
+     - Attend ~0.1s
+     - Remet à 0.0 (cible)
+   - Utilise système Lerp existant via VRMBlendshapeController
+
+2. Ajouter commande IPC `set_auto_blink`
+   - Paramètre `enabled` (bool)
+   - PythonBridge forward vers AutoBlinkController
+
+3. Ajouter toggle Python
+   - Checkbox "Clignement automatique" dans onglet Expressions
+   - Envoie commande `set_auto_blink` à Unity
+
+4. Configuration
+   - Ajouter champs dans config.json :
+     - `avatar.auto_blink.enabled` (bool)
+     - `avatar.auto_blink.min_interval` (float, défaut 2.0)
+     - `avatar.auto_blink.max_interval` (float, défaut 5.0)
+
+5. Tests
+   - Vérifier clignements réguliers
+   - Vérifier transitions smooth
+   - Vérifier toggle on/off
+   - Vérifier sauvegarde config
+
+6. Documentation Session 8
+   - `docs/sessions/session_8_auto_blink/README.md`
+   - `docs/sessions/session_8_auto_blink/BLINK_GUIDE.md`
+   - `docs/sessions/session_8_auto_blink/scripts/` (copier scripts)
+   - Mettre à jour `docs/INDEX.md` et `docs/README.md`
+
+### 🎓 Conseils pour Unity/C#
+
+**L'utilisateur ne connaît PAS Unity ni C#** - Expliquer :
+1. **Où créer le fichier** : Chemin exact dans Unity
+2. **Comment l'attacher** : GameObject, Inspector, configuration
+3. **Concepts C#** : MonoBehaviour, Coroutines, Update(), etc.
+4. **Screenshots mentaux** : Décrire ce qu'il doit voir dans Unity
+5. **Vérification** : Comment tester que ça marche
+
+### ⚠️ Pièges à éviter
+
+1. **NE PAS oublier** de copier scripts dans `docs/session_X/scripts/`
+2. **NE PAS oublier** de mettre à jour INDEX.md et README.md
+3. **NE PAS appeler** Unity API depuis thread réseau (toujours Queue)
+4. **NE PAS supposer** que l'utilisateur connaît Unity
+5. **NE PAS dire "Terminé"** sans afficher récapitulatif complet
+
+### 📊 État des tests
+
+**Tests Python** : 8/8 passent ✅
+```powershell
+python -m pytest
+# test_config.py::TestConfig::test_default_config PASSED
+# test_config.py::TestConfig::test_get_config PASSED
+# test_config.py::TestConfig::test_set_config PASSED
+# test_config.py::TestConfig::test_save_and_load PASSED
+# test_unity_bridge.py::TestUnityBridge::test_init PASSED
+# test_unity_bridge.py::TestUnityBridge::test_connect_fail PASSED
+# test_unity_bridge.py::TestUnityBridge::test_send_command PASSED
+# test_unity_bridge.py::TestUnityBridge::test_disconnect PASSED
+```
+
+**Unity** : Compile sans erreurs ✅
+
+### 🔗 Fichiers clés du projet
+
+**Python** :
+- `main.py` - Point d'entrée
+- `src/gui/app.py` - Interface Qt (890 lignes)
+- `src/ipc/unity_bridge.py` - Client IPC (150 lignes)
+- `src/utils/config.py` - Configuration (120 lignes)
+- `requirements.txt` - Dépendances
+
+**Unity C#** :
+- `unity/DesktopMateUnity/Assets/Scripts/VRMLoader.cs` (250 lignes)
+- `unity/DesktopMateUnity/Assets/Scripts/VRMBlendshapeController.cs` (400 lignes - v2.0)
+- `unity/DesktopMateUnity/Assets/Scripts/IPC/PythonBridge.cs` (550 lignes)
+
+**Documentation** :
+- `docs/INDEX.md` - Arborescence complète
+- `docs/README.md` - Doc principale
+- `docs/sessions/session_7_animations/` - Contexte Session 7
+- `docs/chat_transitions/chat_3_animations_session_7/` - Transition actuelle
+
+### ✅ Checklist avant de commencer
+
+Avant de proposer quoi que ce soit, vérifier :
+
+- [ ] J'ai lu `CURRENT_STATE.md`
+- [ ] J'ai lu `CHAT_SUMMARY.md`
+- [ ] J'ai lu `.github/instructions/copilot-instructions.instructions.md`
+- [ ] Je connais l'architecture Lerp (v2.0)
+- [ ] Je connais le pattern thread-safety (Queue<Action>)
+- [ ] Je sais que l'utilisateur ne connaît pas Unity/C#
+- [ ] Je sais qu'il faut copier scripts dans docs/session_X/scripts/
+- [ ] Je sais qu'il faut toujours mettre à jour INDEX.md et README.md
+
+### 🎉 Prêt à démarrer !
+
+Quand tu es prêt, demande-moi :
+1. Ce que je veux implémenter (probablement clignement automatique)
+2. Si j'ai des questions sur l'état actuel
+3. Si tout fonctionne correctement (tests, Unity, etc.)
+
+**Rappel** : Toujours communiquer en français, expliquer clairement Unity/C#, documenter TOUT, ne JAMAIS oublier les scripts dans docs/session_X/scripts/ !
+
+---
+
+**Bon développement pour Session 8 ! 🚀👀✨**
