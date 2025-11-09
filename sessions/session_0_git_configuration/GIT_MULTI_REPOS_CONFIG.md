@@ -1,7 +1,7 @@
 # 🔧 Configuration Git Multi-Repos - Workly Project
 
-**Date :** 10 novembre 2025  
-**Chat :** Chat 11 - Configuration Git  
+**Date :** 10 novembre 2025
+**Chat :** Chat 11 - Configuration Git
 **Objectif :** Configurer 3 repos GitHub séparés avec conventions de commits différentes
 
 ---
@@ -21,11 +21,11 @@ c:\Dev\workly_project\
 
 ### 🎯 Conventions de commits par repo
 
-| Repo | Convention | Description |
-|------|-----------|-------------|
+| Repo               | Convention                        | Description                                              |
+| ------------------ | --------------------------------- | -------------------------------------------------------- |
 | **workly-desktop** | **Strict** (Conventional Commits) | `feat:`, `fix:`, `docs:`, `refactor:`, `test:`, `chore:` |
-| **workly-website** | **Libre** | Commits descriptifs sans format strict |
-| **workly-docs** | **Semi-Strict** | `docs:` pour doc technique, libre pour notes |
+| **workly-website** | **Libre**                         | Commits descriptifs sans format strict                   |
+| **workly-docs**    | **Semi-Strict**                   | `docs:` pour doc technique, libre pour notes             |
 
 ---
 
@@ -161,25 +161,27 @@ Update CSS
 **Deux formats acceptés :**
 
 1. **Format strict** (pour doc technique) :
+
 ```bash
 docs: <description>
 ```
 
 2. **Format libre** (pour notes) :
+
 ```bash
 Description libre
 ```
 
 #### Quand utiliser `docs:` ?
 
-| Type de changement | Format |
-|-------------------|--------|
-| Ajout de session complète | `docs: add session 12 guide` |
-| Mise à jour guide technique | `docs: update IPC optimization guide` |
-| Création CURRENT_STATE | `docs: update current state for chat 11` |
-| Mise à jour INDEX/README | `docs: update index with session 12` |
-| Notes rapides/brainstorming | `Notes session 12 - idées` |
-| TODO temporaire | `TODO: vérifier Unity version` |
+| Type de changement          | Format                                   |
+| --------------------------- | ---------------------------------------- |
+| Ajout de session complète   | `docs: add session 12 guide`             |
+| Mise à jour guide technique | `docs: update IPC optimization guide`    |
+| Création CURRENT_STATE      | `docs: update current state for chat 11` |
+| Mise à jour INDEX/README    | `docs: update index with session 12`     |
+| Notes rapides/brainstorming | `Notes session 12 - idées`               |
+| TODO temporaire             | `TODO: vérifier Unity version`           |
 
 #### Types de commits `docs:`
 
@@ -334,27 +336,27 @@ git push
 
 ### 🖥️ workly-desktop (Strict)
 
-✅ Historique Git ultra-propre et professionnel  
-✅ Génération automatique de changelogs possible  
-✅ Facilite la collaboration et la maintenance  
-✅ Standard reconnu internationalement  
-✅ Versioning sémantique facilité  
+✅ Historique Git ultra-propre et professionnel
+✅ Génération automatique de changelogs possible
+✅ Facilite la collaboration et la maintenance
+✅ Standard reconnu internationalement
+✅ Versioning sémantique facilité
 
 ### 🌐 workly-website (Libre)
 
-✅ Rapidité des commits (pas de friction)  
-✅ Flexibilité totale pour les changements de design  
-✅ Naturel et accessible  
-✅ Pas de barrière technique  
-✅ Focus sur le contenu, pas sur le format  
+✅ Rapidité des commits (pas de friction)
+✅ Flexibilité totale pour les changements de design
+✅ Naturel et accessible
+✅ Pas de barrière technique
+✅ Focus sur le contenu, pas sur le format
 
 ### 📚 workly-docs (Semi-Strict)
 
-✅ Structure avec `docs:` pour retrouver facilement les guides  
-✅ Flexibilité pour les notes rapides  
-✅ Pragmatique et adapté au workflow solo + IA  
-✅ Historique lisible et organisé  
-✅ Pas de blocage pour les brainstorming  
+✅ Structure avec `docs:` pour retrouver facilement les guides
+✅ Flexibilité pour les notes rapides
+✅ Pragmatique et adapté au workflow solo + IA
+✅ Historique lisible et organisé
+✅ Pas de blocage pour les brainstorming
 
 ---
 
@@ -363,18 +365,22 @@ git push
 ### 🎯 Avantages
 
 1. **Séparation des préoccupations**
+
    - Code applicatif ≠ Site web ≠ Documentation
    - Chaque repo a son propre cycle de vie
 
 2. **Déploiements indépendants**
+
    - Le site web peut être mis à jour sans toucher au code
    - La doc peut évoluer sans impacter l'app
 
 3. **Conventions adaptées**
+
    - Chaque repo a sa convention de commits appropriée
    - Flexibilité vs Structure selon les besoins
 
 4. **Gestion des droits**
+
    - Possibilité de rendre publique la doc sans exposer le code
    - Collaboration différente selon les repos
 
@@ -385,6 +391,7 @@ git push
 ### ⚠️ Alternative non retenue
 
 **Mono-repo avec tout dedans :**
+
 - ❌ Historique Git mélangé (code + site + doc)
 - ❌ Convention de commits difficile à appliquer
 - ❌ Déploiements couplés
@@ -434,12 +441,12 @@ git log --oneline
 
 ## 📚 Fichiers de référence créés
 
-| Repo | Fichier | Description |
-|------|---------|-------------|
-| workly-desktop | `GIT_COMMIT_CONVENTIONS.md` | Guide complet Conventional Commits |
-| workly-website | `GIT_COMMIT_CONVENTIONS.md` | Guide convention libre |
-| workly-docs | `GIT_COMMIT_CONVENTIONS.md` | Guide convention semi-strict |
-| workly-docs | `sessions/session_0_git_configuration/GIT_MULTI_REPOS_CONFIG.md` | Ce document |
+| Repo           | Fichier                                                          | Description                        |
+| -------------- | ---------------------------------------------------------------- | ---------------------------------- |
+| workly-desktop | `GIT_COMMIT_CONVENTIONS.md`                                      | Guide complet Conventional Commits |
+| workly-website | `GIT_COMMIT_CONVENTIONS.md`                                      | Guide convention libre             |
+| workly-docs    | `GIT_COMMIT_CONVENTIONS.md`                                      | Guide convention semi-strict       |
+| workly-docs    | `sessions/session_0_git_configuration/GIT_MULTI_REPOS_CONFIG.md` | Ce document                        |
 
 ---
 
@@ -467,6 +474,7 @@ git log --oneline
 ✅ Configuration Git terminée !
 
 Tu peux maintenant :
+
 1. **Coder** dans `workly-desktop` avec commits stricts
 2. **Designer** le site dans `workly-website` avec commits libres
 3. **Documenter** dans `workly-docs` avec commits semi-stricts

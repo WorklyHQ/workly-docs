@@ -1,6 +1,6 @@
 # Session 0 : Configuration Git & Unity
 
-**Date :** 18 octobre 2025 (Unity) | 10 novembre 2025 (Multi-Repos)  
+**Date :** 18 octobre 2025 (Unity) | 10 novembre 2025 (Multi-Repos)
 **Objectif :** Configurer correctement Git pour le projet Workly
 
 ## 📋 Contenu
@@ -13,6 +13,7 @@
 ### 📁 Configuration Unity (18 octobre 2025)
 
 Lors du premier commit, Git tentait de versionner les dossiers générés par Unity :
+
 - `Library/` (plusieurs GB de cache)
 - `Temp/` (fichiers temporaires)
 - `PackageCache/` (packages téléchargés)
@@ -23,11 +24,11 @@ Ces dossiers sont **automatiquement régénérés** par Unity et ne doivent **ja
 
 Configuration de **3 repos GitHub séparés** avec conventions de commits différentes :
 
-| Repo | URL | Convention |
-|------|-----|-----------|
+| Repo               | URL                                              | Convention                        |
+| ------------------ | ------------------------------------------------ | --------------------------------- |
 | **workly-desktop** | `https://github.com/WorklyHQ/workly-desktop.git` | **Strict** (Conventional Commits) |
-| **workly-website** | `https://github.com/WorklyHQ/workly-website.git` | **Libre** |
-| **workly-docs** | `https://github.com/WorklyHQ/workly-docs.git` | **Semi-Strict** |
+| **workly-website** | `https://github.com/WorklyHQ/workly-website.git` | **Libre**                         |
+| **workly-docs**    | `https://github.com/WorklyHQ/workly-docs.git`    | **Semi-Strict**                   |
 
 ## ✅ Solutions appliquées
 
@@ -47,10 +48,12 @@ Configuration de **3 repos GitHub séparés** avec conventions de commits diffé
 ## �📚 Fichiers créés
 
 ### Unity (18 octobre 2025)
+
 - `.gitignore` (mis à jour avec règles Unity complètes)
 - `GIT_UNITY_FIX.md` (documentation détaillée)
 
 ### Multi-Repos (10 novembre 2025) ✨
+
 - `workly-desktop/GIT_COMMIT_CONVENTIONS.md` (Convention Strict)
 - `workly-website/GIT_COMMIT_CONVENTIONS.md` (Convention Libre)
 - `workly-docs/GIT_COMMIT_CONVENTIONS.md` (Convention Semi-Strict)
@@ -59,12 +62,14 @@ Configuration de **3 repos GitHub séparés** avec conventions de commits diffé
 ## 🎓 Points importants
 
 ### Unity
+
 - Seuls `Assets/`, `ProjectSettings/`, et `Packages/manifest.json` doivent être versionnés
 - Unity régénère `Library/` automatiquement à l'ouverture du projet
 - Fermer Unity avant les opérations Git massives
 - Les warnings "LF → CRLF" sont normaux sur Windows
 
 ### Multi-Repos
+
 - **workly-desktop** : Commits stricts (`feat:`, `fix:`, `docs:`, etc.)
 - **workly-website** : Commits libres et descriptifs
 - **workly-docs** : `docs:` pour doc technique, libre pour notes

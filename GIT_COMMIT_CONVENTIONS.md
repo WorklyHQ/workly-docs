@@ -22,36 +22,36 @@ Description libre
 
 Utilise le préfixe `docs:` pour les **commits structurés** :
 
-| Type de changement | Utilise `docs:` | Exemple |
-|-------------------|-----------------|---------|
-| Ajout de session complète | ✅ Oui | `docs: add session 12 website guide` |
-| Mise à jour d'un guide technique | ✅ Oui | `docs: update IPC optimization guide` |
-| Création de CURRENT_STATE | ✅ Oui | `docs: update current state for chat 11` |
-| Mise à jour d'INDEX.md | ✅ Oui | `docs: update index with session 12` |
-| Documentation d'architecture | ✅ Oui | `docs: document Unity threading model` |
+| Type de changement               | Utilise `docs:` | Exemple                                  |
+| -------------------------------- | --------------- | ---------------------------------------- |
+| Ajout de session complète        | ✅ Oui          | `docs: add session 12 website guide`     |
+| Mise à jour d'un guide technique | ✅ Oui          | `docs: update IPC optimization guide`    |
+| Création de CURRENT_STATE        | ✅ Oui          | `docs: update current state for chat 11` |
+| Mise à jour d'INDEX.md           | ✅ Oui          | `docs: update index with session 12`     |
+| Documentation d'architecture     | ✅ Oui          | `docs: document Unity threading model`   |
 
 ## 🎨 Quand utiliser un commit libre ?
 
 Utilise des commits **libres** pour les **notes rapides** :
 
-| Type de changement | Format libre OK | Exemple |
-|-------------------|-----------------|---------|
-| Notes de brainstorming | ✅ Oui | `Notes session 12 - idées features` |
-| TODO temporaire | ✅ Oui | `TODO: vérifier Unity version` |
-| Notes de debug | ✅ Oui | `Debug notes - problème IPC` |
-| Résumé de chat | ✅ Oui | `Résumé chat 10 - optimisations` |
+| Type de changement     | Format libre OK | Exemple                             |
+| ---------------------- | --------------- | ----------------------------------- |
+| Notes de brainstorming | ✅ Oui          | `Notes session 12 - idées features` |
+| TODO temporaire        | ✅ Oui          | `TODO: vérifier Unity version`      |
+| Notes de debug         | ✅ Oui          | `Debug notes - problème IPC`        |
+| Résumé de chat         | ✅ Oui          | `Résumé chat 10 - optimisations`    |
 
 ## 📝 Types de commits `docs:`
 
 ### Types principaux
 
-| Type | Usage | Exemple |
-|------|-------|---------|
-| `docs: add` | Ajout de nouvelle documentation | `docs: add session 12 complete guide` |
-| `docs: update` | Mise à jour de doc existante | `docs: update README with new sessions` |
-| `docs: fix` | Correction de doc (typo, erreurs) | `docs: fix typos in session 10 guide` |
-| `docs: reorganize` | Réorganisation de structure | `docs: reorganize chat transitions folder` |
-| `docs: remove` | Suppression de doc obsolète | `docs: remove outdated session 1 notes` |
+| Type               | Usage                             | Exemple                                    |
+| ------------------ | --------------------------------- | ------------------------------------------ |
+| `docs: add`        | Ajout de nouvelle documentation   | `docs: add session 12 complete guide`      |
+| `docs: update`     | Mise à jour de doc existante      | `docs: update README with new sessions`    |
+| `docs: fix`        | Correction de doc (typo, erreurs) | `docs: fix typos in session 10 guide`      |
+| `docs: reorganize` | Réorganisation de structure       | `docs: reorganize chat transitions folder` |
+| `docs: remove`     | Suppression de doc obsolète       | `docs: remove outdated session 1 notes`    |
 
 ### Avec scope (recommandé)
 
@@ -208,6 +208,7 @@ Idées session 13 - système audio
 ---
 
 **🎯 Résumé rapide :**
+
 - Format strict : `docs: description` pour doc technique
 - Format libre : `Description` pour notes rapides
 - Les deux sont acceptés dans le même repo
