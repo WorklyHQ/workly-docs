@@ -1,4 +1,4 @@
-# 📚 Documentation Desktop-Mate
+# 📚 Documentation Workly
 
 Organisation de la documentation par sessions de développement.
 
@@ -26,10 +26,24 @@ Ce projet utilise un **système à 3 niveaux** pour garantir que la documentatio
 
 ---
 
+## 📁 Fichiers principaux
+
+### 📄 Nouveaux fichiers (Novembre 2025) ✨
+
+- **[SESSIONS.md](SESSIONS.md)** - Liste détaillée et complète des 12 sessions de développement
+- **[CHANGELOG.md](CHANGELOG.md)** - Historique complet des versions (0.1.0 → 0.14.0-alpha)
+- **[README_OLD_FULL.md](README_OLD_FULL.md)** - Archive de l'ancien README principal (1347 lignes)
+
+**Contexte** : Ces fichiers ont été créés lors de la **refonte Workly (Novembre 2025)** pour améliorer la lisibilité et l'organisation de la documentation. Le README principal du projet a été condensé de 1347 lignes à ~350 lignes, les détails ayant été déplacés dans ces fichiers dédiés.
+
+---
+
 ## 📁 Structure des dossiers
 
 ### 📂 chat_transitions/
+
 **Historique des transitions entre chats**
+
 - Archive de chaque session de chat avec documentation complète
 - Prompts de transition pour continuité entre chats
 - **chat_1_python_unity_start_session_0_to_5/** - Premier chat (MVP)
@@ -40,11 +54,14 @@ Ce projet utilise un **système à 3 niveaux** pour garantir que la documentatio
 ---
 
 ### 📂 docs/sessions/session_0_git_configuration/
+
 **Configuration Git pour Unity**
+
 - `GIT_UNITY_FIX.md` - Résolution problème .gitignore Unity
 - `README.md` - Vue d'ensemble de la session
 
 **Réalisations :**
+
 - ✅ Configuration `.gitignore` pour Unity
 - ✅ Exclusion Library/, Temp/, PackageCache/
 - ✅ Documentation bonnes pratiques Git + Unity
@@ -52,11 +69,14 @@ Ce projet utilise un **système à 3 niveaux** pour garantir que la documentatio
 ---
 
 ### 📂 docs/sessions/session_1_setup/
+
 **Mise en place initiale du projet Python**
+
 - `SUCCESS_SESSION_1.md` - Récapitulatif de la session 1
 - `architecture.md` - Architecture globale du projet
 
 **Réalisations :**
+
 - ✅ Création de la structure du projet Python
 - ✅ Configuration de l'environnement virtuel (venv)
 - ✅ Installation des dépendances (PySide6, pytest, etc.)
@@ -66,11 +86,14 @@ Ce projet utilise un **système à 3 niveaux** pour garantir que la documentatio
 ---
 
 ### 📂 docs/sessions/session_2_unity_installation/
+
 **Installation et configuration de Unity**
+
 - Documentation de l'installation Unity 2022.3 LTS
 - Configuration du projet Unity avec URP (Universal Render Pipeline)
 
 **Réalisations :**
+
 - ✅ Installation Unity Hub
 - ✅ Installation Unity 2022.3 LTS
 - ✅ Création du projet Unity avec template URP
@@ -79,11 +102,14 @@ Ce projet utilise un **système à 3 niveaux** pour garantir que la documentatio
 ---
 
 ### 📂 docs/sessions/session_3_univrm_installation/
+
 **Installation du package UniVRM**
+
 - Guide d'installation UniVRM pour le support VRM
 - Configuration du package dans Unity
 
 **Réalisations :**
+
 - ✅ Installation UniVRM via .unitypackage
 - ✅ Import du package dans le projet Unity
 - ✅ Configuration des dépendances (UniGLTF, VRMShaders, etc.)
@@ -91,12 +117,15 @@ Ce projet utilise un **système à 3 niveaux** pour garantir que la documentatio
 ---
 
 ### 📂 docs/sessions/session_4_python_unity_connection/
+
 **Communication IPC Python ↔ Unity**
+
 - `TEST_CONNECTION.md` - Guide de test de connexion
 - `DEBUG_CONNECTION.md` - Résolution des problèmes de connexion
 - `FIX_SCRIPT_NOT_RUNNING.md` - Fix du problème de script Unity non exécuté
 
 **Réalisations :**
+
 - ✅ Création de PythonBridge.cs (serveur socket Unity)
 - ✅ Création de unity_bridge.py (client socket Python)
 - ✅ Protocole de communication JSON sur TCP (port 5555)
@@ -104,6 +133,7 @@ Ce projet utilise un **système à 3 niveaux** pour garantir que la documentatio
 - ✅ Résolution du problème de checkbox du script Unity
 
 **Architecture IPC :**
+
 ```
 Python (Client) ←→ Socket TCP (127.0.0.1:5555) ←→ Unity (Server)
       │                                                    │
@@ -115,12 +145,15 @@ Python (Client) ←→ Socket TCP (127.0.0.1:5555) ←→ Unity (Server)
 ---
 
 ### 📂 docs/sessions/session_5_vrm_loading/
+
 **Chargement et affichage des modèles VRM**
+
 - `LOAD_VRM_MODEL.md` - Guide de chargement VRM
 - `SESSION_VRM_LOADING_SUCCESS.md` - Récapitulatif complet de la session 5
 - `scripts/VRMLoader_CLEAN.cs` - Script VRMLoader propre et commenté
 
 **Réalisations :**
+
 - ✅ Création de VRMLoader.cs pour gérer les modèles VRM
 - ✅ Résolution du problème de threading (main thread Unity)
 - ✅ Implémentation de la commande `load_model` dans PythonBridge
@@ -128,6 +161,7 @@ Python (Client) ←→ Socket TCP (127.0.0.1:5555) ←→ Unity (Server)
 - ✅ Test complet Python → Unity → Affichage VRM réussi ! 🎭
 
 **Problèmes résolus :**
+
 - Threading Unity (Queue + Update() pattern)
 - API UniVRM variable selon versions
 - Appel GameObject depuis thread réseau
@@ -135,13 +169,16 @@ Python (Client) ←→ Socket TCP (127.0.0.1:5555) ←→ Unity (Server)
 ---
 
 ### 📂 docs/sessions/session_6_expressions/
+
 **Contrôle des expressions faciales via blendshapes VRM**
+
 - `BLENDSHAPES_GUIDE.md` - Guide technique complet des blendshapes
 - `UNITY_SETUP_GUIDE.md` - Configuration Unity pas-à-pas
 - `SESSION_SUCCESS.md` - Récapitulatif complet de la session 6
 - `scripts/VRMBlendshapeController.cs` - Script de référence v1.6
 
 **Réalisations :**
+
 - ✅ Création de VRMBlendshapeController.cs pour gérer les expressions
 - ✅ Support de 5 expressions : Joy, Angry, Sorrow, Fun, Surprised
 - ✅ Interface Python avec sliders pour contrôler chaque expression
@@ -150,6 +187,7 @@ Python (Client) ←→ Socket TCP (127.0.0.1:5555) ←→ Unity (Server)
 - ✅ Tests complets : 8/8 tests Python passés
 
 **Architecture expressions :**
+
 ```
 Python Slider → IPC JSON → PythonBridge → VRMBlendshapeController
                                                     ↓
@@ -161,12 +199,15 @@ Python Slider → IPC JSON → PythonBridge → VRMBlendshapeController
 ---
 
 ### 📂 docs/sessions/session_7_animations/
+
 **Système d'animations fluides et transitions** 🎬
+
 - `README.md` - Vue d'ensemble complète de la session 7
 - `TRANSITIONS_GUIDE.md` - Guide technique Lerp et interpolation
 - `SESSION_SUCCESS.md` - Récapitulatif de succès complet
 
 **Réalisations :**
+
 - ✅ **Transitions fluides** : Interpolation Lerp pour expressions naturelles
 - ✅ **Contrôle de vitesse** : Slider 1.0-10.0 (défaut 3.0)
 - ✅ **Chargement/Déchargement** : Toggle VRM avec thread-safety
@@ -176,6 +217,7 @@ Python Slider → IPC JSON → PythonBridge → VRMBlendshapeController
 - ✅ **UX professionnelle** : Icône app, interface française, messages d'aide
 
 **Innovations techniques :**
+
 - Lerp dans `Update()` pour transitions smooth chaque frame
 - Système de modèle par défaut (Menu Fichier → Définir/Utiliser autre)
 - Thread-safety complet (Destroy, GetComponent depuis thread principal)
@@ -184,13 +226,16 @@ Python Slider → IPC JSON → PythonBridge → VRMBlendshapeController
 ---
 
 ### 📂 docs/sessions/session_8_auto_blink/
+
 **Clignement automatique des yeux** 👁️
+
 - `README.md` - Vue d'ensemble complète de la session 8
 - `BLINK_GUIDE.md` - Guide rapide d'implémentation
 - `TECHNICAL_GUIDE.md` - Architecture détaillée avec SmoothStep
 - `TROUBLESHOOTING.md` - Résolution complète de tous les problèmes
 
 **Réalisations :**
+
 - ✅ **Animation réaliste** : SmoothStep (courbes Hermite) en 160ms
 - ✅ **Timings optimisés** : 50ms fermeture + 30ms pause + 80ms ouverture
 - ✅ **Intervalles aléatoires** : 2-5 secondes entre clignements
@@ -200,6 +245,7 @@ Python Slider → IPC JSON → PythonBridge → VRMBlendshapeController
 - ✅ **Coroutines Unity** : BlinkLoop + PerformBlink pour animations non-bloquantes
 
 **Innovations techniques :**
+
 - Courbe SmoothStep (3t² - 2t³) pour mouvement naturel
 - Manipulation directe VRMBlendShapeProxy (ImmediatelySetValue + Apply)
 - Cohabitation pacifique avec système Lerp (expressions ≠ clignement)
@@ -207,6 +253,7 @@ Python Slider → IPC JSON → PythonBridge → VRMBlendshapeController
 - Délai d'initialisation 2.5s pour attendre chargement Unity
 
 **Problèmes résolus :**
+
 1. Blendshapes non appliqués → Fix mapping GetBlendShapeKey()
 2. Animation trop lente (2s) → Bypass Lerp + manipulation directe
 3. Animation robotique → SmoothStep au lieu de linéaire
@@ -214,7 +261,9 @@ Python Slider → IPC JSON → PythonBridge → VRMBlendshapeController
 ---
 
 ### 📂 docs/sessions/session_9_head_movements/
+
 **Mouvements de Tête Automatiques + Réorganisation Interface** 🎭
+
 - `README.md` - Vue d'ensemble complète de la session 9
 - `INTERFACE_REORGANIZATION.md` - Guide réorganisation 3 onglets
 - `HEAD_MOVEMENT_GUIDE.md` - Guide technique (SmoothStep, Coroutine, IPC)
@@ -222,6 +271,7 @@ Python Slider → IPC JSON → PythonBridge → VRMBlendshapeController
 - `scripts/` - Tous les scripts finaux (Unity C# + Python)
 
 **Réalisations :**
+
 - ✅ **Mouvements naturels** : VRMHeadMovementController.cs avec Coroutines + SmoothStep
 - ✅ **Paramètres configurables** : Fréquence (3-10s) et Amplitude (2-10°)
 - ✅ **Animations fluides** : Yaw (-5° à +5°) et Pitch (-2.5° à +2.5°)
@@ -231,16 +281,19 @@ Python Slider → IPC JSON → PythonBridge → VRMBlendshapeController
 - ✅ **Code propre** : ~137 lignes dupliquées supprimées
 
 **Nouvelle structure interface :**
+
 - **Onglet "Expressions"** : 5 sliders expressions + reset
 - **Onglet "Animations"** : Auto-blink (checkbox) + Head movements (checkbox + 2 sliders) + reset
 - **Onglet "Options"** : Vitesse transition (slider) + reset
 
 **Problèmes résolus :**
+
 1. Conflit VRMAutoBlinkController → Désactiver dans Unity Inspector
 2. État VRM après déconnexion → Reset vrm_loaded + texte bouton
 3. Code dupliqué interface → Suppression ~137 lignes
 
 **Innovations techniques :**
+
 - Coroutine RandomHeadMovement() avec cycle complet (mouvement → hold → retour)
 - Interpolation SmoothStep pour accélération/décélération naturelle
 - Recherche head bone via Animator.GetBoneTransform(HumanBodyBones.Head)
@@ -250,13 +303,16 @@ Python Slider → IPC JSON → PythonBridge → VRMBlendshapeController
 ---
 
 ### 📂 docs/sessions/session_10_ai_chat/
+
 **IA Conversationnelle Complète (Kira)** 🤖💬
+
 - `README.md` - Vue d'ensemble Session 10 (14 phases)
 - `PLAN_SESSION_10.md` - Plan détaillé complet
 - `CHAT_ENGINE_GUIDE.md` - Guide utilisation ChatEngine
 - `scripts/` - Scripts finaux (config.py, model_manager.py, chat_engine.py, tests)
 
 **Réalisations (Phases 1-10) :**
+
 - ✅ **Phase 1-5** (Chats 6-7) : Architecture + Mémoire + Config + Model Manager + Chat Engine
 - ✅ **Phase 6-9** (Chat 8) : Emotion Analyzer + Discord Bot + GUI Chat + CUDA Fix
 - ✅ **Phase 10** (Chat 9) : GUI Discord Control + Menu Options
@@ -264,12 +320,15 @@ Python Slider → IPC JSON → PythonBridge → VRMBlendshapeController
 **Tests globaux** : ✅ **171/171 passent (100%)** 🎉
 
 **Chat 9 (Bugfixes & GPU)** : ✅ **6 bugs résolus + 5 features** → **270/270 tests (100%)**
+
 - Performance : **25-35 tok/s** (5-7x plus rapide), **5.4GB VRAM**, **43/43 GPU layers**
 
 ---
 
 ### 📂 docs/sessions/session_11_performance/
+
 **Optimisations Performance Complètes** 🔥
+
 - `README.md` - Vue d'ensemble Session 11 (6 phases)
 - `MEMORY_PROFILING.md` - Phase 1 : Profiling Mémoire ✅
 - `LLM_CACHE_OPTIMIZATION.md` - Phase 2 : Optimisation Cache LLM ✅
@@ -277,6 +336,7 @@ Python Slider → IPC JSON → PythonBridge → VRMBlendshapeController
 - `scripts/` - Scripts de profiling et benchmarks
 
 **Réalisations (Phases 1-3) :**
+
 - ✅ **Phase 1** : Memory Profiling
   - Baseline RAM/VRAM établi (35 MB → 687 MB après première génération)
   - Pas de memory leaks détecté sur 100 messages
@@ -292,6 +352,7 @@ Python Slider → IPC JSON → PythonBridge → VRMBlendshapeController
   - Amélioration throughput : **+907%** (64 → 642 msg/s)
 
 **Phases à venir (4-6) :**
+
 - 🔜 **Phase 4** : CPU Optimization (n_threads auto-detection)
 - 🔜 **Phase 5** : GPU Profiling & Tuning (profils dynamiques)
 - 🔜 **Phase 6** : Tests & Documentation finale
@@ -299,11 +360,14 @@ Python Slider → IPC JSON → PythonBridge → VRMBlendshapeController
 ---
 
 ### 📂 docs/sessions/session_12_website/
+
 **Site web professionnel pour Workly** 🌐 💜
+
 - `README.md` - Vue d'ensemble complète (300+ lignes)
 - `TECHNICAL_GUIDE.md` - Guide personnalisation (couleurs, pages, animations)
 
 **Réalisations :**
+
 - ✅ **5 pages HTML créées** : Accueil, À propos, CGU, Confidentialité + API (archivée)
 - ✅ **Design violet (#903f9e)** : Dark mode futuriste avec animations scroll
 - ✅ **Responsive mobile-first** : Breakpoint 768px, menu hamburger
@@ -316,6 +380,7 @@ Python Slider → IPC JSON → PythonBridge → VRMBlendshapeController
 - ✅ **Statistiques** : ~5h développement, ~2200 lignes HTML/CSS/JS
 
 **Corrections appliquées :**
+
 - Licence MIT → MIT-NC (usage commercial interdit)
 - Project rename : Kira → Workly (30+ occurrences)
 - Emoji cleanup : Navigation propre, emojis dans feature cards
@@ -326,9 +391,11 @@ Python Slider → IPC JSON → PythonBridge → VRMBlendshapeController
 ---
 
 ### 📂 Unity_docs/ (legacy)
+
 Ancienne documentation Unity - À réorganiser ou supprimer
 
 ### 📂 1st/ (legacy)
+
 Ancien dossier - À vérifier et réorganiser si nécessaire
 
 ---
@@ -336,6 +403,7 @@ Ancien dossier - À vérifier et réorganiser si nécessaire
 ## 🎯 État actuel du projet
 
 ### ✅ Phase 1 - MVP Complet
+
 - **Sessions 0-5 terminées** (Chat 1)
 - Application Python avec interface Qt
 - Communication Python ↔ Unity via socket TCP
@@ -345,6 +413,7 @@ Ancien dossier - À vérifier et réorganiser si nécessaire
 - Documentation complète (30+ fichiers)
 
 ### ✅ Phase 2 - Expressions & Animations Complètes
+
 - **Session 6 terminée** : Contrôle des expressions faciales (5 expressions)
 - **Session 7 terminée** : Animations fluides (Lerp, transitions, vitesse ajustable)
 - **Session 8 terminée** : Clignement automatique des yeux (SmoothStep, 160ms)
@@ -359,8 +428,9 @@ Ancien dossier - À vérifier et réorganiser si nécessaire
   - **Mouvements de tête naturels** (fréquence 3-10s, amplitude 2-10°, SmoothStep)
   - **Interface 3 onglets** (Expressions, Animations, Options)
   - **3 boutons reset contextuels**
-  
+
 ### ✅ Phase 3 - IA Conversationnelle (Chat 6-9) - COMPLÈTE
+
 - **Session 10 (10 phases complètes)** : Système IA Conversationnelle Complet ✅ 🎊
   - ✅ **Chat 6 (Phases 1-2)** : Architecture IA + Mémoire (SQLite, 11 tests)
   - ✅ **Chat 7 (Phases 3-5)** : Config IA + Model Manager + Chat Engine (97 tests)
@@ -370,9 +440,10 @@ Ancien dossier - À vérifier et réorganiser si nécessaire
   - 🤖 Kira peut discuter avec LLM Zephyr-7B sur **Discord** ET **Desktop** !
   - 🎮 **GPU CUDA actif** : RTX 4050, 35 layers, 33 tok/s (6-7x plus rapide)
   - 🎛️ Interface complète : Avatar 3D + Chat Desktop + Discord Bot Control + Menu Options
-  - 🎊 **Desktop-Mate dispose d'une IA conversationnelle complète et sécurisée !**
+  - 🎊 **Workly dispose d'une IA conversationnelle complète et sécurisée !**
 
 ### ✅ Phase 4 - Optimisations & Bugfixes (Chat 9) - COMPLÈTE ✨
+
 - **Chat 9 (Bugfixes & Optimisations GPU)** : Stabilité et Performance ✅ 🚀
   - ✅ **6 bugs critiques résolus** :
     1. Chat input bloqué après 1er message → Signal Qt `chat_input_ready`
@@ -393,9 +464,10 @@ Ancien dossier - À vérifier et réorganiser si nécessaire
     - 🎮 GPU layers : **35/43 → 43/43** (100%)
     - 📏 Context size : **2048 → 4096** tokens (doublé)
   - ✅ **Tests complets** : 270/270 tests passent (100%)
-  - 🎊 **Desktop-Mate est maintenant 5-7x plus rapide et ultra-stable !** ⚡
+  - 🎊 **Workly est maintenant 5-7x plus rapide et ultra-stable !** ⚡
 
 ### 🚀 Phase 5 - Performance Optimizations (Chat 10 - Session 11) - EN COURS
+
 - **Session 11 (Optimisations Performance)** : Memory, CPU, GPU, IPC 🚧 **(Phase 3/6 - Chat 10 COMPLÉTÉ)**
   - ✅ **Phase 1 : Memory Profiling** (1h) - COMPLÉTÉ
     - Scripts : profile_memory.py (4 modes de profiling)
@@ -426,6 +498,7 @@ Ancien dossier - À vérifier et réorganiser si nécessaire
     - Validation gains cumulatifs +30-40%
 
 ### 🌐 Phase 6 - Site Web Officiel (Chat 10 - Session 12) - COMPLÉTÉE ✨
+
 - **Session 12 (Site Web Workly)** : Site web professionnel complet 🎭 **TERMINÉE !**
   - ✅ **5 pages HTML** : Accueil (hero, features, tech), À propos (phases), CGU, Confidentialité
   - ✅ **Design violet (#903f9e)** : Dark mode futuriste, animations scroll optimisées
@@ -439,11 +512,12 @@ Ancien dossier - À vérifier et réorganiser si nécessaire
   - 🎭 **Site web professionnel Workly prêt pour production !** 🌐💜✨
 
 ### 🔜 Prochaines étapes envisagées
-  - **Session 11 (Phases 4-6)** : CPU optimization, GPU profiling, tests finaux
-  - **Session 13-14** : Audio & Lip-sync (TTS, voice recognition)
-  - **Session 15-16** : Interactions avancées (souris, idle animations)
-  - Unity IPC overhead (optimisation communication)
-  - CPU/GPU tuning (n_threads auto, profils dynamiques)
+
+- **Session 11 (Phases 4-6)** : CPU optimization, GPU profiling, tests finaux
+- **Session 13-14** : Audio & Lip-sync (TTS, voice recognition)
+- **Session 15-16** : Interactions avancées (souris, idle animations)
+- Unity IPC overhead (optimisation communication)
+- CPU/GPU tuning (n_threads auto, profils dynamiques)
 - **Session 12 : Audio & Lip-sync** 🎤 (Après Session 11)
   - Capture audio microphone
   - Analyse amplitude/fréquence
@@ -457,17 +531,19 @@ Ancien dossier - À vérifier et réorganiser si nécessaire
 
 ## 📖 Comment utiliser cette documentation
 
-1. **Nouveau sur le projet :** 
+1. **Nouveau sur le projet :**
+
    - Commence par `START_HERE.md`
    - Lis `chat_transitions/chat_1.../CHAT_SUMMARY.md`
-   
+
 2. **Reprendre le développement :**
+
    - Lis `CURRENT_STATE.md` pour l'état actuel
    - Consulte la roadmap dans `README.md` principal
-   
+
 3. **Débutant :** Lis les sessions dans l'ordre (0 → 5)
 
-4. **Problème spécifique :** Consulte les fichiers DEBUG_ et FIX_
+4. **Problème spécifique :** Consulte les fichiers DEBUG* et FIX*
 
 5. **Référence rapide :** Utilise `INDEX.md` pour navigation
 
@@ -477,7 +553,7 @@ Ancien dossier - À vérifier et réorganiser si nécessaire
 
 ## 🔗 Liens utiles
 
-- [Repository GitHub](https://github.com/Xyon15/desktop-mate)
+- [Repository GitHub](https://github.com/WorklyHQ/workly-desktop)
 - [État actuel du projet](chat_transitions/chat_10_session_11_phases_1_3/CURRENT_STATE.md)
 - [Contexte Chat 11](chat_transitions/chat_10_session_11_phases_1_3/CONTEXT_FOR_NEXT_CHAT.md)
 - [Index de navigation](INDEX.md)
@@ -487,7 +563,7 @@ Ancien dossier - À vérifier et réorganiser si nécessaire
 
 ---
 
-**Dernière mise à jour :** 9 novembre 2025  
-**Version du projet :** 0.14.0-alpha (Session 11 Phases 1-3 + Session 12 complétées !)  
-**Status :** ✅ Chat 10 TERMINÉ → Chat 11 (Session 11 Phases 4-6) - Documentation transition complète ! �✨  
+**Dernière mise à jour :** 9 novembre 2025
+**Version du projet :** 0.14.0-alpha (Session 11 Phases 1-3 + Session 12 complétées !)
+**Status :** ✅ Chat 10 TERMINÉ → Chat 11 (Session 11 Phases 4-6) - Documentation transition complète ! �✨
 **Prochain :** Phases 3-6 Session 11 (IPC, CPU, GPU, Tests & Docs)

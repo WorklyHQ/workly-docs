@@ -1,21 +1,24 @@
-# 👋 Bienvenue dans la Documentation Desktop-Mate !
+# 👋 Bienvenue dans la Documentation Workly !
 
-**Documentation complète et organisée du projet Desktop-Mate**
+**Documentation complète et organisée du projet Workly**
 
 ---
 
 ## 🎯 Par où commencer ?
 
 ### 🆕 Nouveau sur le projet ?
+
 1. 📖 Lis **[README.md](README.md)** pour une vue d'ensemble
 2. 🗺️ Consulte **[INDEX.md](INDEX.md)** pour la navigation
 3. 📚 Suis les sessions dans l'ordre (1 → 5)
 
 ### 🔍 Cherches quelque chose de précis ?
+
 - Utilise **[INDEX.md](INDEX.md)** section "Recherche rapide"
 - Consulte **[ORGANISATION.md](ORGANISATION.md)** pour comprendre la structure
 
 ### 🐛 As un problème ?
+
 - Cherche les fichiers `DEBUG_*.md` ou `FIX_*.md` dans les sessions
 - Regarde les `SUCCESS_*.md` pour voir comment ça devrait fonctionner
 
@@ -43,13 +46,13 @@ docs/
 
 ## 🚀 Liens rapides
 
-| Besoin | Fichier | Description |
-|--------|---------|-------------|
-| **Vue d'ensemble** | [README.md](README.md) | Tout comprendre du projet |
-| **Navigation** | [INDEX.md](INDEX.md) | Trouver rapidement un fichier |
-| **Installation Unity** | [session_2/](docs/sessions/session_2_unity_installation/) | Installer Unity |
-| **Problème connexion** | [session_4/DEBUG_CONNECTION.md](docs/sessions/session_4_python_unity_connection/DEBUG_CONNECTION.md) | Résoudre les bugs IPC |
-| **Chargement VRM** | [session_5/SESSION_VRM_LOADING_SUCCESS.md](docs/sessions/session_5_vrm_loading/SESSION_VRM_LOADING_SUCCESS.md) | Charger les avatars |
+| Besoin                 | Fichier                                                                                                        | Description                   |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| **Vue d'ensemble**     | [README.md](README.md)                                                                                         | Tout comprendre du projet     |
+| **Navigation**         | [INDEX.md](INDEX.md)                                                                                           | Trouver rapidement un fichier |
+| **Installation Unity** | [session_2/](docs/sessions/session_2_unity_installation/)                                                      | Installer Unity               |
+| **Problème connexion** | [session_4/DEBUG_CONNECTION.md](docs/sessions/session_4_python_unity_connection/DEBUG_CONNECTION.md)           | Résoudre les bugs IPC         |
+| **Chargement VRM**     | [session_5/SESSION_VRM_LOADING_SUCCESS.md](docs/sessions/session_5_vrm_loading/SESSION_VRM_LOADING_SUCCESS.md) | Charger les avatars           |
 
 ---
 
@@ -66,32 +69,34 @@ docs/
 
 ## 📊 État du projet
 
-| Session | Status | Objectif |
-|---------|--------|----------|
-| 1 | ✅ | Setup Python + GUI |
-| 2 | ✅ | Unity 2022.3 LTS |
-| 3 | ✅ | UniVRM |
-| 4 | ✅ | IPC Python ↔ Unity |
-| 5 | ✅ | Chargement VRM 🎭 |
-| 6 | ✅ | Expressions faciales |
-| 7 | ✅ | Animations & Transitions |
-| 8 | ✅ | Auto-Blink Naturel |
-| 9 | ✅ | Mouvements Tête + Interface 3 onglets |
-| 10 | ✅ | IA Conversationnelle Kira (10 phases : Architecture, Mémoire, Config, LLM, Chat Engine, Emotions, Discord Bot, GUI Chat, CUDA, GUI Discord + Menu Options) 🤖💬🎭 |
-| 11 | 🚧 | Optimisations Performance (3/6 phases : Memory Profiling, LLM Cache, IPC Batching) 🔥⚡ |
-| 12 | ✅ | Site Web Workly (5 pages HTML, Design violet, Responsive, Animations, MIT-NC) 🌐💜 |
+| Session | Status | Objectif                                                                                                                                                          |
+| ------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1       | ✅     | Setup Python + GUI                                                                                                                                                |
+| 2       | ✅     | Unity 2022.3 LTS                                                                                                                                                  |
+| 3       | ✅     | UniVRM                                                                                                                                                            |
+| 4       | ✅     | IPC Python ↔ Unity                                                                                                                                                |
+| 5       | ✅     | Chargement VRM 🎭                                                                                                                                                 |
+| 6       | ✅     | Expressions faciales                                                                                                                                              |
+| 7       | ✅     | Animations & Transitions                                                                                                                                          |
+| 8       | ✅     | Auto-Blink Naturel                                                                                                                                                |
+| 9       | ✅     | Mouvements Tête + Interface 3 onglets                                                                                                                             |
+| 10      | ✅     | IA Conversationnelle Kira (10 phases : Architecture, Mémoire, Config, LLM, Chat Engine, Emotions, Discord Bot, GUI Chat, CUDA, GUI Discord + Menu Options) 🤖💬🎭 |
+| 11      | 🚧     | Optimisations Performance (3/6 phases : Memory Profiling, LLM Cache, IPC Batching) 🔥⚡                                                                           |
+| 12      | ✅     | Site Web Workly (5 pages HTML, Design violet, Responsive, Animations, MIT-NC) 🌐💜                                                                                |
 
 ---
 
 ## 🎓 Conseils
 
 ### Pour bien utiliser cette doc :
+
 1. **Ne saute pas les étapes** - Suis les sessions dans l'ordre
 2. **Lis les README** de chaque session avant de plonger
-3. **Consulte les SUCCESS_** pour voir le résultat attendu
-4. **Utilise les DEBUG_** quand tu rencontres un problème
+3. **Consulte les SUCCESS\_** pour voir le résultat attendu
+4. **Utilise les DEBUG\_** quand tu rencontres un problème
 
 ### Pour contribuer :
+
 1. Range tes fichiers dans la bonne session
 2. Utilise les conventions de nommage
 3. Crée/mets à jour le README de la session
@@ -101,8 +106,9 @@ docs/
 
 ## 🎯 Prochaines étapes
 
-**Tu viens de finir la session 12 ?** 🎉  
-Bravo ! Tu as maintenant un Desktop-Mate avec une **IA conversationnelle fonctionnelle** + **site web professionnel** :
+**Tu viens de finir la session 12 ?** 🎉
+Bravo ! Tu as maintenant Workly avec une **IA conversationnelle fonctionnelle** + **site web professionnel** :
+
 - Interface Python Qt
 - Connexion Python ↔ Unity
 - Chargement de modèles VRM
@@ -123,6 +129,7 @@ Bravo ! Tu as maintenant un Desktop-Mate avec une **IA conversationnelle fonctio
 **Session 10 100% TERMINÉE !** 🎊
 
 Prochaines étapes envisagées :
+
 - **Tests d'intégration Discord**
 - **Session 11 : Audio & Lip-sync**
 - **Optimisations performances**
@@ -132,7 +139,7 @@ Prochaines étapes envisagées :
 ## 💡 Besoin d'aide ?
 
 - 📖 Relis le [README.md](README.md) de la session concernée
-- 🐛 Cherche dans les fichiers DEBUG_ et FIX_
+- 🐛 Cherche dans les fichiers DEBUG* et FIX*
 - 🔍 Utilise [INDEX.md](INDEX.md) pour trouver rapidement
 - 📊 Vérifie [ORGANISATION.md](ORGANISATION.md) pour comprendre la structure
 
@@ -142,6 +149,6 @@ Prochaines étapes envisagées :
 
 ---
 
-*Dernière mise à jour : 9 novembre 2025*  
-*Version : v0.13.0-alpha*  
-*Status : ✅ Session 12 COMPLÉTÉE (Site Web Workly) - 5 pages HTML, design violet (#903f9e), responsive, animations, prêt production ! 🌐💜✨*
+_Dernière mise à jour : 9 novembre 2025_
+_Version : v0.13.0-alpha_
+_Status : ✅ Session 12 COMPLÉTÉE (Site Web Workly) - 5 pages HTML, design violet (#903f9e), responsive, animations, prêt production ! 🌐💜✨_

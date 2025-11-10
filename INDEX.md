@@ -1,4 +1,4 @@
-# 📑 INDEX - Documentation Desktop-Mate
+# 📑 INDEX - Documentation Workly
 
 **Vue d'ensemble rapide de toute la documentation**
 
@@ -11,6 +11,9 @@ docs/
 │
 ├── 📄 README.md                                    ← Commence ici !
 ├── 📄 START_HERE.md                                ← Point d'entrée
+├── 📄 SESSIONS.md                                  ← ✨ Liste détaillée des 12 sessions
+├── 📄 CHANGELOG.md                                 ← 📋 Historique complet des versions
+├── 📄 README_OLD_FULL.md                           ← 🗂️ Ancien README complet (archive)
 ├── 📄 DOCUMENTATION_CHECKLIST.md                   ← ⚠️ Checklist docs (IMPORTANT!)
 ├── 📄 AI_DOCUMENTATION_PROMPT.md                   ← 🤖 Instructions IA (système)
 │
@@ -215,6 +218,7 @@ docs/
 ## 🚀 Démarrage rapide
 
 ### Pour commencer le projet de zéro :
+
 0. 📍 `chat_transitions/chat_9_session_10_phase_10/CURRENT_STATE.md` - État actuel complet du projet
 1. ⚙️ `sessions/session_0_git_configuration/` - Configurer Git pour Unity
 2. 📖 `README.md` - Vue d'ensemble
@@ -226,11 +230,13 @@ docs/
 8. 📁 `sessions/session_6_expressions/` - Implémenter expressions faciales (blendshapes)
 
 ### Pour reprendre après une pause :
+
 - **État du projet** → `chat_transitions/chat_10_session_11_phases_1_3/CURRENT_STATE.md`
 - **Contexte Chat 11** → `chat_transitions/chat_10_session_11_phases_1_3/CONTEXT_FOR_NEXT_CHAT.md`
 - **Prompt Chat 11** → `chat_transitions/chat_10_session_11_phases_1_3/README.md`
 
 ### Pour résoudre un problème spécifique :
+
 - **Problèmes Git avec Unity ?** → `sessions/session_0_git_configuration/GIT_UNITY_FIX.md`
 - **Unity ne démarre pas ?** → `sessions/session_2_unity_installation/UNITY_INSTALL_GUIDE.md`
 - **UniVRM erreur ?** → `sessions/session_3_univrm_installation/UNIVRM_INSTALL_MANUAL.md`
@@ -244,69 +250,72 @@ docs/
 
 ### 🎊 Chat 1 - Terminé (Sessions 0-5)
 
-| Session | Objectif | Statut | Fichiers clés |
-|---------|----------|--------|---------------|
-| **0** | Configuration Git Unity | ✅ Complet | `sessions/session_0_git_configuration/GIT_UNITY_FIX.md` |
-| **1** | Setup Python + GUI | ✅ Complet | `sessions/session_1_setup/SUCCESS_SESSION_1.md` |
-| **2** | Installation Unity | ✅ Complet | `sessions/session_2_unity_installation/` |
-| **3** | Installation UniVRM | ✅ Complet | `sessions/session_3_univrm_installation/UNIVRM_INSTALL_MANUAL.md` |
-| **4** | Connexion Python ↔ Unity | ✅ Complet | `sessions/session_4_python_unity_connection/` |
-| **5** | Chargement VRM | ✅ Complet | `sessions/session_5_vrm_loading/SESSION_VRM_LOADING_SUCCESS.md` |
+| Session | Objectif                 | Statut     | Fichiers clés                                                     |
+| ------- | ------------------------ | ---------- | ----------------------------------------------------------------- |
+| **0**   | Configuration Git Unity  | ✅ Complet | `sessions/session_0_git_configuration/GIT_UNITY_FIX.md`           |
+| **1**   | Setup Python + GUI       | ✅ Complet | `sessions/session_1_setup/SUCCESS_SESSION_1.md`                   |
+| **2**   | Installation Unity       | ✅ Complet | `sessions/session_2_unity_installation/`                          |
+| **3**   | Installation UniVRM      | ✅ Complet | `sessions/session_3_univrm_installation/UNIVRM_INSTALL_MANUAL.md` |
+| **4**   | Connexion Python ↔ Unity | ✅ Complet | `sessions/session_4_python_unity_connection/`                     |
+| **5**   | Chargement VRM           | ✅ Complet | `sessions/session_5_vrm_loading/SESSION_VRM_LOADING_SUCCESS.md`   |
 
 **Résumé Chat 1 :** `chat_transitions/chat_1.../CHAT_SUMMARY.md`
 
 ### 🎊 Chat 2 - Terminé (Session 6)
 
-| Session | Objectif | Statut | Fichiers clés |
-|---------|----------|--------|---------------|
-| **6** | Expressions faciales (blendshapes) | ✅ Complet | `sessions/session_6_expressions/README.md`, `BLENDSHAPES_GUIDE.md` |
+| Session | Objectif                           | Statut     | Fichiers clés                                                      |
+| ------- | ---------------------------------- | ---------- | ------------------------------------------------------------------ |
+| **6**   | Expressions faciales (blendshapes) | ✅ Complet | `sessions/session_6_expressions/README.md`, `BLENDSHAPES_GUIDE.md` |
 
 ### 🎊 Chat 3 - Terminé (Session 7)
 
-| Session | Objectif | Statut | Fichiers clés |
-|---------|----------|--------|---------------|
-| **7** | Animations & Transitions fluides | ✅ Complet | `sessions/session_7_animations/README.md`, `TRANSITIONS_GUIDE.md` |
+| Session | Objectif                         | Statut     | Fichiers clés                                                     |
+| ------- | -------------------------------- | ---------- | ----------------------------------------------------------------- |
+| **7**   | Animations & Transitions fluides | ✅ Complet | `sessions/session_7_animations/README.md`, `TRANSITIONS_GUIDE.md` |
 
 ### 🎊 Chat 4 - Terminé (Session 8)
 
-| Session | Objectif | Statut | Fichiers clés |
-|---------|----------|--------|---------------|
-| **8** | Clignement automatique des yeux | ✅ Complet | `sessions/session_8_auto_blink/TECHNICAL_GUIDE.md`, `TROUBLESHOOTING.md` |
+| Session | Objectif                        | Statut     | Fichiers clés                                                            |
+| ------- | ------------------------------- | ---------- | ------------------------------------------------------------------------ |
+| **8**   | Clignement automatique des yeux | ✅ Complet | `sessions/session_8_auto_blink/TECHNICAL_GUIDE.md`, `TROUBLESHOOTING.md` |
 
 ### 🎊 Chat 5 - Terminé (Session 9)
 
-| Session | Objectif | Statut | Fichiers clés |
-|---------|----------|--------|---------------|
-| **9** | Mouvements Tête + Réorganisation Interface | ✅ Complet | `sessions/session_9_head_movements/README.md`, `HEAD_MOVEMENT_GUIDE.md` |
+| Session | Objectif                                   | Statut     | Fichiers clés                                                           |
+| ------- | ------------------------------------------ | ---------- | ----------------------------------------------------------------------- |
+| **9**   | Mouvements Tête + Réorganisation Interface | ✅ Complet | `sessions/session_9_head_movements/README.md`, `HEAD_MOVEMENT_GUIDE.md` |
 
 ### 🚀 Chat 9 - TERMINÉ (Bugfixes & GPU Optimizations)
 
-| Chat | Objectif | Statut | Fichiers clés |
-|------|----------|--------|---------------|
+| Chat  | Objectif                     | Statut         | Fichiers clés                           |
+| ----- | ---------------------------- | -------------- | --------------------------------------- |
 | **9** | Bugfixes & Optimisations GPU | ✅ **COMPLET** | `chat_transitions/chat_9_bugfixes_gpu/` |
 
-**6 bugs critiques résolus** : Input bloqué, sync Discord, sliders GUI, GPU/RAM, compteur messages, venv  
-**5 features ajoutées** : Typing indicator, compteur session, menu restructuré, doc venv  
+**6 bugs critiques résolus** : Input bloqué, sync Discord, sliders GUI, GPU/RAM, compteur messages, venv
+**5 features ajoutées** : Typing indicator, compteur session, menu restructuré, doc venv
 **Performance** : 25-35 tok/s (5-7x plus rapide), 5.4GB VRAM, 43/43 GPU layers
 
 ### 🔥 Chat 10 - EN COURS (Session 11 - Performance Optimizations + Session 12 - Site Web)
 
-| Session | Objectif | Statut | Fichiers clés |
-|---------|----------|--------|---------------|
-| **11** | Optimisations Performance (6 phases) | 🚧 **EN COURS (3/6)** | `sessions/session_11_performance/` |
-| **12** | Site Web Workly | ✅ **COMPLÈTE** | `sessions/session_12_website/` |
+| Session | Objectif                             | Statut                | Fichiers clés                      |
+| ------- | ------------------------------------ | --------------------- | ---------------------------------- |
+| **11**  | Optimisations Performance (6 phases) | 🚧 **EN COURS (3/6)** | `sessions/session_11_performance/` |
+| **12**  | Site Web Workly                      | ✅ **COMPLÈTE**       | `sessions/session_12_website/`     |
 
 **Session 11 - Phases complétées** :
+
 - ✅ **Phase 1** : Memory Profiling - Baseline RAM/VRAM établi (pas de memory leaks)
 - ✅ **Phase 2** : LLM Cache Optimization - Warming cache (-17% latency, +14% speed)
 - ✅ **Phase 3** : Unity IPC Batching - (-79% latency, +907% throughput)
 
 **Session 11 - Phases en cours** :
+
 - 🔜 **Phase 4** : CPU Optimization (n_threads auto-detection)
 - 🔜 **Phase 5** : GPU Profiling & Tuning (profils dynamiques)
 - 🔜 **Phase 6** : Tests & Documentation finale
 
 **Session 12 - COMPLÈTE** :
+
 - ✅ Site web professionnel avec 5 pages HTML
 - ✅ Design violet (#903f9e) dark mode futuriste
 - ✅ Responsive mobile-first (768px)
@@ -317,6 +326,7 @@ docs/
 **Plan détaillé :** `sessions/session_10_ai_chat/PLAN_SESSION_10.md`
 
 **Phases Session 10** :
+
 - Phase 1 : Architecture de base ✅ TERMINÉE (Chat 6)
 - Phase 2 : Base de données & Mémoire ✅ TERMINÉE (Chat 6)
 - Phase 3 : Configuration IA ✅ TERMINÉE (Chat 7)
@@ -331,16 +341,17 @@ docs/
 
 ### 🔮 Chats Futurs (Sessions 11+)
 
-| Session | Objectif | Statut | Fichiers clés |
-|---------|----------|--------|---------------|
-| **11-12** | Vocal Discord + TTS | 🚧 Planifié | - |
-| **13-14** | Interactions souris + Idle animations | 🚧 Planifié | - |
+| Session   | Objectif                              | Statut      | Fichiers clés |
+| --------- | ------------------------------------- | ----------- | ------------- |
+| **11-12** | Vocal Discord + TTS                   | 🚧 Planifié | -             |
+| **13-14** | Interactions souris + Idle animations | 🚧 Planifié | -             |
 
 ---
 
 ## 🔍 Recherche rapide
 
 ### Par fonctionnalité
+
 - **État actuel du projet** → `chat_transitions/chat_9_bugfixes_gpu/CURRENT_STATE.md`
 - **Résumé Chat 1** → `chat_transitions/chat_1.../CHAT_SUMMARY.md`
 - **Configuration Git Unity** → `sessions/session_0_git_configuration/GIT_UNITY_FIX.md`
@@ -362,12 +373,14 @@ docs/
 - **Détection GPU NVIDIA** → `src/ai/model_manager.py` (pynvml)
 
 ### Par problème
+
 - **Library/ et Temp/ versionnés par erreur** → `sessions/session_0_git_configuration/GIT_UNITY_FIX.md`
 - **Port 5555 déjà utilisé** → `sessions/session_4_python_unity_connection/DEBUG_CONNECTION.md`
 - **EnsureRunningOnMainThread error** → `sessions/session_5_vrm_loading/SESSION_VRM_LOADING_SUCCESS.md`
 - **Script Unity ne démarre pas** → `sessions/session_4_python_unity_connection/FIX_SCRIPT_NOT_RUNNING.md`
 
 ### Scripts de référence
+
 - **VRMLoader.cs** → `sessions/session_5_vrm_loading/scripts/VRMLoader.cs`
 - **VRMBlendshapeController.cs v1.6** → `sessions/session_6_expressions/scripts/VRMBlendshapeController_V1.6_BACKUP.cs`
 - **VRMBlendshapeController.cs v2.0** → `sessions/session_7_animations/scripts/VRMBlendshapeController.cs` (avec Lerp)
@@ -395,8 +408,8 @@ docs/
 
 ---
 
-**Dernière mise à jour :** 9 novembre 2025  
-**Organisation par :** Sessions chronologiques + catégories fonctionnelles  
-**Sessions complètes :** 0-12 ✅ (Session 12 Site Web Workly COMPLÉTÉE !) 🌐💜  
-**Chat actuel :** Chat 10 → Chat 11 (Session 11 - Performance Optimizations Phase 3/6 + Session 12 COMPLÉTÉE) 🚧✨  
+**Dernière mise à jour :** 9 novembre 2025
+**Organisation par :** Sessions chronologiques + catégories fonctionnelles
+**Sessions complètes :** 0-12 ✅ (Session 12 Site Web Workly COMPLÉTÉE !) 🌐💜
+**Chat actuel :** Chat 10 → Chat 11 (Session 11 - Performance Optimizations Phase 3/6 + Session 12 COMPLÉTÉE) 🚧✨
 **Transition :** Chat 10 terminé → Documentation transition Chat 11 complète dans `chat_transitions/chat_10_session_11_phases_1_3/` ✅
