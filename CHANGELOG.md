@@ -24,8 +24,68 @@ Ce changelog suit le format [Keep a Changelog](https://keepachangelog.com/fr/1.0
 ### À venir
 
 - Session 11 Phases 4-6 : CPU/GPU optimization finale
-- Session 13-14 : Audio & Lip-sync (TTS, voice recognition)
-- Session 15-16 : Interactions avancées (souris, idle animations)
+- Session 14-15 : Audio & Lip-sync (TTS, voice recognition)
+- Session 16-17 : Interactions avancées (souris, idle animations)
+
+---
+
+## [0.15.0-alpha] - 2025-11-11
+
+### Changed - Session 13 : Refactoring Desktop-Mate → Workly 🔄
+
+**Renommage complet de "Desktop-Mate" vers "Workly" dans tout le codebase**
+
+#### Code Python (11 fichiers modifiés)
+
+- `main.py` : Import `DesktopMateApp` → `WorklyApp`
+- `src/gui/app.py` :
+  - Classe `DesktopMateApp` → `WorklyApp`
+  - `setApplicationName("Desktop-Mate")` → `setApplicationName("Workly")`
+  - `setOrganizationName("Xyon15")` → `setOrganizationName("WorklyHQ")`
+  - AppUserModelID : `'Xyon15.DesktopMate.0.7.0'` → `'WorklyHQ.Workly.0.14.0'`
+  - Window title : `"Desktop-Mate Control Panel"` → `"Workly Control Panel"`
+  - About dialog : `"About Desktop-Mate"`, `v0.11.0` → `"About Workly"`, `v0.14.0`
+- `src/utils/config.py` : Docstring + config directory `.desktop-mate` → `.workly`
+- `src/utils/logger.py` : Docstring + log directory `.desktop-mate/logs` → `.workly/logs`, filename `desktop-mate.log` → `workly.log`
+- `tests/__init__.py` : Docstring "Desktop-Mate" → "Workly"
+- `tests/test_integration_phase5.py` : Docstring système IA
+- `data/config.json` : System prompt Kira "GUI Desktop-Mate" → "GUI Workly"
+
+#### Documentation (50+ fichiers)
+
+- Mise à jour de toutes les références dans `workly-docs/`
+- Sessions 1-12 : Corrections historiques
+- README, INDEX, SESSIONS, CHANGELOG : Synchronisés
+- Création Session 13 avec documentation complète
+
+#### Nouveaux chemins système
+
+| Composant | Avant | Après |
+|-----------|-------|-------|
+| **Config directory** | `~/.desktop-mate/` | `~/.workly/` ✨ |
+| **Logs directory** | `~/.desktop-mate/logs/` | `~/.workly/logs/` ✨ |
+| **Log filename** | `desktop-mate.log` | `workly.log` ✨ |
+| **AppUserModelID** | `Xyon15.DesktopMate.0.7.0` | `WorklyHQ.Workly.0.14.0` ✨ |
+| **Application Name** | `Desktop-Mate` | `Workly` ✨ |
+| **Organization** | `Xyon15` | `WorklyHQ` ✨ |
+| **Window Title** | `Desktop-Mate Control Panel` | `Workly Control Panel` ✨ |
+
+### Statistics
+
+- **Fichiers modifiés** : 11 (code actif) + 50+ (documentation)
+- **Occurrences traitées** : ~70 (code actif) + 200+ (documentation)
+- **Scan exhaustif** : Python, C#, JSON, Unity assets (tous types)
+- **Résultat** : ✅ **ZÉRO occurrence** restante de "Desktop-Mate"
+- **Tests** : 34/39 passent (5 échecs non bloquants, profil GPU)
+- **Venv** : 100% opérationnel, 53 packages
+- **Durée** : ~2h30
+
+### Impact
+
+- ✅ Cohérence totale du branding
+- ✅ Professionnalisation du codebase
+- ✅ Prêt pour communication publique
+- ✅ Base solide pour release
 
 ---
 

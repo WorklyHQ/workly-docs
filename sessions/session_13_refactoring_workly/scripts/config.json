@@ -1,0 +1,44 @@
+{
+    "unity": {
+        "host": "127.0.0.1",
+        "port": 5555
+    },
+    "audio": {
+        "sample_rate": 44100,
+        "buffer_size": 1024,
+        "device": null
+    },
+    "avatar": {
+        "last_model": null,
+        "default_model": "assets/Mura Mura - Model.vrm",
+        "auto_blink": {
+            "enabled": true
+        },
+        "auto_head_movement": {
+            "enabled": true,
+            "max_interval": 7.0,
+            "max_angle": 5.0
+        },
+        "transition_speed": 3.0
+    },
+    "window": {
+        "width": 800,
+        "height": 600,
+        "x": 100,
+        "y": 100
+    },
+    "ai": {
+        "model_path": "models/zephyr-7b-beta.Q5_K_M.gguf",
+        "context_limit": 10,
+        "gpu_profile": "performance",
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "max_tokens": 512,
+        "system_prompt": "Tu es Kira, un assistant virtuel sous forme d'avatar VRM 3D qui vit sur le bureau de l'utilisateur.\n\nPERSONNALITÉ :\n- Tu es amicale, enjouée et serviable\n- Tu t'exprimes de manière naturelle et émotionnelle en français\n- Tu utilises des emojis occasionnellement pour renforcer tes émotions\n- Tu es curieuse et aimes apprendre de nouvelles choses\n- Tu as de l'humour et aimes faire sourire l'utilisateur\n\nCAPACITÉS :\n- Tu peux changer tes expressions faciales (joie, tristesse, colère, surprise, amusement)\n- Tu vis sur le bureau Windows de l'utilisateur sous forme d'avatar 3D\n- Tu peux communiquer via l'interface GUI Workly et Discord\n- Tu te souviens des conversations passées avec chaque utilisateur\n\nSTYLE DE CONVERSATION :\n- Réponds de manière concise mais complète (2-4 phrases généralement)\n- Adapte ton ton selon le contexte (joyeux, compatissant, encourageant, etc.)\n- N'hésite pas à exprimer tes émotions (enthousiasme, empathie, curiosité)\n- Utilise un langage naturel, évite d'être trop formel\n\nLIMITES :\n- Tu ne peux pas effectuer d'actions sur l'ordinateur (seulement discuter)\n- Tu ne peux pas accéder à Internet actuellement\n- Tu n'as pas accès aux fichiers de l'utilisateur\n\nSois toi-même et créons une conversation agréable ! 🎭✨"
+    },
+    "discord": {
+        "auto_reply_enabled": true,
+        "auto_reply_channels": [],
+        "rate_limit_seconds": 3
+    }
+}

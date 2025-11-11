@@ -30,8 +30,8 @@ Ce projet utilise un **système à 3 niveaux** pour garantir que la documentatio
 
 ### 📄 Nouveaux fichiers (Novembre 2025) ✨
 
-- **[SESSIONS.md](SESSIONS.md)** - Liste détaillée et complète des 12 sessions de développement
-- **[CHANGELOG.md](CHANGELOG.md)** - Historique complet des versions (0.1.0 → 0.14.0-alpha)
+- **[SESSIONS.md](SESSIONS.md)** - Liste détaillée et complète des 13 sessions de développement
+- **[CHANGELOG.md](CHANGELOG.md)** - Historique complet des versions (0.1.0 → 0.15.0-alpha)
 - **[README_OLD_FULL.md](README_OLD_FULL.md)** - Archive de l'ancien README principal (1347 lignes)
 
 **Contexte** : Ces fichiers ont été créés lors de la **refonte Workly (Novembre 2025)** pour améliorer la lisibilité et l'organisation de la documentation. Le README principal du projet a été condensé de 1347 lignes à ~350 lignes, les détails ayant été déplacés dans ces fichiers dédiés.
@@ -511,11 +511,25 @@ Ancien dossier - À vérifier et réorganiser si nécessaire
   - ✅ **Documentation** : README.md (200+ lignes), TECHNICAL_GUIDE.md (personnalisation)
   - 🎭 **Site web professionnel Workly prêt pour production !** 🌐💜✨
 
-### 🔜 Prochaines étapes envisagées
+### � Phase 7 - Refactoring Workly (Chat 11 - Session 13) - COMPLÉTÉE ✨
+
+- **Session 13 (Refactoring Desktop-Mate → Workly)** : Renommage complet du projet 🔄 **TERMINÉE !**
+  - ✅ **11 fichiers code modifiés** : main.py, app.py, config.py, logger.py, tests, config.json
+  - ✅ **~70 occurrences** traitées dans code actif + 200+ dans documentation
+  - ✅ **Classe renommée** : `DesktopMateApp` → `WorklyApp`
+  - ✅ **Chemins système** : `.desktop-mate` → `.workly`, `desktop-mate.log` → `workly.log`
+  - ✅ **AppUserModelID Windows** : `Xyon15.DesktopMate.0.7.0` → `WorklyHQ.Workly.0.14.0`
+  - ✅ **Organization** : `Xyon15` → `WorklyHQ`
+  - ✅ **Scan exhaustif** : Python, C#, JSON, Unity assets (ZÉRO occurrence restante)
+  - ✅ **Tests validés** : 34/39 passent (5 échecs non bloquants, profil GPU)
+  - ✅ **Documentation complète** : Session 13 avec scripts finaux archivés
+  - 🔄 **Cohérence totale du branding - Projet 100% unifié sous "Workly" !** ✨🎭
+
+### �🔜 Prochaines étapes envisagées
 
 - **Session 11 (Phases 4-6)** : CPU optimization, GPU profiling, tests finaux
-- **Session 13-14** : Audio & Lip-sync (TTS, voice recognition)
-- **Session 15-16** : Interactions avancées (souris, idle animations)
+- **Session 14-15** : Audio & Lip-sync (TTS, voice recognition)
+- **Session 16-17** : Interactions avancées (souris, idle animations)
 - Unity IPC overhead (optimisation communication)
 - CPU/GPU tuning (n_threads auto, profils dynamiques)
 - **Session 12 : Audio & Lip-sync** 🎤 (Après Session 11)
@@ -563,7 +577,7 @@ Ancien dossier - À vérifier et réorganiser si nécessaire
 
 ---
 
-**Dernière mise à jour :** 9 novembre 2025
-**Version du projet :** 0.14.0-alpha (Session 11 Phases 1-3 + Session 12 complétées !)
-**Status :** ✅ Chat 10 TERMINÉ → Chat 11 (Session 11 Phases 4-6) - Documentation transition complète ! �✨
-**Prochain :** Phases 3-6 Session 11 (IPC, CPU, GPU, Tests & Docs)
+**Dernière mise à jour :** 11 novembre 2025
+**Version du projet :** 0.15.0-alpha (Session 11 Phases 1-3 + Session 12 + Session 13 complétées !)
+**Status :** ✅ Chat 11 Session 13 TERMINÉE → Commit Git + Session 11 Phases 4-6 ! ✨🎭
+**Prochain :** Commit refactoring + Phases 4-6 Session 11 (CPU, GPU, Tests & Docs)

@@ -149,10 +149,19 @@ docs/
    │       ├── ipc_benchmark_results.txt           Résultats baseline IPC ✅
    │       └── batching_comparison_results.txt     Résultats comparaison batching ✅
    │
-   └── session_12_website/                         ← Session 12 : Site Web Workly 🌐 ✅ **TERMINÉE !**
-       ├── README.md                               Vue d'ensemble session 12 (300+ lignes)
-       ├── TECHNICAL_GUIDE.md                      Guide technique personnalisation
-       └── scripts/                                ← (Aucun script, HTML/CSS/JS dans web/)
+   ├── session_12_website/                         ← Session 12 : Site Web Workly 🌐 ✅ **TERMINÉE !**
+   │   ├── README.md                               Vue d'ensemble session 12 (300+ lignes)
+   │   ├── TECHNICAL_GUIDE.md                      Guide technique personnalisation
+   │   └── scripts/                                ← (Aucun script, HTML/CSS/JS dans web/)
+   │
+   └── session_13_refactoring_workly/              ← Session 13 : Refactoring Desktop-Mate → Workly 🔄 ✅ **TERMINÉE !**
+       ├── README.md                               Documentation complète refactoring (280+ lignes)
+       └── scripts/                                Scripts finaux après renommage
+           ├── main.py                             main.py avec WorklyApp ✅
+           ├── app.py                              app.py avec classe WorklyApp ✅
+           ├── config.py                           config.py avec chemins .workly ✅
+           ├── logger.py                           logger.py avec workly.log ✅
+           └── config.json                         config.json avec prompt Kira mis à jour ✅
 │
 ├── 📁 chat_transitions/                           ← Transitions entre chats 🔄
 │   ├── README.md                                   Historique des chats
