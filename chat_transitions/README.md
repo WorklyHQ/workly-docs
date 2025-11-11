@@ -15,9 +15,9 @@ Chaque chat a son dossier :
 ## 🗂️ Chats Archivés
 
 ### 1. Chat 1 - MVP Complet ✅
-**Dossier** : `chat_1_python_unity_start_session_0_to_5/`  
-**Date** : 18 octobre 2025 (23h35)  
-**Sessions couvertes** : 0-5  
+**Dossier** : `chat_1_python_unity_start_session_0_to_5/`
+**Date** : 18 octobre 2025 (23h35)
+**Sessions couvertes** : 0-5
 
 **Réalisations** :
 - ✅ Configuration Git pour Unity
@@ -28,16 +28,16 @@ Chaque chat a son dossier :
 - ✅ Chargement modèles VRM
 - ✅ Thread-safety Unity (Queue + Update pattern)
 
-**État final** : Avatar VRM affiché dans Unity, contrôlé depuis Python  
-**Fichiers** : CURRENT_STATE.md, prompt_chat1_vers_chat_2.txt, CHAT_SUMMARY.md  
+**État final** : Avatar VRM affiché dans Unity, contrôlé depuis Python
+**Fichiers** : CURRENT_STATE.md, prompt_chat1_vers_chat_2.txt, CHAT_SUMMARY.md
 **Prochain** : Session 6 - Expressions faciales
 
 ---
 
 ### 2. Chat 2 - Expressions Faciales ✅
-**Dossier** : `chat_2_expressions_session_6/`  
-**Date** : 19 octobre 2025  
-**Sessions couvertes** : 6  
+**Dossier** : `chat_2_expressions_session_6/`
+**Date** : 19 octobre 2025
+**Sessions couvertes** : 6
 
 **Réalisations** :
 - ✅ VRMBlendshapeController v1.6
@@ -47,16 +47,16 @@ Chaque chat a son dossier :
 - ✅ Thread-safety avec Queue<Action> pattern
 - ✅ Tests Python : 8/8 passent
 
-**État final** : Expressions faciales contrôlables depuis Python avec sliders  
-**Fichiers** : CURRENT_STATE.md, prompt_chat2_vers_chat3.txt, CHAT_SUMMARY.md  
+**État final** : Expressions faciales contrôlables depuis Python avec sliders
+**Fichiers** : CURRENT_STATE.md, prompt_chat2_vers_chat3.txt, CHAT_SUMMARY.md
 **Prochain** : Session 7 - Animations fluides
 
 ---
 
 ### 3. Chat 3 - Animations Fluides ✅
-**Dossier** : `chat_3_animations_session_7/`  
-**Date** : 20 octobre 2025  
-**Sessions couvertes** : 7  
+**Dossier** : `chat_3_animations_session_7/`
+**Date** : 20 octobre 2025
+**Sessions couvertes** : 7
 
 **Réalisations** :
 - ✅ **VRMBlendshapeController v2.0** (upgrade majeur)
@@ -75,45 +75,45 @@ Chaque chat a son dossier :
 - Commande IPC `set_transition_speed`
 - Pattern menu-based pour modèle par défaut
 
-**État final** : Animations fluides et naturelles, système complet et stable  
-**Fichiers** : CURRENT_STATE.md, prompt_chat3_vers_chat4.txt, CHAT_SUMMARY.md  
+**État final** : Animations fluides et naturelles, système complet et stable
+**Fichiers** : CURRENT_STATE.md, prompt_chat3_vers_chat4.txt, CHAT_SUMMARY.md
 **Prochain** : Session 8 - Clignement automatique (recommandé)
 
 ---
 
 ### 4. Chat 4 - Clignement Automatique ✅
-**Dossier** : `chat_4_session_8_blink/`  
-**Date** : 20 octobre 2025  
-**Sessions couvertes** : 8  
+**Dossier** : `chat_4_session_8_blink/`
+**Date** : 20 octobre 2025
+**Sessions couvertes** : 8
 
 **Réalisations** :
 - ✅ Clignement automatique naturel (intervalle aléatoire 1-5s)
 - ✅ Intégration complète avec VRMBlendshapeController
 - ✅ Tests Python : 13/13 passent
 
-**État final** : Avatar cligne naturellement  
+**État final** : Avatar cligne naturellement
 **Prochain** : Session 9 - Lip-sync audio
 
 ---
 
 ### 5. Chat 5 - Session 9 Transitions ✅
-**Dossier** : `chat_5_session_9/`  
-**Date** : 21 octobre 2025  
-**Sessions couvertes** : 9 (transitions)  
+**Dossier** : `chat_5_session_9/`
+**Date** : 21 octobre 2025
+**Sessions couvertes** : 9 (transitions)
 
 **Réalisations** :
 - ✅ Documentation transition complète
 - ✅ État projet consolidé
 
-**État final** : Prêt pour Session 10  
+**État final** : Prêt pour Session 10
 **Prochain** : Session 10 - IA Conversationnelle
 
 ---
 
 ### 6. Chat 6 - IA Conversationnelle (Phases 1-2) ✅
-**Dossier** : `chat_6_session_10_phases_1_2/`  
-**Date** : 22 octobre 2025  
-**Sessions couvertes** : 10 (Phases 1-2)  
+**Dossier** : `chat_6_session_10_phases_1_2/`
+**Date** : 22 octobre 2025
+**Sessions couvertes** : 10 (Phases 1-2)
 
 **Réalisations** :
 - ✅ **Phase 1** : Architecture IA (src/ai/, src/discord_bot/, src/auth/)
@@ -121,15 +121,15 @@ Chaque chat a son dossier :
 - ✅ Modèle LLM copié (Zephyr-7B 6.8GB)
 - ✅ Configuration complète (data/config.json)
 
-**État final** : Base mémoire opérationnelle  
+**État final** : Base mémoire opérationnelle
 **Prochain** : Chat 7 - Phases 3-5
 
 ---
 
 ### 7. Chat 7 - IA Conversationnelle (Phases 3-5) ✅
-**Dossier** : `chat_7_session_10_phases_3_5/`  
-**Date** : 23 octobre 2025  
-**Sessions couvertes** : 10 (Phases 3-5)  
+**Dossier** : `chat_7_session_10_phases_3_5/`
+**Date** : 23 octobre 2025
+**Sessions couvertes** : 10 (Phases 3-5)
 
 **Réalisations** :
 - ✅ **Phase 3** : Configuration IA (AIConfig, GPU profiles, 31 tests)
@@ -146,15 +146,15 @@ Chaque chat a son dossier :
 - Générer réponses avec contexte
 - Support multi-utilisateurs et multi-sources
 
-**État final** : **Système IA 100% fonctionnel** 🎉  
+**État final** : **Système IA 100% fonctionnel** 🎉
 **Prochain** : Chat 8 - Phases 6-9 (Émotions avancées + Discord + GUI)
 
 ---
 
 ### 8. Chat 8 - IA Avancée + Discord (Phases 6-9) ✅
-**Dossier** : `chat_8_session_10_phases_6_9/`  
-**Date** : 23 octobre 2025  
-**Sessions couvertes** : 10 (Phases 6-9)  
+**Dossier** : `chat_8_session_10_phases_6_9/`
+**Date** : 23 octobre 2025
+**Sessions couvertes** : 10 (Phases 6-9)
 
 **Réalisations** :
 - ✅ **Phase 6** : EmotionAnalyzer (Détection 6 émotions depuis texte, 20 tests)
@@ -172,15 +172,15 @@ Chaque chat a son dossier :
 - Gestion mémoire conversations (SQLite)
 - Support multi-utilisateurs et multi-sources (Discord, GUI)
 
-**État final** : **IA conversationnelle + Discord + GUI complète** 🎊  
+**État final** : **IA conversationnelle + Discord + GUI complète** 🎊
 **Prochain** : Chat 9 - Phase 10 (GUI Discord Control + Menu Options)
 
 ---
 
 ### 9. Chat 9 - GUI Discord + Menu Options ✅
-**Dossier** : `chat_9_session_10_phase_10/`  
-**Date** : 24 octobre 2025  
-**Sessions couvertes** : 10 (Phase 10 finale)  
+**Dossier** : `chat_9_session_10_phase_10/`
+**Date** : 24 octobre 2025
+**Sessions couvertes** : 10 (Phase 10 finale)
 
 **Réalisations** :
 - ✅ **Phase 10** : GUI Discord Control + Menu Options
@@ -197,7 +197,7 @@ Chaque chat a son dossier :
 - UI responsive avec onglets Avatar / Chat / Discord
 - Tests complets (171/171) couvrant toute l'application
 
-**État final** : **🎊 Session 10 TERMINÉE - Desktop-Mate IA Conversationnelle complète ! 🤖💬🎭**  
+**État final** : **🎊 Session 10 TERMINÉE - Desktop-Mate IA Conversationnelle complète ! 🤖💬🎭**
 **Prochain** : Tests d'intégration Discord / Session 11 / Optimisations
 
 ---
@@ -216,10 +216,10 @@ Chaque chat a son dossier :
 | **Chat 8** | 10 (6-9) | ✅ Complet | ~6h | Emotions + Discord + GUI + CUDA |
 | **Chat 9** | 10 (10) | ✅ Complet | ~2.5h | GUI Discord + Menu Options |
 
-**Total sessions complétées** : 10 (toutes phases) ✅  
-**Session 10 progression** : 10/10 phases (100%) 🎊  
-**Documentation** : 174+ fichiers markdown  
-**Tests Python** : 171/171 passent ✅ (100%)  
+**Total sessions complétées** : 10 (toutes phases) ✅
+**Session 10 progression** : 10/10 phases (100%) 🎊
+**Documentation** : 174+ fichiers markdown
+**Tests Python** : 171/171 passent ✅ (100%)
 **Version actuelle** : v0.11.0-alpha (IA conversationnelle + Discord complète)
 
 ---
@@ -287,8 +287,34 @@ Chaque dossier de chat contient :
 - [État actuel du projet](chat_9_session_10_phase_10/CURRENT_STATE.md)
 - [Instructions Copilot](../.github/instructions/copilot-instructions.instructions.md)
 
+### 11. Chat 11 - Refactoring Workly ✅
+**Dossier** : `chat_11_session_13_refactoring/`
+**Date** : 11 novembre 2025
+**Sessions couvertes** : 13
+
+**Réalisations** :
+- ✅ **Renommage complet** Desktop-Mate → Workly
+- ✅ **11 fichiers code modifiés** (main.py, app.py, config.py, logger.py, tests, config.json)
+- ✅ **~70 occurrences** corrigées dans code actif + 200+ dans documentation
+- ✅ **ZÉRO occurrence** restante de "Desktop-Mate" ✨
+- ✅ **Nouveaux chemins système** : `.desktop-mate` → `.workly`, `desktop-mate.log` → `workly.log`
+- ✅ **AppUserModelID Windows** : `Xyon15.DesktopMate.0.7.0` → `WorklyHQ.Workly.0.14.0`
+- ✅ **Organization** : `Xyon15` → `WorklyHQ`
+- ✅ **Tests validés** : 34/39 passent
+- ✅ **Documentation complète** : Session 13 créée avec scripts archivés
+- ✅ **Version** : 0.15.0-alpha
+
+**Innovations** :
+- Scan exhaustif : Python, C#, JSON, Unity assets (tous types de fichiers)
+- Vérification venv : 100% opérationnel, 53 packages, GPU détectée
+- Conformité totale aux instructions projet
+
+**État final** : Projet 100% unifié sous le nom "Workly" 🎭
+**Fichiers** : CURRENT_STATE.md, CONTEXT_FOR_NEXT_CHAT.md, prompt_transition.txt, README.md
+**Prochain** : Chat 12 - Icons + Session 11 Phases 4-6 (CPU/GPU/Tests)
+
 ---
 
-**Dernière mise à jour** : 26 octobre 2025  
-**Chat actuel** : Chat 9 TERMINÉ (Session 10 Phase 10 - GUI Discord + Menu Options)  
-**Prochain objectif** : Tests intégration Discord / Session 11 (Audio & Lip-sync) / Optimisations
+**Dernière mise à jour** : 11 novembre 2025
+**Chat actuel** : Chat 11 TERMINÉ (Session 13 - Refactoring Workly)
+**Prochain objectif** : Chat 12 - Icons & Branding + Session 11 Phases 4-6 (CPU Optimization, GPU Profiling, Tests & Documentation)

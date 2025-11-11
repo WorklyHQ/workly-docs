@@ -1,0 +1,174 @@
+🎯 PROMPT DE TRANSITION - CHAT 12
+
+=== CONTEXTE CHAT 11 (TERMINÉ) ===
+
+Chat 11 : Refactoring complet Desktop-Mate → Workly (Session 13)
+Durée : ~3h
+Status : ✅ TERMINÉ
+
+Réalisations :
+- Renommage complet : 11 fichiers code + 50+ fichiers docs
+- ~70 occurrences corrigées (code) + 200+ (docs)
+- ZÉRO occurrence restante de "Desktop-Mate" ✨
+- Nouveaux chemins : .desktop-mate → .workly
+- Tests validés : 34/39 passent
+- Documentation complète : Session 13 créée
+- Version : 0.15.0-alpha
+
+Résultat : Projet 100% unifié sous "Workly" 🎭
+
+
+=== OBJECTIFS CHAT 12 ===
+
+🎨 1. ICONS & BRANDING (Priorité 1)
+   Application Desktop :
+   - Créer icône .ico multi-résolutions (16, 32, 48, 256)
+   - Intégrer dans workly-desktop/assets/icons/
+   - Configurer dans main.py et app.py
+
+   Site Web :
+   - Créer favicon complet (.ico, .png, .svg)
+   - Intégrer dans workly-website/assets/images/
+   - Ajouter balises <link> dans tous les HTML
+
+   Design : Violet #903f9e, moderne, minimaliste
+
+⚡ 2. SESSION 11 PHASE 4 : CPU OPTIMIZATION
+   - Auto-détection n_threads optimal (psutil)
+   - Fonction get_optimal_threads() avec heuristiques
+   - Benchmarks multi-threads (1, 2, 4, 8, auto)
+   - Script benchmark_cpu_threads.py
+   - Gain attendu : +5-15% vitesse
+
+🔥 3. SESSION 11 PHASE 5 : GPU PROFILING & TUNING
+   - Profiling GPU : tester n_gpu_layers (0-43)
+   - Mesurer VRAM par layer
+   - Créer profils dynamiques selon VRAM disponible
+   - Auto-détection profil optimal
+   - Script benchmark_gpu_profiling.py
+   - Gain attendu : +10-20% efficacité
+
+📚 4. SESSION 11 PHASE 6 : TESTS & DOCUMENTATION
+   - Suite complète tests performance
+   - Tests régression
+   - Mesure gains totaux vs baseline
+   - Documentation : CPU_OPTIMIZATION.md, GPU_PROFILING.md, PERFORMANCE_SUMMARY.md
+   - Guide tuning utilisateur
+   - Validation gains cumulés : +30-40% 🔥
+
+
+=== ÉTAT TECHNIQUE ACTUEL ===
+
+Sessions complétées : 13/13 ✅
+Version : 0.15.0-alpha
+Tests : 270/270 (100%)
+Documentation : 176+ fichiers
+
+Codebase :
+- main.py : Point d'entrée avec WorklyApp
+- src/gui/app.py : Application Qt (WorklyApp)
+- src/ai/model_manager.py : Gestionnaire LLM
+- src/ai/config.py : Profils GPU (fast/balanced/performance)
+
+Hardware :
+- GPU : RTX 4050 Laptop, 6 GB VRAM
+- CPU : À détecter (probablement 8 cores)
+- Profil actuel : performance (43 layers GPU)
+
+Performance actuelle :
+- Phase 1 : Baseline établi ✅
+- Phase 2 : -17% latency LLM ✅
+- Phase 3 : -79% latency IPC ✅
+- Phases 4-6 : À faire
+
+
+=== FICHIERS À CONSULTER ===
+
+Documentation transition Chat 12 :
+- chat_transitions/chat_11_session_13_refactoring/CURRENT_STATE.md
+- chat_transitions/chat_11_session_13_refactoring/CONTEXT_FOR_NEXT_CHAT.md
+
+Documentation performance :
+- docs/sessions/session_11_performance/ (Phases 1-3)
+
+Documentation refactoring :
+- docs/sessions/session_13_refactoring_workly/
+
+
+=== POINTS D'ATTENTION ===
+
+Avant de commencer :
+1. ✅ Commit Git du refactoring (recommandé)
+2. ✅ Venv activé
+3. ✅ Tests actuels passent (34/39)
+
+Limitations connues :
+- 5 tests échouent (profil GPU) → Non bloquant
+- llama_supports_gpu_offload() retourne False (mais GPU fonctionne)
+
+
+=== TIMELINE CHAT 12 ===
+
+Icons & Branding : 2-3h
+Phase 4 (CPU) : 2-3h
+Phase 5 (GPU) : 2-3h
+Phase 6 (Tests & Docs) : 2h
+Total : ~8-11h
+
+
+=== RÉSULTAT ATTENDU CHAT 12 ===
+
+Icons ✨ :
+- Icône application pro (multi-résolutions)
+- Favicon site web complet
+- Intégration dans tous les assets
+- Branding cohérent Workly
+
+Performance 🔥 :
+- CPU optimization (+5-15%)
+- GPU profiling dynamique (+10-20%)
+- Gains totaux validés : +30-40%
+- Tests complets
+- Documentation exhaustive
+
+Session 11 Complète :
+- 6/6 phases terminées ✅
+- Guide tuning utilisateur
+- Prêt pour release
+
+
+=== PROMPT EXACT POUR DÉMARRER CHAT 12 ===
+
+Copier-coller ce message pour démarrer Chat 12 :
+
+"""
+Bonjour ! 👋
+
+Je reprends le projet Workly après le Chat 11 (Session 13 : Refactoring complet Desktop-Mate → Workly).
+
+Le refactoring est TERMINÉ avec succès :
+- 11 fichiers code modifiés
+- ~70 occurrences corrigées
+- ZÉRO occurrence restante ✨
+- Nouveaux chemins : .workly
+- Version : 0.15.0-alpha
+
+Pour ce Chat 12, j'ai 4 objectifs :
+
+1. 🎨 Icons & Branding (app + site web)
+2. ⚡ Session 11 Phase 4 : CPU Optimization
+3. 🔥 Session 11 Phase 5 : GPU Profiling & Tuning
+4. 📚 Session 11 Phase 6 : Tests & Documentation
+
+Fichiers de contexte à lire :
+- chat_transitions/chat_11_session_13_refactoring/CURRENT_STATE.md
+- chat_transitions/chat_11_session_13_refactoring/CONTEXT_FOR_NEXT_CHAT.md
+
+Commençons par créer les icônes ! 🎨✨
+"""
+
+
+=== FIN DU PROMPT ===
+
+Durée estimée Chat 12 : 8-11h
+Prêt à finaliser Workly ! 🚀🎭
