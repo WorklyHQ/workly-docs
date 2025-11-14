@@ -17,8 +17,8 @@ docs/
 ├── 📄 DOCUMENTATION_CHECKLIST.md                   ← ⚠️ Checklist docs (IMPORTANT!)
 ├── 📄 AI_DOCUMENTATION_PROMPT.md                   ← 🤖 Instructions IA (système)
 │
-├── ⚠️ État actuel → chat_transitions/chat_10_session_11_phases_1_3/CURRENT_STATE.md
-│   Chat 10 (Session 11 Phases 1-3) ✅ COMPLÉTÉ - Performance Optimizations
+├── ⚠️ État actuel → chat_transitions/chat_12_session_11_complete/CURRENT_STATE.md
+│   Chat 12 (Session 11 COMPLÈTE 7/7) ✅ TERMINÉ - Performance + GPU Auto-Switching
 │
 ├── 📁 .github/                                    ← Templates GitHub
 │   └── PULL_REQUEST_TEMPLATE.md                    Template PR avec checklist doc
