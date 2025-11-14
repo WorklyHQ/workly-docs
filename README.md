@@ -2,6 +2,8 @@
 
 Organisation de la documentation par sessions de développement.
 
+💬 **Rejoignez notre communauté Discord** : [https://discord.gg/3Cpyxg29B4](https://discord.gg/3Cpyxg29B4)
+
 ---
 
 ## ⚠️ IMPORTANT - Pour l'IA et les Développeurs

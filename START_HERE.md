@@ -2,6 +2,8 @@
 
 **Documentation complète et organisée du projet Workly**
 
+💬 **Rejoignez la communauté** : [Discord Workly](https://discord.gg/3Cpyxg29B4)
+
 ---
 
 ## 🎯 Par où commencer ?
