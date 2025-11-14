@@ -29,7 +29,57 @@ Ce changelog suit le format [Keep a Changelog](https://keepachangelog.com/fr/1.0
 
 ---
 
-## [0.16.0-alpha] - 2025-11-14 ✨ **NOUVEAU - SESSION 11 COMPLÈTE (7 PHASES)**
+## [0.17.0-alpha] - 2025-11-14 ✨ **NOUVEAU - INTERFACE GPU PROFILES**
+
+### Added - Interface de gestion des profils GPU 🎮
+
+**Affichage profil GPU actuel**
+- Label temps réel dans l'onglet Connexion
+- Affiche profil, nombre de layers, VRAM estimée
+- Couleurs adaptées : Vert (Performance), Orange (Balanced), Rouge (CPU)
+- Mise à jour automatique au chargement/déchargement/changement
+
+**Dialog de sélection de profils**
+- Menu Options -> IA -> Profils IA activé
+- Dialog scrollable avec 4 profils : Auto, Performance, Balanced, CPU Fallback
+- Détails complets par profil (layers, VRAM, vitesse, recommandations)
+- Sélection via radio buttons avec profil actuel pré-coché
+- Sauvegarde automatique dans config.json
+
+**Rechargement à chaud**
+- Si IA chargée : proposition de rechargement immédiat avec nouveau profil
+- Déchargement propre + rechargement automatique (~15-30s)
+- Gestion erreurs avec fallback
+- Messages de confirmation/erreur explicites
+
+**Onglet Logs**
+- Nouvel onglet 📋 Logs pour affichage temps réel
+- Capture tous les logs (DEBUG, INFO, WARNING, ERROR)
+- Couleurs selon niveau : Rouge (ERROR), Orange (WARNING), Vert (INFO), Bleu (DEBUG)
+- Auto-scroll vers le bas
+- Limite 1000 lignes (anti-surcharge)
+- Bouton "Effacer les logs"
+- Style terminal (fond noir, police monospace)
+
+### Changed
+- `src/gui/app.py` : +350 lignes (GPU profile UI + Logs tab)
+  - `create_connexion_tab()` : Ajout gpu_profile_label
+  - `update_gpu_profile_display()` : Affichage profil actuel
+  - `manage_ia_profiles()` : Dialog complet avec scroll
+  - `_apply_gpu_profile_change()` : Gestion changement profil
+  - `create_logs_tab()` : Onglet logs temps réel
+  - `_setup_log_handler()` : QtLogHandler pour capture logs
+  - Menu "Options -> IA -> Profils IA" activé
+
+**Impact utilisateur** :
+- 🎯 Visualisation claire du profil GPU actuel
+- ⚙️ Changement facile entre profils (4 clics)
+- 🔄 Mode "Auto" recommandé (détection automatique)
+- 📋 Diagnostic simplifié via onglet Logs
+
+---
+
+## [0.16.0-alpha] - 2025-11-14 ✨ **SESSION 11 COMPLÈTE (7 PHASES)**
 
 ### Added - Session 11 Phases 4-7 : Performance Optimizations Finale 🚀
 
