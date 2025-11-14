@@ -1,13 +1,13 @@
-# 📊 État Actuel du Projet - Chat 13 (Interface GPU Profiles + Logs)
+# 📊 État Actuel du Projet - Chat 12 (Interface GPU Profiles + Logs + Discord)
 
-**Date** : 14 novembre 2025  
-**Chat** : Chat 13  
-**Objectif** : Interface utilisateur pour gérer les profils GPU + Onglet Logs diagnostic  
+**Date** : 14 novembre 2025
+**Chat** : Chat 12
+**Objectif** : Interface utilisateur pour gérer les profils GPU + Onglet Logs diagnostic + Intégration Discord communauté
 **Statut** : ✅ **TERMINÉ**
 
 ---
 
-## 🎯 Objectifs du Chat 13
+## 🎯 Objectifs du Chat 12
 
 ### Fonctionnalités Implémentées
 
@@ -309,14 +309,61 @@ Aucun bug connu actuellement.
 
 ---
 
+## 💬 Intégration Discord (Ajout Chat 12)
+
+### Liens Discord Ajoutés
+
+**Discord invite** : https://discord.gg/3Cpyxg29B4
+
+**Repositories mis à jour** :
+
+1. **workly-desktop** ✅
+   - README.md : Badge Discord + liens navigation + section communauté
+   - src/gui/app.py : Menu "Aide → Rejoindre Discord" + About dialog v0.17.0
+   - Méthode `open_discord()` : Ouvre navigateur via webbrowser.open()
+
+2. **workly-docs** ✅
+   - README.md : Lien Discord après titre
+   - START_HERE.md : Lien Discord dans bienvenue
+
+3. **workly-public** ✅
+   - README.md : Badge Discord (remplacé placeholder "YOUR_DISCORD" → "3Cpyxg29B4")
+   - Navigation mise à jour avec lien réel
+
+4. **workly-website** ✅
+   - README.md : Lien Discord ajouté
+   - index.html : Bouton Discord dans hero CTA + lien navigation
+   - pages/about.html : Lien Discord navigation + footer
+   - pages/terms.html : Lien Discord navigation + footer  
+   - pages/privacy.html : Lien Discord navigation + footer
+
+**Badge format** :
+```markdown
+[![Discord](https://img.shields.io/badge/Discord-Join%20Us-5865F2?logo=discord&logoColor=white)](https://discord.gg/3Cpyxg29B4)
+```
+
+### GitHub Links Updated
+
+Tous les liens `https://github.com/WorklyHQ/workly-desktop` dans le site web ont été remplacés par `https://github.com/WorklyHQ/` (organisation).
+
+### Commits Discord
+
+1. `feat(discord): Add Discord community link in app menu and about dialog` (workly-desktop)
+2. `docs(discord): Add Discord community link to documentation` (workly-docs)
+3. `docs: Update Discord community link from placeholder to real invite` (workly-public)
+4. `feat: Add Discord community link and update GitHub links to WorklyHQ organization` (workly-website)
+
+---
+
 ## 🎭 Conclusion
 
-**Chat 13 : Interface GPU Profiles + Logs** est **100% terminé** ! 🎊
+**Chat 12 : Interface GPU Profiles + Logs + Discord** est **100% terminé** ! 🎊
 
 L'utilisateur peut maintenant :
 - 👁️ **Voir** son profil GPU actuel en temps réel
 - ⚙️ **Changer** facilement entre 4 profils (Auto/Performance/Balanced/CPU)
 - 🔄 **Recharger** le modèle à chaud sans redémarrer
 - 📋 **Diagnostiquer** via l'onglet Logs avec couleurs
+- 💬 **Rejoindre** la communauté Discord depuis l'app et tous les repos
 
-L'interface utilisateur est maintenant **complète et intuitive** pour la gestion des performances GPU ! 🚀✨
+L'interface utilisateur est maintenant **complète et intuitive** pour la gestion des performances GPU, et la communauté Discord est **accessible partout** ! 🚀✨💬
