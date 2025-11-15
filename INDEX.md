@@ -17,8 +17,9 @@ docs/
 ├── 📄 DOCUMENTATION_CHECKLIST.md                   ← ⚠️ Checklist docs (IMPORTANT!)
 ├── 📄 AI_DOCUMENTATION_PROMPT.md                   ← 🤖 Instructions IA (système)
 │
-├── ⚠️ État actuel → chat_transitions/chat_13_gpu_ui/CURRENT_STATE.md
-│   Chat 13 (Interface GPU Profiles + Logs) ✅ TERMINÉ - Gestion profils GPU + Onglet Logs
+├── ⚠️ État actuel → chat_transitions/chat_12_gpu_ui_discord/CURRENT_STATE.md
+│   Chat 12 (Interface GPU Profiles + Logs + Discord + Fixes) ✅ TERMINÉ
+│   Phase 1-2 : UI GPU Profiles + Logs | Phase 3 : Fixes critiques CUDA + Discord auto-reply
 │
 ├── 📁 .github/                                    ← Templates GitHub
 │   └── PULL_REQUEST_TEMPLATE.md                    Template PR avec checklist doc

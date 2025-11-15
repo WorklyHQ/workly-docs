@@ -29,6 +29,53 @@ Ce changelog suit le format [Keep a Changelog](https://keepachangelog.com/fr/1.0
 
 ---
 
+## [0.17.1-alpha] - 2025-11-15 ✨ **FIXES CRITIQUES - CUDA & Discord Auto-Reply**
+
+### Fixed - Correction problèmes majeurs 🔧
+
+**CUDA Support restauré** 🚀
+- Problème : `llama-cpp-python` installé sans support CUDA (version CPU-only)
+- Symptôme : Réponses IA extrêmement lentes (51.73s au lieu de ~2s)
+- Diagnostic : Test `hasattr(Llama, 'n_gpu_layers')` retournait False
+- Solution : Réinstallation forcée avec `CMAKE_ARGS="-DLLAMA_CUDA=on"`
+- Commande : `$env:CMAKE_ARGS="-DLLAMA_CUDA=on" ; $env:FORCE_CMAKE="1" ; pip install llama-cpp-python --force-reinstall --no-cache-dir --verbose`
+- Durée compilation : ~20 minutes (compilation complète avec CUDA)
+- Résultat : CUDA disponible, `ggml-cuda.dll` installée, performances GPU restaurées
+- Impact : **Gain de performance x25** (51s → ~2s par réponse)
+
+**Discord Auto-Reply fonctionnel** 💬
+- Problème : Salons auto-reply ne fonctionnaient pas malgré configuration
+- Causes identifiées :
+  1. Pas de checkbox pour activer/désactiver l'auto-reply dans l'interface
+  2. Config du bot non rechargée après modification des salons
+  3. `auto_reply_enabled` non sauvegardé dans config.json
+- Solutions implémentées :
+  - Ajout checkbox "✅ Activer l'auto-reply" dans dialog de gestion
+  - Rechargement automatique de la config du bot après sauvegarde
+  - Mise à jour de `bot.auto_reply_enabled` et `bot.auto_reply_channels` en temps réel
+  - Message de confirmation avec statut (activée/désactivée)
+
+### Changed
+- `src/gui/app.py` : Améliorations dialog Discord auto-reply
+  - `manage_auto_reply_channels()` : +1 checkbox pour activer/désactiver
+  - `_save_channels()` : +2 paramètres (checkbox + reload bot config)
+  - Hauteur dialog : 400px → 450px
+  - Sauvegarde de `discord.auto_reply_enabled` dans config
+
+**Impact utilisateur** :
+- 🚀 Performances IA restaurées (GPU fonctionnel)
+- 💬 Auto-reply Discord opérationnel sans redémarrage complet
+- ⚙️ Interface Discord plus claire avec activation explicite
+- ✅ Configuration rechargée automatiquement (pas besoin de redémarrer l'app)
+
+**Notes techniques** :
+- CUDA Toolkit 11.x ou 12.x requis pour compilation
+- Drivers NVIDIA à jour nécessaires
+- Wheels précompilés devraient normalement inclure CUDA (problème local résolu)
+- Pour distribution publique : wheels officiels incluent déjà CUDA
+
+---
+
 ## [0.17.0-alpha] - 2025-11-14 ✨ **NOUVEAU - INTERFACE GPU PROFILES**
 
 ### Added - Interface de gestion des profils GPU 🎮

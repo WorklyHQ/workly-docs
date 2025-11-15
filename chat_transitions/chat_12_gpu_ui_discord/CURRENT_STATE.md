@@ -37,18 +37,36 @@
    - Auto-scroll, limite 1000 lignes
    - Bouton effacer logs
 
+5. **Bug CUDA corrigé** ✅ (Phase 3)
+   - Diagnostic : llama-cpp-python sans support CUDA
+   - Réinstallation forcée avec CMAKE_ARGS="-DLLAMA_CUDA=on"
+   - Performances restaurées : 51s → ~2s par réponse (x25 plus rapide)
+   - CUDA disponible, ggml-cuda.dll installée
+
+6. **Bug Auto-Reply Discord corrigé** ✅ (Phase 3)
+   - Ajout checkbox pour activer/désactiver auto-reply
+   - Rechargement automatique config bot après sauvegarde
+   - Pas besoin de redémarrer l'app entière
+   - Message de confirmation avec statut clair
+
 ---
 
 ## 📁 Fichiers Modifiés
 
 ### workly-desktop
 
-#### `src/gui/app.py` (+350 lignes)
+#### `src/gui/app.py` (+370 lignes)
 **Nouvelles fonctionnalités** :
 - Label `gpu_profile_label` dans `create_connexion_tab()`
 - Méthode `update_gpu_profile_display()` : Affiche profil actuel avec couleurs
 - Méthode `manage_ia_profiles()` : Dialog complet scrollable avec 4 profils
 - Méthode `_apply_gpu_profile_change()` : Gestion changement + rechargement
+
+**Modifications Discord auto-reply (Phase 3)** :
+- `manage_auto_reply_channels()` : +checkbox "Activer l'auto-reply", hauteur 450px
+- `_save_channels()` : +paramètre `enable_checkbox`, sauvegarde `auto_reply_enabled`
+- Rechargement automatique : `bot.auto_reply_enabled` et `bot.auto_reply_channels`
+- Message confirmation avec statut (activée/désactivée)
 - Méthode `create_logs_tab()` : Onglet logs temps réel
 - Méthode `_setup_log_handler()` : QtLogHandler pour capture logs
 - Méthode `clear_logs()` : Effacer l'affichage logs
@@ -185,28 +203,135 @@ logging.getLogger().addHandler(self.log_handler)
 
 ---
 
+## 🐛 Phase 3 : Bugs Critiques Résolus
+
+### Bug 1 : CUDA Support Manquant ⚠️
+
+**Symptôme initial** :
+```
+Utilisateur : "Le modèle est lancé sur la ram et pas la vram donc une réponse basique est super longue"
+Logs : "Temps de réponse : 51.73s" (au lieu de ~2s attendu)
+```
+
+**Diagnostic** :
+1. Test : `python -c "from llama_cpp import Llama; print('CUDA available:', hasattr(Llama, 'n_gpu_layers'))"`
+2. Résultat : `CUDA available: False`
+3. Conclusion : `llama-cpp-python` installé sans support CUDA (version CPU-only)
+
+**Cause racine** :
+- Installation initiale sans `CMAKE_ARGS="-DLLAMA_CUDA=on"`
+- Cache pip gardait version CPU-only
+- Profil GPU détecté correctement (`performance`, `gpu_layers=-1`) mais bibliothèque ne pouvait pas utiliser le GPU
+
+**Solution appliquée** :
+```powershell
+# Réinstallation forcée avec CUDA
+$env:CMAKE_ARGS="-DLLAMA_CUDA=on"
+$env:FORCE_CMAKE="1"
+pip install llama-cpp-python --force-reinstall --no-cache-dir --verbose
+```
+
+**Durée** : ~20 minutes (compilation complète avec nvcc)
+
+**Résultat** :
+- ✅ CUDA available: True
+- ✅ `ggml-cuda.dll` et `ggml-cuda.lib` installés
+- ✅ Performances restaurées : **51.73s → ~2s** (gain x25)
+- ✅ Modèle charge maintenant sur VRAM (6GB utilisés)
+
+**Prévention future** :
+- Pour distribution publique : wheels précompilés officiels incluent déjà CUDA
+- Utilisateur final n'aura besoin que de drivers NVIDIA à jour
+- Système de profils auto détecte et configure automatiquement
+
+---
+
+### Bug 2 : Discord Auto-Reply Non Fonctionnel 💬
+
+**Symptôme initial** :
+```
+Logs : "✅ KiraDiscordBot initialisé (auto_reply=False, channels=1)"
+Utilisateur : "les salons d'auto reply ne fonctionnent pas"
+```
+
+**Diagnostic** :
+1. Vérification `config.json` : `auto_reply_enabled: true`, `auto_reply_channels: [salon_id]`
+2. Logs bot : `auto_reply=False` malgré config true
+3. Interface : Pas de checkbox pour activer/désactiver auto-reply
+4. Conclusion : Config bot non rechargée après modification
+
+**Causes identifiées** :
+1. **Pas de contrôle UI** : Aucune checkbox pour activer/désactiver auto-reply
+2. **Config non rechargée** : Bot démarre avec config initiale, ne recharge jamais
+3. **Sauvegarde incomplète** : `auto_reply_enabled` non sauvegardé par l'interface
+
+**Solutions implémentées** :
+
+**1. Ajout checkbox dans dialog** :
+```python
+# manage_auto_reply_channels()
+enable_checkbox = QCheckBox("✅ Activer l'auto-reply dans les salons configurés")
+enable_checkbox.setChecked(auto_reply_enabled)
+```
+
+**2. Modification _save_channels()** :
+```python
+def _save_channels(self, list_widget, enable_checkbox, dialog):
+    # Récupérer état checkbox
+    auto_reply_enabled = enable_checkbox.isChecked()
+
+    # Sauvegarder dans config
+    self.config.set("discord.auto_reply_enabled", auto_reply_enabled)
+    self.config.set("discord.auto_reply_channels", auto_reply_channels)
+
+    # Recharger config du bot EN TEMPS RÉEL
+    if self.discord_manager and self.discord_manager.bot:
+        self.discord_manager.bot.auto_reply_enabled = auto_reply_enabled
+        self.discord_manager.bot.auto_reply_channels = auto_reply_channels
+```
+
+**Résultat** :
+- ✅ Checkbox claire pour activer/désactiver
+- ✅ Config bot rechargée automatiquement après sauvegarde
+- ✅ Pas besoin de redémarrer l'app entière
+- ✅ Message confirmation avec statut (activée/désactivée)
+- ✅ Auto-reply fonctionnel dans les salons configurés
+
+**Impact utilisateur** :
+- Configuration Discord plus intuitive
+- Modifications prises en compte immédiatement
+- Feedback clair sur l'état de l'auto-reply
+
+---
+
 ## 📊 Statistiques
 
 ### Modifications Code
 
 - **Fichier** : `src/gui/app.py`
-- **Lignes ajoutées** : ~350 lignes
-- **Nouvelles méthodes** : 5
+- **Lignes ajoutées** : ~370 lignes (Phase 1-2 : +350, Phase 3 : +20)
+- **Nouvelles méthodes** : 6
   - `update_gpu_profile_display()`
   - `manage_ia_profiles()`
   - `_apply_gpu_profile_change()`
   - `create_logs_tab()`
   - `_setup_log_handler()`
   - `clear_logs()`
+- **Méthodes modifiées (Phase 3)** : 2
+  - `manage_auto_reply_channels()` : +checkbox auto-reply
+  - `_save_channels()` : +reload config bot
 - **Nouvelles classes** : 1 (QtLogHandler interne)
 
 ### Interface
 
-- **Nouveaux widgets** : 2
+- **Nouveaux widgets** : 3
   - Label GPU profile (onglet Connexion)
   - Onglet Logs complet
+  - Checkbox auto-reply Discord (Phase 3)
 - **Menu activé** : Options → IA → Profils IA
-- **Dialog créé** : Gestion profils GPU (scrollable)
+- **Dialogs modifiés** : 2
+  - Gestion profils GPU (scrollable)
+  - Gestion salons Discord (+checkbox, reload auto)
 
 ---
 
@@ -241,25 +366,28 @@ logging.getLogger().addHandler(self.log_handler)
 
 ## 🚀 Version
 
-**Version actuelle** : 0.17.0-alpha
+**Version actuelle** : 0.17.1-alpha
 
 **Changelog** :
 - ✅ Interface profils GPU (affichage + changement)
 - ✅ Onglet Logs temps réel
 - ✅ Rechargement à chaud du modèle
 - ✅ Mode Auto ajouté dans dialog
+- ✅ **CUDA support restauré** (Phase 3)
+- ✅ **Discord auto-reply fonctionnel** (Phase 3)
 
 ---
 
 ## 📚 Documentation Mise à Jour
 
 ### workly-docs
-- ✅ `CHANGELOG.md` : Ajout version 0.17.0-alpha
-- ✅ `INDEX.md` : Session 11 COMPLÈTE, Chat 13 état actuel
-- ✅ `chat_transitions/chat_13_gpu_ui/CURRENT_STATE.md` : Ce fichier
+- ✅ `CHANGELOG.md` : Ajout version 0.17.1-alpha (fixes CUDA + Discord)
+- ✅ `INDEX.md` : Chat 12 état actuel (3 phases)
+- ✅ `chat_transitions/chat_12_gpu_ui_discord/CURRENT_STATE.md` : Ce fichier (Phase 3 ajoutée)
 
 ### workly-desktop
 - ✅ `README.md` : Ajout section Outils de Diagnostic, mise à jour Interface (7 onglets)
+- ✅ `src/gui/app.py` : Fixes Discord auto-reply (+checkbox, reload config)
 
 ---
 
@@ -334,7 +462,7 @@ Aucun bug connu actuellement.
    - README.md : Lien Discord ajouté
    - index.html : Bouton Discord dans hero CTA + lien navigation
    - pages/about.html : Lien Discord navigation + footer
-   - pages/terms.html : Lien Discord navigation + footer  
+   - pages/terms.html : Lien Discord navigation + footer
    - pages/privacy.html : Lien Discord navigation + footer
 
 **Badge format** :
@@ -346,10 +474,31 @@ Aucun bug connu actuellement.
 
 Tous les liens `https://github.com/WorklyHQ/workly-desktop` dans le site web ont été remplacés par `https://github.com/WorklyHQ/` (organisation).
 
-### Commits Discord
+### Commits Discord (Déjà effectués - Phase 2)
 
 1. `feat(discord): Add Discord community link in app menu and about dialog` (workly-desktop)
 2. `docs(discord): Add Discord community link to documentation` (workly-docs)
+3. `feat(discord): Add Discord community link and replace Steam with beta testing section` (workly-public)
+4. `feat(discord): Add Discord link across website pages` (workly-website)
+5. `fix(license): Change license from MIT-NC to Proprietary across all repos` (multi-repo)
+6. `docs(website): Update all pages to reflect demo-only status` (workly-website)
+
+---
+
+## 📝 Commits Chat 12 - Phase 3
+
+**Aucun commit créé pour Phase 3** (fixes locaux, documentation uniquement)
+
+**Fichiers modifiés non commitées** :
+- ❌ `src/gui/app.py` (fixes Discord auto-reply)
+- ✅ `workly-docs/CHANGELOG.md` (version 0.17.1-alpha)
+- ✅ `workly-docs/INDEX.md` (mise à jour état)
+- ✅ `workly-docs/chat_transitions/chat_12_gpu_ui_discord/CURRENT_STATE.md` (ce fichier)
+
+**Note CUDA** :
+- Fix CUDA = Réinstallation package uniquement (pas de modification code)
+- Pas de changement dans le repo Git
+- Documenté pour référence future (distribution publique)
 3. `docs: Update Discord community link from placeholder to real invite` (workly-public)
 4. `feat: Add Discord community link and update GitHub links to WorklyHQ organization` (workly-website)
 
