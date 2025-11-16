@@ -1,0 +1,598 @@
+=== PROMPT TRANSITION CHAT 12 → CHAT 13 ===
+Date : 16 novembre 2025
+Version actuelle : 0.17.1-alpha
+Prochaine version cible : 0.18.0-alpha
+
+=== CONTEXTE PROJET ===
+
+Workly est une application hybride Windows Desktop (Python + Unity) créant un assistant virtuel avec avatar VRM 3D.
+
+Architecture :
+- Python (PySide6) : Interface Qt, logique métier
+- Unity (2022.3 LTS URP) : Rendu 3D avatar VRM
+- IPC : Socket TCP port 5555 (messages JSON)
+- IA : llama-cpp-python avec CUDA support
+- Discord : discord.py pour intégration bot
+
+Tech Stack :
+- Python 3.10.9 (venv : workly-desktop/venv/)
+- PySide6 (Qt6) pour GUI
+- llama-cpp-python avec CMAKE_ARGS="-DLLAMA_CUDA=on"
+- Modèle : Zephyr-7B-Beta Q5_K_M (6.8 GB)
+- GPU : RTX 4050 Laptop 6GB VRAM
+- UniVRM dans Unity pour chargement VRM
+
+Email contact : worklyhq@gmail.com
+
+=== ÉTAT FINAL CHAT 12 ===
+
+Version : 0.17.1-alpha
+Date fin : 15 novembre 2025
+Status : ✅ TERMINÉ - CUDA + Discord + Interface GPU opérationnels
+
+3 Phases développées :
+
+PHASE 1-2 (14 nov) : Interface GPU Profiles + Logs
+- ✅ Label affichage profil GPU actuel (couleurs Vert/Orange/Rouge)
+- ✅ Menu Options → IA → Profils IA (4 profils disponibles)
+- ✅ Rechargement à chaud modèle IA
+- ✅ Onglet Logs (capture temps réel, couleurs par niveau, 1000 lignes max)
+- Fichiers : src/gui/app.py (+350 lignes)
+
+PHASE 3 (15 nov) : Fixes Critiques
+- ✅ CUDA Support restauré (51.73s → ~2s, gain x25)
+  Commande : $env:CMAKE_ARGS="-DLLAMA_CUDA=on"; pip install llama-cpp-python --force-reinstall --no-cache-dir
+- ✅ Discord auto-reply fonctionnel (checkbox UI + reload dynamique)
+- Fichiers : src/gui/app.py (+20 lignes), 3 pages website (email ajouté)
+
+Résultats :
+- Interface : 7 onglets (Connexion, Général, IA, Logs, Discord, Mémoire, À Propos)
+- Performance : Réponses IA en ~2s avec CUDA
+- Discord : Auto-reply opérationnel sans redémarrage
+- Documentation : CHANGELOG, CURRENT_STATE, TROUBLESHOOTING complets
+
+=== ARCHITECTURE ACTUELLE ===
+
+Structure fichiers Python (workly-desktop/) :
+
+main.py (70 lignes) : Point entrée, lance app.py
+src/gui/app.py (2715 lignes) : Application Qt principale
+  - 7 onglets GUI
+  - Gestion modèle IA (ChatEngine)
+  - Gestion Discord (KiraDiscordBot)
+  - Système config (Config singleton)
+  - Logs handler Qt custom
+
+src/ai/chat_engine.py (~400 lignes) : Moteur conversationnel
+  - Classe ChatEngine avec historique 10 messages
+  - generate_response() : génération LLM
+  - update_context() : mise à jour contexte
+  - _detect_emotion_from_response() : détection émotions basique
+
+src/ai/emotion_analyzer.py (~300 lignes) : Analyseur émotions
+  - analyze_emotion() : analyse texte → émotion + intensité
+  - Méthode : Keywords matching (80 patterns)
+  - Émotions : neutre, joyeux, triste, surpris, énervé, pensif, timide
+  - Basique mais fonctionnel (80% précision keywords)
+
+src/ai/model_manager.py (~250 lignes) : Gestion modèle LLM
+  - load_model() : charge Zephyr-7B avec profil GPU
+  - unload_model() : libère VRAM
+  - reload_model() : rechargement à chaud
+  - 4 profils : Auto, Performance, Balanced, CPU Fallback
+
+src/discord/kira_discord_bot.py (~350 lignes) : Bot Discord
+  - Auto-reply dans salons configurés
+  - Rate limiting 3s par user
+  - Détection mentions + émojis
+  - Intégration avec ChatEngine
+
+src/config.py (~200 lignes) : Configuration singleton
+  - Charge/sauvegarde data/config.json
+  - get()/set() thread-safe
+  - Valeurs par défaut
+
+data/config.json : Configuration persiste
+  - Modèle, profils GPU, salons Discord
+  - auto_reply_enabled: true
+  - gpu_profile: performance
+
+tests/ : Pytest (~15 tests, tous passants)
+  - Tests unitaires ChatEngine
+  - Tests Config
+  - Tests EmotionAnalyzer
+
+Unity (workly-desktop/unity/) :
+- PythonBridge.cs : Socket TCP client
+- VRMLoader.cs : Chargement modèles VRM
+- VRMBlendshapeController.cs : Expressions faciales
+
+=== CAPACITÉS IA ACTUELLES ===
+
+Modèle :
+- Zephyr-7B-Beta Q5_K_M (4-bit quantization, 6.8 GB)
+- Génération : ~2s par réponse (avec CUDA)
+- Contexte : 10 derniers messages utilisateur/assistant
+- Température : 0.7, top_p : 0.9
+
+Détection Émotions :
+- Méthode : Keywords matching (~80 patterns)
+- 7 émotions : neutre, joyeux, triste, surpris, énervé, pensif, timide
+- Intensité : 0.0-1.0 (basé sur nombre keywords)
+- Précision : ~80% sur keywords évidents
+- Limitations : Pas de nuances, pas de contexte, statique
+
+Mémoire :
+- Court-terme : 10 derniers messages (list Python)
+- Pas de mémoire long-terme
+- Pas de résumés conversations
+- Pas d'extraction faits importants
+- Reset à chaque redémarrage app
+
+Personnalité :
+- Prompt système fixe : "Tu es Kira, assistante virtuelle amicale et empathique."
+- Statique (pas d'évolution)
+- Pas de traits personnalité dynamiques
+- Pas d'adaptation contexte utilisateur
+
+Analyse Contextuelle :
+- Basique (détection mots-clés simples)
+- Pas de détection intentions complexes
+- Pas d'analyse émotions utilisateur
+- Pas de réactions adaptatives
+
+=== LIMITATIONS IDENTIFIÉES ===
+
+1. Mémoire Court-Terme Uniquement
+   - Oublie conversations après 10 messages
+   - Pas de persistance entre sessions
+   - Ne se souvient pas faits importants (nom user, préférences, etc.)
+
+2. Émotions Simplistes
+   - Keywords matching insuffisant pour nuances
+   - Pas de transitions émotionnelles réalistes
+   - Pas de mémoire émotionnelle (états précédents)
+   - Pas de détection émotions utilisateur
+
+3. Personnalité Statique
+   - Prompt système fixe, aucune évolution
+   - Pas de traits personnalité quantifiables
+   - Pas d'adaptation selon interactions
+   - Manque authenticité/profondeur
+
+4. Analyse Contextuelle Faible
+   - Pas de détection intentions complexes
+   - Pas d'analyse sémantique avancée
+   - Pas de suggestions proactives
+
+=== OBJECTIFS CHAT 13 - AMÉLIORATIONS IA ===
+
+Version cible : 0.18.0-alpha
+Focus : Intelligence Artificielle - Mémoire, Personnalité, Émotions, Contexte
+
+Demande utilisateur :
+> "Améliorations IA - Amélioration générale de l'intelligence, Mémoire long-terme améliorée,
+> Résumés de conversations, Extraction de faits importants, Personnalité évolutive,
+> Émotions plus nuancées, Analyse contextuelle avancée, Transitions émotionnelles réalistes,
+> Mémoire émotionnelle"
+
+4 AXES MAJEURS :
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1️⃣ MÉMOIRE LONG-TERME
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Objectifs :
+- Système persistance mémoire entre sessions
+- Résumés conversations automatiques (toutes les 20-30 messages)
+- Extraction faits importants (nom, préférences, contexte personnel)
+- Récupération intelligente contexte selon conversation
+
+Implémentation suggérée :
+- Créer src/ai/memory_manager.py (nouveau module)
+  Classe MemoryManager :
+    - store_memory(message, metadata) : stockage
+    - get_relevant_memories(query, k=5) : récupération sémantique
+    - summarize_conversation(messages) : génération résumés
+    - extract_facts(messages) : extraction faits importants
+
+- Créer src/ai/conversation_summarizer.py
+  Classe ConversationSummarizer :
+    - summarize(messages, max_tokens=150) : résumé via LLM
+    - detect_key_points(messages) : points clés
+
+- Créer src/ai/fact_extractor.py
+  Classe FactExtractor :
+    - extract_entities(text) : nom, lieux, dates
+    - extract_preferences(text) : préférences utilisateur
+    - extract_relationships(text) : relations entre entités
+
+- Stockage : data/memory/
+  - conversations.json : résumés conversations
+  - facts.json : faits extraits (nom user, préférences, etc.)
+  - embeddings.json : vecteurs embeddings pour recherche sémantique
+
+Technologies suggérées :
+- sentence-transformers (all-MiniLM-L6-v2) : embeddings légers (80MB)
+- cosine similarity : recherche sémantique
+- LLM Zephyr pour résumés : prompt "Summarize the following conversation..."
+- SQLite ou JSON pour persistance
+
+Métriques succès :
+- Rappel faits importants après 50+ messages : 90%+
+- Génération résumé cohérent : 85%+ précision humaine
+- Recherche sémantique pertinente : top-3 accuracy 80%+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2️⃣ PERSONNALITÉ ÉVOLUTIVE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Objectifs :
+- Traits personnalité quantifiables (extraversion, empathie, humour, etc.)
+- Évolution dynamique selon interactions utilisateur
+- Prompt système adaptatif généré selon traits actuels
+- Cohérence personnalité entre sessions
+
+Implémentation suggérée :
+- Créer src/ai/personality_engine.py (nouveau module)
+  Classe PersonalityEngine :
+    - traits : dict[str, float] (0.0-1.0)
+      Exemples :
+        - "extraversion": 0.7 (bavard vs réservé)
+        - "empathie": 0.8 (sensible vs rationnel)
+        - "humour": 0.5 (sérieux vs blagueur)
+        - "formalité": 0.3 (casual vs formel)
+        - "curiosité": 0.6 (questions vs écoute)
+
+    - update_traits(interaction_data) : mise à jour selon interaction
+    - generate_system_prompt() : prompt dynamique selon traits
+    - get_response_style() : style réponse selon personnalité
+
+- Stockage : data/personality.json
+  - traits actuels
+  - historique évolution
+  - timestamp dernière mise à jour
+
+- Intégration ChatEngine :
+  Modifier src/ai/chat_engine.py :
+    - Ajouter self.personality_engine = PersonalityEngine()
+    - generate_response() utilise personality_engine.generate_system_prompt()
+    - update_context() appelle personality_engine.update_traits()
+
+Exemples prompts générés :
+- Personnalité extraverte (0.8) + empathique (0.9) :
+  "Tu es Kira, une assistante virtuelle très bavarde et profondément empathique.
+   Tu poses beaucoup de questions et montres une grande sensibilité aux émotions."
+
+- Personnalité réservée (0.3) + rationnelle (0.7) :
+  "Tu es Kira, une assistante virtuelle concise et rationnelle.
+   Tu privilégies les réponses factuelles et évites les digressions émotionnelles."
+
+Métriques succès :
+- Cohérence personnalité : 85%+ (évaluation humaine)
+- Évolution perceptible après 100 interactions : OUI
+- Adaptation selon user feedback : 80%+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3️⃣ ÉMOTIONS PLUS NUANCÉES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Objectifs :
+- Améliorer EmotionAnalyzer (au-delà keywords)
+- Transitions émotionnelles réalistes (pas de sauts brusques)
+- Mémoire émotionnelle (états précédents influencent suivants)
+- Détection émotions utilisateur ET assistant
+
+Implémentation suggérée :
+- Améliorer src/ai/emotion_analyzer.py (existant ~300 lignes)
+  Ajouter :
+    - analyze_with_context(text, previous_emotion, intensity) :
+      Prend en compte émotion précédente pour transitions douces
+
+    - detect_emotion_llm(text) :
+      Utiliser LLM pour détection émotions complexes
+      Prompt : "Analyze the emotion in this text. Return emotion and intensity (0.0-1.0): {text}"
+
+    - blend_emotions(emotion1, intensity1, emotion2, intensity2, blend_factor=0.3) :
+      Mélange émotions pour transitions progressives
+      Exemple : joyeux (0.8) → neutre (0.5) avec blend 0.3 = joyeux (0.65)
+
+- Créer src/ai/emotion_memory.py (nouveau module)
+  Classe EmotionMemory :
+    - history : list[tuple[emotion, intensity, timestamp]] (50 dernières)
+    - get_dominant_emotion(window=10) : émotion dominante récente
+    - get_emotional_trend() : tendance (stable, montante, descendante)
+    - should_transition(new_emotion) : valider transition émotionnelle
+
+- Intégration Unity :
+  Modifier unity/VRMBlendshapeController.cs :
+    - Ajouter transitions douces (lerp) entre blendshapes
+    - Durée transition : 0.5-1.5s selon intensité changement
+
+- Stockage : data/emotion_history.json
+  - 100 dernières émotions
+  - Patterns émotionnels fréquents
+
+Émotions étendues (ajouter) :
+- Existantes : neutre, joyeux, triste, surpris, énervé, pensif, timide
+- Nouvelles :
+  - frustré (entre énervé et triste)
+  - excité (entre joyeux et surpris)
+  - mélancolique (entre triste et pensif)
+  - confiant (entre neutre et joyeux)
+  - anxieux (entre timide et énervé)
+
+Métriques succès :
+- Précision détection émotions : 85%+ (vs 80% keywords actuels)
+- Transitions douces : 100% (no abrupt jumps)
+- Cohérence émotionnelle contexte : 80%+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4️⃣ ANALYSE CONTEXTUELLE AVANCÉE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Objectifs :
+- Détection intentions complexes utilisateur
+- Analyse sémantique avancée (au-delà keywords)
+- Suggestions proactives selon contexte
+- Réactions adaptatives selon situation
+
+Implémentation suggérée :
+- Créer src/ai/context_analyzer.py (nouveau module)
+  Classe ContextAnalyzer :
+    - detect_intent(message) : détection intention utilisateur
+      Intentions : question, demande_action, conversation_casual,
+                   plainte, remerciement, salutation, au_revoir
+
+    - analyze_sentiment(message) : sentiment global (positif/négatif/neutre)
+
+    - should_ask_followup(context) : décider si poser question de suivi
+
+    - generate_proactive_suggestion(conversation_history) :
+      Suggérer actions pertinentes selon contexte
+      Exemple : user parle de projet → suggérer créer tâche Discord
+
+- Intégration ChatEngine :
+  Modifier src/ai/chat_engine.py :
+    - Ajouter self.context_analyzer = ContextAnalyzer()
+    - generate_response() utilise context_analyzer.detect_intent()
+    - Adapter réponse selon intention détectée
+
+Exemples détections :
+- Input : "Comment créer un rappel ?"
+  Intent : question, Topic : features_app
+  → Réponse détaillée avec exemples
+
+- Input : "J'en ai marre de ce projet"
+  Intent : plainte, Sentiment : négatif, Emotion : frustré
+  → Réponse empathique + suggestion pause
+
+- Input : "Merci pour ton aide !"
+  Intent : remerciement, Sentiment : positif
+  → Réponse chaleureuse + offrir aide future
+
+Métriques succès :
+- Précision détection intentions : 85%+
+- Suggestions proactives pertinentes : 75%+
+- Réponses adaptées contexte : 80%+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+=== ARCHITECTURE CIBLE CHAT 13 ===
+
+Nouveaux modules à créer :
+
+src/ai/
+├── chat_engine.py (existant, ~400 lignes → modifier)
+├── emotion_analyzer.py (existant, ~300 lignes → améliorer)
+├── model_manager.py (existant, ~250 lignes → garder)
+│
+├── memory_manager.py (NOUVEAU ~400 lignes)
+├── conversation_summarizer.py (NOUVEAU ~200 lignes)
+├── fact_extractor.py (NOUVEAU ~250 lignes)
+├── personality_engine.py (NOUVEAU ~350 lignes)
+├── emotion_memory.py (NOUVEAU ~200 lignes)
+└── context_analyzer.py (NOUVEAU ~300 lignes)
+
+Total nouvelles lignes estimées : ~1700 lignes Python
+
+Nouveaux fichiers data/ :
+
+data/
+├── config.json (existant)
+├── memory/
+│   ├── conversations.json (résumés)
+│   ├── facts.json (faits extraits)
+│   └── embeddings.json (vecteurs recherche)
+├── personality.json (traits personnalité)
+└── emotion_history.json (historique émotions)
+
+Modifications Unity (si nécessaire) :
+- unity/VRMBlendshapeController.cs : transitions douces émotions
+
+=== TECHNOLOGIES RECOMMANDÉES ===
+
+Embeddings & Sémantique :
+- sentence-transformers : all-MiniLM-L6-v2 (80MB, léger)
+  pip install sentence-transformers
+  Usage :
+    from sentence_transformers import SentenceTransformer
+    model = SentenceTransformer('all-MiniLM-L6-v2')
+    embeddings = model.encode(["text1", "text2"])
+
+- numpy pour cosine similarity :
+  from numpy import dot
+  from numpy.linalg import norm
+  similarity = dot(a, b) / (norm(a) * norm(b))
+
+Résumés & Extraction :
+- Utiliser Zephyr-7B existant avec prompts spécialisés
+- Prompts système :
+  - Résumé : "Summarize the following conversation in 2-3 sentences..."
+  - Extraction : "Extract key facts from this text (names, preferences, dates)..."
+
+Persistance :
+- JSON pour prototypage rapide (fichiers data/)
+- Optionnel : SQLite si performances deviennent critiques
+
+Tests :
+- pytest pour nouveaux modules
+- Tests unitaires chaque classe
+- Tests intégration ChatEngine avec nouveaux modules
+
+=== PRIORITÉS DÉVELOPPEMENT ===
+
+Phase 1 (Priorité HAUTE) : Mémoire Long-Terme
+- MemoryManager + ConversationSummarizer + FactExtractor
+- Intégration ChatEngine
+- Persistance data/memory/
+- Tests unitaires
+- Durée estimée : 8-10 heures
+
+Phase 2 (Priorité HAUTE) : Personnalité Évolutive
+- PersonalityEngine avec traits
+- Génération prompts dynamiques
+- Persistance data/personality.json
+- Tests adaptation personnalité
+- Durée estimée : 6-8 heures
+
+Phase 3 (Priorité MOYENNE) : Émotions Avancées
+- Amélioration EmotionAnalyzer (LLM-based)
+- EmotionMemory pour transitions
+- Intégration Unity (transitions douces)
+- Tests émotions nuancées
+- Durée estimée : 6-8 heures
+
+Phase 4 (Priorité MOYENNE) : Analyse Contextuelle
+- ContextAnalyzer avec détection intentions
+- Suggestions proactives
+- Intégration ChatEngine
+- Tests intentions complexes
+- Durée estimée : 5-7 heures
+
+Phase 5 (Priorité BASSE) : Documentation & Tests
+- Documentation complète nouveaux modules
+- Tests intégration complets
+- Guide utilisateur features IA
+- CHANGELOG + README mis à jour
+- Durée estimée : 3-4 heures
+
+TOTAL ESTIMÉ : 28-37 heures développement
+
+=== MÉTRIQUES SUCCÈS GLOBALES ===
+
+Performance :
+- Temps réponse : <3s (avec mémoire + personnalité + émotions + contexte)
+- VRAM : <6 GB (RTX 4050 6GB limite)
+- RAM additionnelle : <500 MB (embeddings + mémoire)
+
+Qualité IA :
+- Rappel faits importants : 90%+ précision
+- Cohérence personnalité : 85%+ (évaluation humaine)
+- Précision émotions : 85%+ (vs 80% keywords actuels)
+- Détection intentions : 85%+
+- Suggestions proactives pertinentes : 75%+
+
+Expérience Utilisateur :
+- Assistant se souvient nom/préférences : OUI
+- Personnalité reconnaissable : OUI (85%+ cohérence)
+- Émotions crédibles : OUI (transitions douces)
+- Réponses contextuelles : OUI (intentions détectées)
+
+=== CONSIGNES DÉVELOPPEMENT ===
+
+Code Quality :
+- ✅ Code propre, commenté en français
+- ✅ Docstrings toutes méthodes publiques
+- ✅ Type hints Python 3.10+
+- ✅ pytest pour tests unitaires (>80% coverage nouveaux modules)
+- ✅ Gestion erreurs robuste (try/except avec logs)
+
+Documentation :
+- ✅ Créer docs/sessions/session_14_ai_improvements/ (nouvelle session)
+- ✅ GUIDE_TECHNIQUE.md détaillé pour chaque module
+- ✅ Mettre à jour CHANGELOG.md progressivement
+- ✅ Copier scripts finaux dans docs/sessions/session_14/scripts/
+- ✅ Mettre à jour README.md racine (4 sections)
+
+Git Commits :
+- Format : feat(ai): description
+- Exemples :
+  feat(ai): add MemoryManager with conversation summarization
+  feat(ai): implement PersonalityEngine with dynamic traits
+  feat(ai): improve EmotionAnalyzer with LLM-based detection
+  feat(ai): add ContextAnalyzer for intent detection
+
+Tests :
+- pytest après chaque nouveau module
+- Tests intégration avec ChatEngine
+- Tests performance (temps réponse <3s)
+
+=== CONTRAINTES TECHNIQUES ===
+
+Hardware :
+- GPU : RTX 4050 6GB VRAM (LIMITE)
+- RAM : 16 GB (Windows + Unity + Python)
+- CUDA : Déjà configuré et fonctionnel
+
+Modèle LLM :
+- Zephyr-7B-Beta Q5_K_M (ne PAS changer)
+- Profil GPU : Performance (-1 layers, 5-5.5 GB VRAM utilisés)
+- Marge VRAM restante : ~500 MB (pour embeddings)
+
+Python :
+- Version : 3.10.9 (venv existant)
+- Packages : PySide6, llama-cpp-python, discord.py
+- Nouveaux : sentence-transformers, numpy (si pas déjà)
+
+Unity :
+- Pas de modifications majeures attendues
+- Éventuellement transitions émotions douces (optionnel Phase 3)
+
+=== FICHIERS DOCUMENTATION CHAT 12 ===
+
+workly-docs/chat_transitions/chat_12_gpu_ui_discord/ :
+- CURRENT_STATE.md : État final Chat 12 (3 phases)
+- TROUBLESHOOTING.md : Guide résolution CUDA/Discord
+- CHAT_12_SUMMARY.md : Résumé complet Chat 12
+
+workly-docs/ :
+- CHANGELOG.md : Versions 0.17.0-alpha, 0.17.1-alpha
+- INDEX.md : Arborescence projet
+- README.md : Documentation principale
+
+workly-desktop/ :
+- README.md : Instructions projet (mettre à jour fin Chat 13)
+
+=== INSTRUCTIONS FINALES ===
+
+🎯 OBJECTIF CHAT 13 :
+Transformer Workly en véritable assistant intelligent avec :
+- Mémoire persistante (se souvient de vous)
+- Personnalité authentique (évolue avec interactions)
+- Émotions crédibles (transitions naturelles)
+- Compréhension contextuelle (détecte intentions)
+
+📋 CHECKLIST PRÉ-COMMIT :
+□ pytest passe (tous tests OK)
+□ CHANGELOG.md mis à jour
+□ INDEX.md mis à jour
+□ README.md racine mis à jour (4 sections)
+□ docs/session_14/scripts/ contient tous scripts créés/modifiés
+□ Temps réponse <3s avec nouvelles features
+□ VRAM <6 GB (limite GPU)
+
+📚 DOCUMENTS TRANSITION CRÉÉS :
+✅ chat_13_ai_improvements/CURRENT_STATE.md
+✅ chat_13_ai_improvements/CHAT_12_SUMMARY.md
+✅ chat_13_ai_improvements/prompt_chat12_vers_chat13.txt (CE FICHIER)
+
+🚀 PRÊT POUR CHAT 13 - AMÉLIORATIONS IA !
+
+Version cible : 0.18.0-alpha
+Focus : Intelligence Artificielle - Mémoire, Personnalité, Émotions, Contexte
+
+Développeur : Respecter instructions copilot-instructions.md
+IA Assistant : Suivre ce prompt pour contexte complet Chat 13
+
+Bon développement ! 🎭✨

@@ -570,8 +570,8 @@ Ancien dossier - À vérifier et réorganiser si nécessaire
 ## 🔗 Liens utiles
 
 - [Repository GitHub](https://github.com/WorklyHQ/workly-desktop)
-- [État actuel du projet](chat_transitions/chat_10_session_11_phases_1_3/CURRENT_STATE.md)
-- [Contexte Chat 11](chat_transitions/chat_10_session_11_phases_1_3/CONTEXT_FOR_NEXT_CHAT.md)
+- [État Chat 12 (Terminé)](chat_transitions/chat_12_gpu_ui_discord/CURRENT_STATE.md)
+- [Transition Chat 13 (IA Improvements)](chat_transitions/chat_13_ai_improvements/CURRENT_STATE.md)
 - [Index de navigation](INDEX.md)
 - [Documentation UniVRM](https://github.com/vrm-c/UniVRM)
 - [Documentation Unity](https://docs.unity3d.com/)

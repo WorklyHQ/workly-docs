@@ -424,8 +424,10 @@ docs/
 
 ---
 
-**Dernière mise à jour :** 9 novembre 2025
+**Dernière mise à jour :** 16 novembre 2025
 **Organisation par :** Sessions chronologiques + catégories fonctionnelles
 **Sessions complètes :** 0-12 ✅ (Session 12 Site Web Workly COMPLÉTÉE !) 🌐💜
-**Chat actuel :** Chat 10 → Chat 11 (Session 11 - Performance Optimizations Phase 3/6 + Session 12 COMPLÉTÉE) 🚧✨
-**Transition :** Chat 10 terminé → Documentation transition Chat 11 complète dans `chat_transitions/chat_10_session_11_phases_1_3/` ✅
+**Chat actuel :** Chat 12 ✅ TERMINÉ (Interface GPU + Logs + CUDA Fix + Discord Fix) → Chat 13 🚀 EN PRÉPARATION (Améliorations IA)
+**État Chat 12 :** [chat_transitions/chat_12_gpu_ui_discord/CURRENT_STATE.md](chat_transitions/chat_12_gpu_ui_discord/CURRENT_STATE.md)
+**Transition Chat 13 :** [chat_transitions/chat_13_ai_improvements/CURRENT_STATE.md](chat_transitions/chat_13
+2_gpu_ui_discord/CURRENT_STATE.md)

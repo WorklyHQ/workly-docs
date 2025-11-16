@@ -1,518 +1,349 @@
-# 📊 État Actuel du Projet - Chat 12 (Interface GPU Profiles + Logs + Discord)
+# 📊 État Actuel du Projet - Fin Chat 12 → Début Chat 13
 
-**Date** : 14 novembre 2025
-**Chat** : Chat 12
-**Objectif** : Interface utilisateur pour gérer les profils GPU + Onglet Logs diagnostic + Intégration Discord communauté
-**Statut** : ✅ **TERMINÉ**
-
----
-
-## 🎯 Objectifs du Chat 12
-
-### Fonctionnalités Implémentées
-
-1. **Affichage du profil GPU actuel** ✅
-   - Label dans l'onglet Connexion
-   - Affiche profil, layers, VRAM estimée
-   - Couleurs selon profil (Vert/Orange/Rouge)
-   - Mise à jour automatique
-
-2. **Dialog de gestion des profils GPU** ✅
-   - Menu Options → IA → Profils IA activé
-   - 4 profils disponibles : Auto, Performance, Balanced, CPU Fallback
-   - Détails complets par profil
-   - Interface scrollable (hauteur max 700px)
-   - Sauvegarde config.json automatique
-
-3. **Rechargement à chaud** ✅
-   - Changement de profil avec IA chargée
-   - Déchargement + rechargement automatique
-   - Gestion des erreurs
-   - Messages de confirmation
-
-4. **Onglet Logs** ✅
-   - Nouvel onglet 📋 Logs
-   - Capture temps réel (DEBUG/INFO/WARNING/ERROR)
-   - Couleurs adaptées par niveau
-   - Auto-scroll, limite 1000 lignes
-   - Bouton effacer logs
-
-5. **Bug CUDA corrigé** ✅ (Phase 3)
-   - Diagnostic : llama-cpp-python sans support CUDA
-   - Réinstallation forcée avec CMAKE_ARGS="-DLLAMA_CUDA=on"
-   - Performances restaurées : 51s → ~2s par réponse (x25 plus rapide)
-   - CUDA disponible, ggml-cuda.dll installée
-
-6. **Bug Auto-Reply Discord corrigé** ✅ (Phase 3)
-   - Ajout checkbox pour activer/désactiver auto-reply
-   - Rechargement automatique config bot après sauvegarde
-   - Pas besoin de redémarrer l'app entière
-   - Message de confirmation avec statut clair
+**Date** : 16 novembre 2025
+**Chat précédent** : Chat 12 (Interface GPU Profiles + Logs + Discord + Fixes)
+**Chat suivant** : Chat 13 (Améliorations IA)
+**Statut** : ✅ **TRANSITION**
 
 ---
 
-## 📁 Fichiers Modifiés
+## 🎯 État Final du Chat 12
 
-### workly-desktop
+### Fonctionnalités Complétées
 
-#### `src/gui/app.py` (+370 lignes)
-**Nouvelles fonctionnalités** :
-- Label `gpu_profile_label` dans `create_connexion_tab()`
-- Méthode `update_gpu_profile_display()` : Affiche profil actuel avec couleurs
-- Méthode `manage_ia_profiles()` : Dialog complet scrollable avec 4 profils
-- Méthode `_apply_gpu_profile_change()` : Gestion changement + rechargement
+**Phase 1-2 : Interface GPU & Logs** ✅
+- Affichage profil GPU actuel (label avec couleurs)
+- Dialog gestion profils GPU (4 profils : Auto, Performance, Balanced, CPU)
+- Rechargement à chaud du modèle
+- Onglet Logs temps réel (couleurs par niveau, auto-scroll, limite 1000 lignes)
 
-**Modifications Discord auto-reply (Phase 3)** :
-- `manage_auto_reply_channels()` : +checkbox "Activer l'auto-reply", hauteur 450px
-- `_save_channels()` : +paramètre `enable_checkbox`, sauvegarde `auto_reply_enabled`
-- Rechargement automatique : `bot.auto_reply_enabled` et `bot.auto_reply_channels`
-- Message confirmation avec statut (activée/désactivée)
-- Méthode `create_logs_tab()` : Onglet logs temps réel
-- Méthode `_setup_log_handler()` : QtLogHandler pour capture logs
-- Méthode `clear_logs()` : Effacer l'affichage logs
+**Phase 3 : Fixes Critiques** ✅
+- **CUDA Support restauré** : Réinstallation llama-cpp-python avec CMAKE_ARGS="-DLLAMA_CUDA=on"
+  - Performance : 51.73s → ~2s par réponse (gain x25)
+  - Test : `hasattr(Llama, 'n_gpu_layers')` = True
+- **Discord Auto-Reply fonctionnel** :
+  - Ajout checkbox "Activer l'auto-reply"
+  - Rechargement automatique config bot après sauvegarde
+  - Pas besoin de redémarrer l'app
 
-**Menu activé** :
-- Options → IA → Profils IA (était désactivé)
-
----
-
-## 🎨 Interface Utilisateur
-
-### Onglet Connexion
-```
-┌─────────────────────────────────────┐
-│ 🤖 Modèle IA (LLM)                  │
-│                                     │
-│ Statut IA : ✅ IA chargée : Zephyr-7B prêt │
-│ Profil GPU : Performance (layers: -1, VRAM: 5-5.5 GB) │  ← NOUVEAU
-│                                     │
-│ [📥 Charger IA]  [🗑️ Décharger IA]  │
-└─────────────────────────────────────┘
-```
-
-### Menu Options → IA → Profils IA
-```
-┌──────────────────────────────────────────┐
-│ Profils IA - Gestion GPU                 │
-├──────────────────────────────────────────┤
-│ Choisissez le profil GPU...              │
-│ 📊 Profil actuel : Performance            │
-│                                          │
-│ ┌────────────────────────────────────┐  │
-│ │ ○ Auto (Détection Automatique)     │  │ ← NOUVEAU (scrollable)
-│ │   • GPU Layers: Auto               │  │
-│ │   • VRAM: Auto-détecté             │  │
-│ │                                    │  │
-│ │ ○ Performance                      │  │
-│ │   • GPU Layers: -1 (toutes)        │  │
-│ │   • VRAM: 5-5.5 GB                 │  │
-│ │   • Vitesse: 25-35 tokens/sec      │  │
-│ │                                    │  │
-│ │ ○ Balanced                         │  │
-│ │   • GPU Layers: 35                 │  │
-│ │   • VRAM: 3-4 GB                   │  │
-│ │   • Vitesse: 15-25 tokens/sec      │  │
-│ │                                    │  │
-│ │ ○ CPU Fallback                     │  │
-│ │   • GPU Layers: 0                  │  │
-│ │   • VRAM: 0 GB (RAM: 4-6 GB)       │  │
-│ │   • Vitesse: 2-5 tokens/sec        │  │
-│ └────────────────────────────────────┘  │
-│                                          │
-│              [OK]  [Annuler]             │
-└──────────────────────────────────────────┘
-```
-
-### Onglet Logs (NOUVEAU)
-```
-┌──────────────────────────────────────────┐
-│ 📋 Logs                                   │
-├──────────────────────────────────────────┤
-│ 📋 Logs Application      [🗑️ Effacer]    │
-│                                          │
-│ ┌────────────────────────────────────┐  │
-│ │ 12:34:56 [INFO] app: IA chargée    │  │ (vert)
-│ │ 12:34:58 [DEBUG] config: GPU auto  │  │ (bleu)
-│ │ 12:35:02 [WARNING] unity: déco     │  │ (orange)
-│ │ 12:35:10 [ERROR] model: VRAM full  │  │ (rouge)
-│ │ ...                                │  │
-│ │ (auto-scroll, max 1000 lignes)     │  │
-│ └────────────────────────────────────┘  │
-│                                          │
-│ 💡 Logs limités aux 1000 dernières lignes│
-└──────────────────────────────────────────┘
-```
+**Intégration Email** ✅
+- Email `worklyhq@gmail.com` ajouté dans :
+  - privacy.html (section Contact)
+  - terms.html (section Contact)
+  - about.html (informations projet)
 
 ---
 
-## 🔧 Fonctionnement Technique
+## 📁 Architecture Actuelle
 
-### Affichage Profil GPU
+### workly-desktop (Application Python + Unity)
 
-**Méthode `update_gpu_profile_display()`** :
-1. Récupère profil actuel depuis `ModelManager.config.gpu_profile`
-2. Résout "auto" si nécessaire via `get_initial_gpu_profile()`
-3. Récupère infos depuis `GPU_PROFILES[profile_id]`
-4. Affiche : "Profil GPU : {name} (layers: {n}, VRAM: {estimate})"
-5. Applique couleur selon profil
-
-**Couleurs** :
-- 🟢 Vert (`#4CAF50`) : Performance
-- 🟠 Orange (`#FFC107`) : Balanced
-- 🔴 Rouge (`#F44336`) : CPU Fallback
-- ⚪ Gris (`#888`) : Auto ou non détecté
-
-### Dialog Profils GPU
-
-**Structure** :
-- QDialog avec hauteur max 700px
-- QScrollArea pour liste profils (évite débordement)
-- QButtonGroup avec radio buttons (sélection exclusive)
-- 4 profils : Auto (nouveau), Performance, Balanced, CPU Fallback
-
-**Flux de changement** :
-1. Utilisateur sélectionne nouveau profil
-2. Clique OK → `_apply_gpu_profile_change()`
-3. Sauvegarde dans `config.json` (`ai.gpu_profile`)
-4. Si IA chargée → Dialog "Recharger maintenant ?"
-5. Si Oui :
-   - Déchargement modèle (`unload_model()`)
-   - Rechargement config (`AIConfig.from_json()`)
-   - Rechargement modèle (`load_model()`)
-   - Mise à jour affichage
-6. Si Non → Profil appliqué au prochain démarrage
-
-### Onglet Logs
-
-**QtLogHandler** :
-- Hérite de `logging.Handler`
-- Capture tous les logs via `emit(record)`
-- Formate avec timestamp + niveau + module + message
-- Applique couleurs HTML selon niveau :
-  - ERROR → Rouge (`#f44336`)
-  - WARNING → Orange (`#ff9800`)
-  - INFO → Vert (`#4caf50`)
-  - DEBUG → Bleu (`#2196f3`)
-- Auto-scroll vers le bas
-- Limite à 1000 lignes (évite surcharge mémoire)
-
-**Ajout au logger root** :
-```python
-logging.getLogger().addHandler(self.log_handler)
+**Structure principale** :
 ```
+workly-desktop/
+├── src/
+│   ├── gui/
+│   │   └── app.py (2715 lignes, 7 onglets)
+│   ├── ai/
+│   │   ├── chat_engine.py (Gestion conversations)
+│   │   ├── emotion_analyzer.py (Analyse émotions)
+│   │   ├── model_manager.py (Gestion modèles LLM)
+│   │   └── config.py (GPU profiles, configs IA)
+│   ├── discord_bot/
+│   │   └── bot.py (Bot Discord avec auto-reply)
+│   └── ipc/
+│       └── unity_bridge.py (Communication Unity)
+├── unity/ (Unity 2022.3 LTS + UniVRM)
+├── data/
+│   └── config.json (Configurations app)
+└── models/
+    └── zephyr-7b-beta.Q5_K_M.gguf (6.8 GB)
+```
+
+**Modules IA actuels** :
+- `ChatEngine` : Gestion conversations, historique local
+- `EmotionAnalyzer` : Détection émotions basique (keywords)
+- `ModelManager` : Chargement/déchargement LLM, GPU profiles
+- Profils GPU : Auto, Performance, Balanced, CPU Fallback
+
+**Capacités IA actuelles** :
+- ✅ Conversations avec Zephyr-7B (local)
+- ✅ Historique de conversation (limite 10 messages)
+- ✅ Détection émotions basique (6 émotions)
+- ✅ GPU acceleration (CUDA fonctionnel)
+- ✅ System prompt personnalisé (Kira, assistant virtuel)
+
+**Limitations identifiées** :
+- ⚠️ Pas de mémoire long-terme (limite 10 messages)
+- ⚠️ Pas de résumés de conversations
+- ⚠️ Émotions basiques (analyse par keywords)
+- ⚠️ Pas de mémoire émotionnelle
+- ⚠️ Pas d'extraction de faits importants
+- ⚠️ Personnalité statique (system prompt fixe)
 
 ---
 
-## 🐛 Phase 3 : Bugs Critiques Résolus
-
-### Bug 1 : CUDA Support Manquant ⚠️
-
-**Symptôme initial** :
-```
-Utilisateur : "Le modèle est lancé sur la ram et pas la vram donc une réponse basique est super longue"
-Logs : "Temps de réponse : 51.73s" (au lieu de ~2s attendu)
-```
-
-**Diagnostic** :
-1. Test : `python -c "from llama_cpp import Llama; print('CUDA available:', hasattr(Llama, 'n_gpu_layers'))"`
-2. Résultat : `CUDA available: False`
-3. Conclusion : `llama-cpp-python` installé sans support CUDA (version CPU-only)
-
-**Cause racine** :
-- Installation initiale sans `CMAKE_ARGS="-DLLAMA_CUDA=on"`
-- Cache pip gardait version CPU-only
-- Profil GPU détecté correctement (`performance`, `gpu_layers=-1`) mais bibliothèque ne pouvait pas utiliser le GPU
-
-**Solution appliquée** :
-```powershell
-# Réinstallation forcée avec CUDA
-$env:CMAKE_ARGS="-DLLAMA_CUDA=on"
-$env:FORCE_CMAKE="1"
-pip install llama-cpp-python --force-reinstall --no-cache-dir --verbose
-```
-
-**Durée** : ~20 minutes (compilation complète avec nvcc)
-
-**Résultat** :
-- ✅ CUDA available: True
-- ✅ `ggml-cuda.dll` et `ggml-cuda.lib` installés
-- ✅ Performances restaurées : **51.73s → ~2s** (gain x25)
-- ✅ Modèle charge maintenant sur VRAM (6GB utilisés)
-
-**Prévention future** :
-- Pour distribution publique : wheels précompilés officiels incluent déjà CUDA
-- Utilisateur final n'aura besoin que de drivers NVIDIA à jour
-- Système de profils auto détecte et configure automatiquement
-
----
-
-### Bug 2 : Discord Auto-Reply Non Fonctionnel 💬
-
-**Symptôme initial** :
-```
-Logs : "✅ KiraDiscordBot initialisé (auto_reply=False, channels=1)"
-Utilisateur : "les salons d'auto reply ne fonctionnent pas"
-```
-
-**Diagnostic** :
-1. Vérification `config.json` : `auto_reply_enabled: true`, `auto_reply_channels: [salon_id]`
-2. Logs bot : `auto_reply=False` malgré config true
-3. Interface : Pas de checkbox pour activer/désactiver auto-reply
-4. Conclusion : Config bot non rechargée après modification
-
-**Causes identifiées** :
-1. **Pas de contrôle UI** : Aucune checkbox pour activer/désactiver auto-reply
-2. **Config non rechargée** : Bot démarre avec config initiale, ne recharge jamais
-3. **Sauvegarde incomplète** : `auto_reply_enabled` non sauvegardé par l'interface
-
-**Solutions implémentées** :
-
-**1. Ajout checkbox dans dialog** :
-```python
-# manage_auto_reply_channels()
-enable_checkbox = QCheckBox("✅ Activer l'auto-reply dans les salons configurés")
-enable_checkbox.setChecked(auto_reply_enabled)
-```
-
-**2. Modification _save_channels()** :
-```python
-def _save_channels(self, list_widget, enable_checkbox, dialog):
-    # Récupérer état checkbox
-    auto_reply_enabled = enable_checkbox.isChecked()
-
-    # Sauvegarder dans config
-    self.config.set("discord.auto_reply_enabled", auto_reply_enabled)
-    self.config.set("discord.auto_reply_channels", auto_reply_channels)
-
-    # Recharger config du bot EN TEMPS RÉEL
-    if self.discord_manager and self.discord_manager.bot:
-        self.discord_manager.bot.auto_reply_enabled = auto_reply_enabled
-        self.discord_manager.bot.auto_reply_channels = auto_reply_channels
-```
-
-**Résultat** :
-- ✅ Checkbox claire pour activer/désactiver
-- ✅ Config bot rechargée automatiquement après sauvegarde
-- ✅ Pas besoin de redémarrer l'app entière
-- ✅ Message confirmation avec statut (activée/désactivée)
-- ✅ Auto-reply fonctionnel dans les salons configurés
-
-**Impact utilisateur** :
-- Configuration Discord plus intuitive
-- Modifications prises en compte immédiatement
-- Feedback clair sur l'état de l'auto-reply
-
----
-
-## 📊 Statistiques
-
-### Modifications Code
-
-- **Fichier** : `src/gui/app.py`
-- **Lignes ajoutées** : ~370 lignes (Phase 1-2 : +350, Phase 3 : +20)
-- **Nouvelles méthodes** : 6
-  - `update_gpu_profile_display()`
-  - `manage_ia_profiles()`
-  - `_apply_gpu_profile_change()`
-  - `create_logs_tab()`
-  - `_setup_log_handler()`
-  - `clear_logs()`
-- **Méthodes modifiées (Phase 3)** : 2
-  - `manage_auto_reply_channels()` : +checkbox auto-reply
-  - `_save_channels()` : +reload config bot
-- **Nouvelles classes** : 1 (QtLogHandler interne)
-
-### Interface
-
-- **Nouveaux widgets** : 3
-  - Label GPU profile (onglet Connexion)
-  - Onglet Logs complet
-  - Checkbox auto-reply Discord (Phase 3)
-- **Menu activé** : Options → IA → Profils IA
-- **Dialogs modifiés** : 2
-  - Gestion profils GPU (scrollable)
-  - Gestion salons Discord (+checkbox, reload auto)
-
----
-
-## 🎯 Cas d'Usage
-
-### Utilisateur veut voir son profil GPU actuel
-1. Ouvre l'onglet "Connexion"
-2. Charge l'IA (si pas déjà fait)
-3. Voit : "Profil GPU : Performance (layers: -1, VRAM: 5-5.5 GB)"
-
-### Utilisateur veut changer de profil GPU
-1. Menu : Options → IA → Profils IA
-2. Sélectionne "Balanced"
-3. Clique OK
-4. Si IA chargée : "Recharger maintenant ?" → Oui
-5. Attend 15-30s (rechargement)
-6. Profil appliqué immédiatement
-
-### Utilisateur veut revenir en mode Auto
-1. Menu : Options → IA → Profils IA
-2. Sélectionne "Auto (Détection Automatique)" (en haut)
-3. Clique OK
-4. Système détectera automatiquement le meilleur profil
-
-### Utilisateur veut diagnostiquer un problème
-1. Ouvre l'onglet "📋 Logs"
-2. Voit tous les logs en temps réel avec couleurs
-3. Identifie l'erreur rouge
-4. Copie le message pour debug
-
----
-
-## 🚀 Version
+## 🚀 Version et Changelog
 
 **Version actuelle** : 0.17.1-alpha
 
-**Changelog** :
-- ✅ Interface profils GPU (affichage + changement)
-- ✅ Onglet Logs temps réel
-- ✅ Rechargement à chaud du modèle
-- ✅ Mode Auto ajouté dans dialog
-- ✅ **CUDA support restauré** (Phase 3)
-- ✅ **Discord auto-reply fonctionnel** (Phase 3)
+**Dernières versions** :
+- `0.17.1-alpha` (15 nov 2025) : Fixes CUDA + Discord auto-reply
+- `0.17.0-alpha` (14 nov 2025) : Interface GPU Profiles + Onglet Logs
+- `0.16.0-alpha` (14 nov 2025) : Session 11 complète (Optimisations performances)
 
 ---
 
-## 📚 Documentation Mise à Jour
+## 📊 Statistiques Techniques
 
-### workly-docs
-- ✅ `CHANGELOG.md` : Ajout version 0.17.1-alpha (fixes CUDA + Discord)
-- ✅ `INDEX.md` : Chat 12 état actuel (3 phases)
-- ✅ `chat_transitions/chat_12_gpu_ui_discord/CURRENT_STATE.md` : Ce fichier (Phase 3 ajoutée)
+### Performance IA
+- **Modèle** : Zephyr-7B-Beta (Q5_K_M)
+- **Taille** : 6.8 GB
+- **GPU** : RTX 4050 (6 GB VRAM)
+- **Profil actuel** : Performance (gpu_layers=-1, toutes layers GPU)
+- **Temps réponse** : ~2s par message (CUDA activé)
+- **Context window** : Limité à 10 derniers messages
 
-### workly-desktop
-- ✅ `README.md` : Ajout section Outils de Diagnostic, mise à jour Interface (7 onglets)
-- ✅ `src/gui/app.py` : Fixes Discord auto-reply (+checkbox, reload config)
-
----
-
-## 🎊 Prochaines Étapes
-
-### Idées pour futurs chats
-
-1. **Session 14 : Audio & Lip-sync**
-   - Capture audio microphone
-   - Analyse amplitude/fréquence
-   - Lip-sync VRM (blendshapes bouche)
-
-2. **Session 15 : Interactions Avancées**
-   - Avatar suit le curseur
-   - Réaction aux clics
-   - Drag & drop sur desktop
-
-3. **Session 16 : Packaging & Distribution**
-   - Installeur Windows (.exe)
-   - Auto-update
-   - Distribution Steam/Itch.io
-
-4. **Améliorations Interface**
-   - Export logs vers fichier
-   - Filtrage logs par niveau
-   - Graphiques temps réel (VRAM, GPU%)
+### Modules Code
+- `src/gui/app.py` : 2715 lignes
+- `src/ai/chat_engine.py` : ~400 lignes
+- `src/ai/emotion_analyzer.py` : ~300 lignes
+- `src/discord_bot/bot.py` : ~550 lignes
 
 ---
 
-## ✅ Validation
+## 🎯 Objectifs Chat 13 : Améliorations IA
 
-### Tests Effectués
+### 1. Mémoire Long-Terme Améliorée 🧠
 
-- ✅ Affichage profil GPU (onglet Connexion)
-- ✅ Dialog profils GPU scrollable
-- ✅ Changement profil avec sauvegarde config.json
-- ✅ Rechargement modèle à chaud (Performance → Balanced)
-- ✅ Mode Auto fonctionnel
-- ✅ Onglet Logs affiche logs temps réel
-- ✅ Couleurs logs correctes
-- ✅ Auto-scroll et limite 1000 lignes
-- ✅ Bouton effacer logs fonctionne
+**Objectifs** :
+- ✅ Résumés automatiques de conversations
+- ✅ Extraction de faits importants (nom, préférences, événements)
+- ✅ Stockage persistant (fichier JSON ou base de données)
+- ✅ Recherche dans l'historique
+- ✅ Compression intelligente (garder contexte important)
 
-### Bugs Connus
+**Approche suggérée** :
+- Module `MemoryManager` avec :
+  - `ConversationSummarizer` : Résumés auto via LLM
+  - `FactExtractor` : Extraction entités/faits via patterns/LLM
+  - `MemoryStore` : Stockage JSON/SQLite
+- Résumés après X messages (ex: tous les 20 messages)
+- Faits importants : nom, âge, préférences, hobbies, événements marquants
 
-Aucun bug connu actuellement.
-
----
-
-## 💬 Intégration Discord (Ajout Chat 12)
-
-### Liens Discord Ajoutés
-
-**Discord invite** : https://discord.gg/3Cpyxg29B4
-
-**Repositories mis à jour** :
-
-1. **workly-desktop** ✅
-   - README.md : Badge Discord + liens navigation + section communauté
-   - src/gui/app.py : Menu "Aide → Rejoindre Discord" + About dialog v0.17.0
-   - Méthode `open_discord()` : Ouvre navigateur via webbrowser.open()
-
-2. **workly-docs** ✅
-   - README.md : Lien Discord après titre
-   - START_HERE.md : Lien Discord dans bienvenue
-
-3. **workly-public** ✅
-   - README.md : Badge Discord (remplacé placeholder "YOUR_DISCORD" → "3Cpyxg29B4")
-   - Navigation mise à jour avec lien réel
-
-4. **workly-website** ✅
-   - README.md : Lien Discord ajouté
-   - index.html : Bouton Discord dans hero CTA + lien navigation
-   - pages/about.html : Lien Discord navigation + footer
-   - pages/terms.html : Lien Discord navigation + footer
-   - pages/privacy.html : Lien Discord navigation + footer
-
-**Badge format** :
-```markdown
-[![Discord](https://img.shields.io/badge/Discord-Join%20Us-5865F2?logo=discord&logoColor=white)](https://discord.gg/3Cpyxg29B4)
-```
-
-### GitHub Links Updated
-
-Tous les liens `https://github.com/WorklyHQ/workly-desktop` dans le site web ont été remplacés par `https://github.com/WorklyHQ/` (organisation).
-
-### Commits Discord (Déjà effectués - Phase 2)
-
-1. `feat(discord): Add Discord community link in app menu and about dialog` (workly-desktop)
-2. `docs(discord): Add Discord community link to documentation` (workly-docs)
-3. `feat(discord): Add Discord community link and replace Steam with beta testing section` (workly-public)
-4. `feat(discord): Add Discord link across website pages` (workly-website)
-5. `fix(license): Change license from MIT-NC to Proprietary across all repos` (multi-repo)
-6. `docs(website): Update all pages to reflect demo-only status` (workly-website)
+**Fichiers à créer/modifier** :
+- `src/ai/memory/memory_manager.py` (nouveau)
+- `src/ai/memory/summarizer.py` (nouveau)
+- `src/ai/memory/fact_extractor.py` (nouveau)
+- `src/ai/chat_engine.py` (modifier pour intégrer MemoryManager)
+- `data/memory/{user_id}/` (dossiers stockage)
 
 ---
 
-## 📝 Commits Chat 12 - Phase 3
+### 2. Personnalité Évolutive 🎭
 
-**Aucun commit créé pour Phase 3** (fixes locaux, documentation uniquement)
+**Objectifs** :
+- ✅ Personnalité adaptée au contexte
+- ✅ Traits de personnalité dynamiques
+- ✅ Évolution selon interactions utilisateur
+- ✅ Cohérence personnalité dans le temps
 
-**Fichiers modifiés non commitées** :
-- ❌ `src/gui/app.py` (fixes Discord auto-reply)
-- ✅ `workly-docs/CHANGELOG.md` (version 0.17.1-alpha)
-- ✅ `workly-docs/INDEX.md` (mise à jour état)
-- ✅ `workly-docs/chat_transitions/chat_12_gpu_ui_discord/CURRENT_STATE.md` (ce fichier)
+**Approche suggérée** :
+- Module `PersonalityEngine` avec :
+  - Traits : curiosité, humour, empathie, formalité, enthousiasme
+  - Ajustement dynamique selon contexte
+  - Stockage traits par utilisateur
+- Modification `system_prompt` dynamique selon personnalité
 
-**Note CUDA** :
-- Fix CUDA = Réinstallation package uniquement (pas de modification code)
-- Pas de changement dans le repo Git
-- Documenté pour référence future (distribution publique)
-3. `docs: Update Discord community link from placeholder to real invite` (workly-public)
-4. `feat: Add Discord community link and update GitHub links to WorklyHQ organization` (workly-website)
+**Fichiers à créer/modifier** :
+- `src/ai/personality/personality_engine.py` (nouveau)
+- `src/ai/personality/traits.py` (nouveau)
+- `src/ai/chat_engine.py` (intégration PersonalityEngine)
 
 ---
 
-## 🎭 Conclusion
+### 3. Émotions Plus Nuancées 🎨
 
-**Chat 12 : Interface GPU Profiles + Logs + Discord** est **100% terminé** ! 🎊
+**Objectifs** :
+- ✅ Analyse contextuelle avancée (au-delà keywords)
+- ✅ Transitions émotionnelles réalistes
+- ✅ Mémoire émotionnelle (se souvenir événements positifs/négatifs)
+- ✅ Émotions composées (ex: joie + surprise = excitation)
+- ✅ Intensité émotionnelle variable
 
-L'utilisateur peut maintenant :
-- 👁️ **Voir** son profil GPU actuel en temps réel
-- ⚙️ **Changer** facilement entre 4 profils (Auto/Performance/Balanced/CPU)
-- 🔄 **Recharger** le modèle à chaud sans redémarrer
-- 📋 **Diagnostiquer** via l'onglet Logs avec couleurs
-- 💬 **Rejoindre** la communauté Discord depuis l'app et tous les repos
+**Approche suggérée** :
+- Améliorer `EmotionAnalyzer` :
+  - Analyse sémantique (embeddings, similarité)
+  - Détection contexte conversation
+  - Transitions douces (éviter changements brusques)
+  - Mémoire émotions passées par utilisateur
+- Émotions étendues :
+  - Basiques : joie, tristesse, colère, peur, surprise, dégoût
+  - Composées : excitation, mélancolie, frustration, soulagement
 
-L'interface utilisateur est maintenant **complète et intuitive** pour la gestion des performances GPU, et la communauté Discord est **accessible partout** ! 🚀✨💬
+**Fichiers à créer/modifier** :
+- `src/ai/emotion_analyzer.py` (amélioration majeure)
+- `src/ai/emotions/emotion_memory.py` (nouveau)
+- `src/ai/emotions/transitions.py` (nouveau)
+
+---
+
+### 4. Analyse Contextuelle Avancée 🔍
+
+**Objectifs** :
+- ✅ Comprendre intention utilisateur
+- ✅ Détecter sujets de conversation
+- ✅ Identifier questions/affirmations/commandes
+- ✅ Adapter réponse selon contexte
+
+**Approche suggérée** :
+- Module `ContextAnalyzer` :
+  - Détection intention (question, commande, discussion)
+  - Extraction sujet principal
+  - Analyse sentiment global
+  - Historique sujets abordés
+
+**Fichiers à créer/modifier** :
+- `src/ai/context/context_analyzer.py` (nouveau)
+- `src/ai/chat_engine.py` (intégration ContextAnalyzer)
+
+---
+
+## 🛠️ Technologies et Approches
+
+### Pour Mémoire Long-Terme
+- **Résumés** : Utiliser Zephyr-7B avec prompt spécialisé
+- **Extraction faits** : Regex + Patterns NLP + LLM
+- **Stockage** : JSON structuré ou SQLite
+- **Compression** : Résumés hiérarchiques (résumés de résumés)
+
+### Pour Émotions Avancées
+- **Analyse sémantique** : sentence-transformers (embeddings)
+- **Transitions** : Système de poids et interpolation
+- **Mémoire** : Graphe émotions dans le temps
+- **Détection contexte** : Analyse fenêtre glissante (derniers N messages)
+
+### Pour Personnalité
+- **Traits** : Big Five personality traits adaptés
+- **Évolution** : Mise à jour progressive selon feedback
+- **Cohérence** : Vérification contradictions personnalité
+- **Stockage** : Profil personnalité par utilisateur
+
+---
+
+## 📚 Documentation Existante
+
+**workly-docs** :
+- `CHANGELOG.md` : Historique versions (0.17.1-alpha actuelle)
+- `INDEX.md` : Arborescence complète documentation
+- `SESSIONS.md` : Liste sessions 0-11 complétées
+- `chat_transitions/chat_12_gpu_ui_discord/` :
+  - `CURRENT_STATE.md` : État fin Chat 12
+  - `TROUBLESHOOTING.md` : Guide résolution problèmes CUDA/Discord
+
+**workly-desktop** :
+- `README.md` : Documentation principale projet
+- Tests unitaires : `tests/ai/` (à étendre)
+- Scripts benchmark : `scripts/` (performances IA)
+
+---
+
+## ⚠️ Points d'Attention
+
+### Compatibilité
+- ✅ Garder compatibilité système actuel
+- ✅ Migrations données si changement structure
+- ✅ Fallback si nouvelles features échouent
+
+### Performance
+- ⚠️ Résumés/extraction ne doivent pas ralentir conversations
+- ⚠️ Stockage mémoire doit rester gérable (< 100 MB par utilisateur)
+- ⚠️ Chargement mémoire au démarrage doit être rapide (< 2s)
+
+### Tests
+- ✅ Tests unitaires pour chaque nouveau module
+- ✅ Tests intégration avec ChatEngine existant
+- ✅ Benchmarks performance (temps réponse, mémoire)
+
+---
+
+## 🎊 Prochaines Étapes (Chat 13)
+
+### Phase 1 : Architecture et Planning
+1. Concevoir architecture modules IA
+2. Définir formats données (JSON structures)
+3. Créer classes de base et interfaces
+4. Documentation technique complète
+
+### Phase 2 : Mémoire Long-Terme
+1. Implémenter `MemoryManager`
+2. Implémenter `ConversationSummarizer`
+3. Implémenter `FactExtractor`
+4. Tests unitaires + intégration
+
+### Phase 3 : Émotions Avancées
+1. Améliorer `EmotionAnalyzer`
+2. Implémenter `EmotionMemory`
+3. Implémenter transitions douces
+4. Tests + validation
+
+### Phase 4 : Personnalité Évolutive
+1. Implémenter `PersonalityEngine`
+2. Système traits de personnalité
+3. Intégration avec ChatEngine
+4. Tests + ajustements
+
+### Phase 5 : Tests et Polissage
+1. Tests intégration complets
+2. Benchmarks performance
+3. Optimisations si nécessaire
+4. Documentation utilisateur
+
+---
+
+## 📊 Métriques de Succès
+
+**Mémoire Long-Terme** :
+- ✅ Résumés générés automatiquement après 20 messages
+- ✅ Au moins 10 faits extraits par conversation longue
+- ✅ Recherche dans historique en < 1s
+- ✅ Compression mémoire efficace (ratio 5:1 minimum)
+
+**Émotions** :
+- ✅ Détection émotions avec 80%+ précision
+- ✅ Transitions émotionnelles naturelles (< 2 changements brusques/conversation)
+- ✅ Mémoire émotionnelle sur 100+ interactions
+
+**Personnalité** :
+- ✅ Cohérence personnalité 90%+ du temps
+- ✅ Adaptation contexte visible en 5-10 messages
+- ✅ Évolution personnalité mesurable sur 50+ messages
+
+**Performance** :
+- ✅ Temps réponse < 3s (incluant nouveaux modules)
+- ✅ Mémoire RAM < 2 GB (incluant stockage)
+- ✅ Chargement contexte < 2s au démarrage
+
+---
+
+## 🔗 Ressources et Liens
+
+**Documentation** :
+- [Chat 12 CURRENT_STATE](../chat_12_gpu_ui_discord/CURRENT_STATE.md)
+- [CHANGELOG.md](../../CHANGELOG.md)
+- [Sessions documentées](../../SESSIONS.md)
+
+**Code actuel** :
+- ChatEngine : `src/ai/chat_engine.py`
+- EmotionAnalyzer : `src/ai/emotion_analyzer.py`
+- Tests IA : `tests/ai/`
+
+**Références techniques** :
+- Zephyr-7B : https://huggingface.co/HuggingFaceH4/zephyr-7b-beta
+- llama-cpp-python : https://github.com/abetlen/llama-cpp-python
+- sentence-transformers : https://www.sbert.net/
+
+---
+
+**État** : ✅ Prêt pour Chat 13 - Améliorations IA
+**Dernière mise à jour** : 16 novembre 2025
