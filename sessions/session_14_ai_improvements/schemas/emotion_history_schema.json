@@ -1,0 +1,178 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Emotion History Schema",
+    "description": "Schéma JSON pour data/emotion_history.json",
+    "type": "object",
+    "required": [
+        "version",
+        "last_updated",
+        "max_history",
+        "current_emotion",
+        "current_intensity",
+        "history"
+    ],
+    "properties": {
+        "version": {
+            "type": "string",
+            "pattern": "^\\d+\\.\\d+$"
+        },
+        "last_updated": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "max_history": {
+            "type": "integer",
+            "minimum": 10,
+            "maximum": 1000,
+            "default": 100,
+            "description": "Nombre max entrées historique (FIFO)"
+        },
+        "current_emotion": {
+            "type": "string",
+            "description": "Émotion actuelle",
+            "examples": [
+                "neutre",
+                "joyeux",
+                "triste",
+                "frustré"
+            ]
+        },
+        "current_intensity": {
+            "type": "number",
+            "minimum": 0.0,
+            "maximum": 1.0,
+            "description": "Intensité émotion actuelle"
+        },
+        "history": {
+            "type": "array",
+            "description": "Historique émotions (max_history entrées)",
+            "maxItems": 1000,
+            "items": {
+                "$ref": "#/definitions/emotion_entry"
+            }
+        },
+        "transitions": {
+            "type": "array",
+            "description": "Statistiques transitions émotionnelles",
+            "items": {
+                "$ref": "#/definitions/transition"
+            }
+        },
+        "statistics": {
+            "$ref": "#/definitions/statistics"
+        }
+    },
+    "definitions": {
+        "emotion_entry": {
+            "type": "object",
+            "required": [
+                "timestamp",
+                "emotion",
+                "intensity"
+            ],
+            "properties": {
+                "timestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Quand émotion détectée"
+                },
+                "emotion": {
+                    "type": "string",
+                    "description": "Émotion détectée",
+                    "enum": [
+                        "neutre",
+                        "joyeux",
+                        "triste",
+                        "surpris",
+                        "énervé",
+                        "pensif",
+                        "timide",
+                        "frustré",
+                        "excité",
+                        "mélancolique",
+                        "confiant",
+                        "anxieux",
+                        "empathique"
+                    ]
+                },
+                "intensity": {
+                    "type": "number",
+                    "minimum": 0.0,
+                    "maximum": 1.0,
+                    "description": "Intensité émotion 0.0-1.0"
+                },
+                "context": {
+                    "type": "string",
+                    "description": "Court résumé contexte (pourquoi cette émotion)",
+                    "maxLength": 200
+                },
+                "triggered_by": {
+                    "type": "string",
+                    "enum": [
+                        "user_message",
+                        "assistant_response",
+                        "system"
+                    ],
+                    "description": "Déclencheur émotion"
+                }
+            }
+        },
+        "transition": {
+            "type": "object",
+            "required": [
+                "from",
+                "to",
+                "count"
+            ],
+            "properties": {
+                "from": {
+                    "type": "string",
+                    "description": "Émotion départ"
+                },
+                "to": {
+                    "type": "string",
+                    "description": "Émotion arrivée"
+                },
+                "count": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "description": "Nombre fois transition observée"
+                },
+                "avg_duration_seconds": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "Durée moyenne transition (secondes)"
+                }
+            }
+        },
+        "statistics": {
+            "type": "object",
+            "properties": {
+                "total_emotions_recorded": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "Nombre total émotions enregistrées"
+                },
+                "most_frequent_emotion": {
+                    "type": "string",
+                    "description": "Émotion la plus fréquente"
+                },
+                "most_frequent_emotion_count": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "avg_intensity_overall": {
+                    "type": "number",
+                    "minimum": 0.0,
+                    "maximum": 1.0,
+                    "description": "Intensité moyenne globale"
+                },
+                "total_transitions": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "Nombre total transitions émotionnelles"
+                }
+            }
+        }
+    }
+}

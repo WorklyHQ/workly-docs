@@ -1,0 +1,151 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Personality Schema",
+    "description": "Schéma JSON pour data/personality.json",
+    "type": "object",
+    "required": [
+        "version",
+        "last_updated",
+        "current_traits"
+    ],
+    "properties": {
+        "version": {
+            "type": "string",
+            "pattern": "^\\d+\\.\\d+$"
+        },
+        "last_updated": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "current_traits": {
+            "$ref": "#/definitions/traits"
+        },
+        "trait_history": {
+            "type": "array",
+            "description": "Historique évolution traits personnalité",
+            "items": {
+                "$ref": "#/definitions/trait_snapshot"
+            }
+        },
+        "total_interactions": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Nombre total interactions utilisateur"
+        },
+        "last_trait_update": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Dernière mise à jour traits"
+        },
+        "update_frequency": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Fréquence mise à jour (tous les N interactions)",
+            "default": 50
+        }
+    },
+    "definitions": {
+        "traits": {
+            "type": "object",
+            "required": [
+                "extraversion",
+                "empathie",
+                "humour",
+                "formalité",
+                "curiosité",
+                "enthousiasme",
+                "patience"
+            ],
+            "properties": {
+                "extraversion": {
+                    "type": "number",
+                    "minimum": 0.0,
+                    "maximum": 1.0,
+                    "description": "0.0=introverti (concis), 1.0=extraverti (bavard)"
+                },
+                "empathie": {
+                    "type": "number",
+                    "minimum": 0.0,
+                    "maximum": 1.0,
+                    "description": "0.0=rationnel (factuel), 1.0=empathique (sensible)"
+                },
+                "humour": {
+                    "type": "number",
+                    "minimum": 0.0,
+                    "maximum": 1.0,
+                    "description": "0.0=sérieux, 1.0=blagueur"
+                },
+                "formalité": {
+                    "type": "number",
+                    "minimum": 0.0,
+                    "maximum": 1.0,
+                    "description": "0.0=casual (tutoiement), 1.0=formel (vouvoiement)"
+                },
+                "curiosité": {
+                    "type": "number",
+                    "minimum": 0.0,
+                    "maximum": 1.0,
+                    "description": "0.0=passif (répond), 1.0=curieux (pose questions)"
+                },
+                "enthousiasme": {
+                    "type": "number",
+                    "minimum": 0.0,
+                    "maximum": 1.0,
+                    "description": "0.0=calme (mesuré), 1.0=énergique (exclamatif)"
+                },
+                "patience": {
+                    "type": "number",
+                    "minimum": 0.0,
+                    "maximum": 1.0,
+                    "description": "0.0=impatient (direct), 1.0=patient (détaillé)"
+                }
+            }
+        },
+        "trait_snapshot": {
+            "type": "object",
+            "required": [
+                "timestamp",
+                "traits"
+            ],
+            "properties": {
+                "timestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Quand mise à jour effectuée"
+                },
+                "traits": {
+                    "$ref": "#/definitions/traits",
+                    "description": "Snapshot traits à ce moment"
+                },
+                "reason": {
+                    "type": "string",
+                    "description": "Raison mise à jour",
+                    "examples": [
+                        "Initial default values",
+                        "Updated after 100 interactions (user feedback positive)"
+                    ]
+                },
+                "interactions_count": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "Nombre interactions depuis dernière mise à jour"
+                },
+                "changes": {
+                    "type": "object",
+                    "description": "Delta changements pour chaque trait",
+                    "patternProperties": {
+                        "^(extraversion|empathie|humour|formalité|curiosité|enthousiasme|patience)$": {
+                            "type": "string",
+                            "pattern": "^[+-]\\d+\\.\\d{2}$",
+                            "examples": [
+                                "+0.05",
+                                "-0.02",
+                                "+0.10"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,151 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Conversations Memory Schema",
+    "description": "Schéma JSON pour data/memory/conversations.json",
+    "type": "object",
+    "required": [
+        "version",
+        "last_updated",
+        "conversations",
+        "total_conversations",
+        "total_messages"
+    ],
+    "properties": {
+        "version": {
+            "type": "string",
+            "description": "Version du schéma JSON",
+            "pattern": "^\\d+\\.\\d+$",
+            "examples": [
+                "1.0",
+                "2.0"
+            ]
+        },
+        "last_updated": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp dernière mise à jour (ISO 8601)"
+        },
+        "conversations": {
+            "type": "array",
+            "description": "Liste des résumés de conversations",
+            "items": {
+                "$ref": "#/definitions/conversation"
+            }
+        },
+        "total_conversations": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Nombre total de conversations stockées"
+        },
+        "total_messages": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Nombre total de messages archivés"
+        }
+    },
+    "definitions": {
+        "conversation": {
+            "type": "object",
+            "required": [
+                "id",
+                "start_timestamp",
+                "end_timestamp",
+                "message_count",
+                "summary"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "pattern": "^conv_\\d{8}_\\d+$",
+                    "description": "ID unique conversation (format: conv_YYYYMMDD_NNN)",
+                    "examples": [
+                        "conv_20251116_001",
+                        "conv_20251116_002"
+                    ]
+                },
+                "start_timestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Début de la conversation"
+                },
+                "end_timestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Fin de la conversation"
+                },
+                "message_count": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "description": "Nombre de messages dans la conversation"
+                },
+                "summary": {
+                    "type": "string",
+                    "minLength": 10,
+                    "maxLength": 500,
+                    "description": "Résumé 2-3 phrases généré par LLM"
+                },
+                "key_points": {
+                    "type": "array",
+                    "description": "Points clés extraits de la conversation",
+                    "items": {
+                        "type": "string"
+                    },
+                    "examples": [
+                        [
+                            "Nom utilisateur : Alice",
+                            "Passion : musique jazz"
+                        ]
+                    ]
+                },
+                "topics": {
+                    "type": "array",
+                    "description": "Sujets principaux abordés",
+                    "items": {
+                        "type": "string"
+                    },
+                    "examples": [
+                        [
+                            "musique",
+                            "jazz",
+                            "guitare"
+                        ]
+                    ]
+                },
+                "overall_sentiment": {
+                    "type": "string",
+                    "enum": [
+                        "positive",
+                        "negative",
+                        "neutral",
+                        "mixed"
+                    ],
+                    "description": "Sentiment global de la conversation"
+                },
+                "sentiment_score": {
+                    "type": "number",
+                    "minimum": -1.0,
+                    "maximum": 1.0,
+                    "description": "Score sentiment (-1.0 négatif à +1.0 positif)"
+                },
+                "dominant_emotion": {
+                    "type": "string",
+                    "description": "Émotion dominante de la conversation",
+                    "examples": [
+                        "joyeux",
+                        "triste",
+                        "neutre",
+                        "frustré"
+                    ]
+                },
+                "message_ids": {
+                    "type": "array",
+                    "description": "IDs des messages originaux",
+                    "items": {
+                        "type": "integer",
+                        "minimum": 1
+                    }
+                }
+            }
+        }
+    }
+}

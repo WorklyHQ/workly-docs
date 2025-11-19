@@ -1,0 +1,237 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Facts Memory Schema",
+    "description": "Schéma JSON pour data/memory/facts.json",
+    "type": "object",
+    "required": [
+        "version",
+        "last_updated"
+    ],
+    "properties": {
+        "version": {
+            "type": "string",
+            "pattern": "^\\d+\\.\\d+$"
+        },
+        "last_updated": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "user_profile": {
+            "$ref": "#/definitions/user_profile"
+        },
+        "preferences": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/preference"
+            }
+        },
+        "events": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/event"
+            }
+        },
+        "relationships": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/relationship"
+            }
+        },
+        "total_preferences": {
+            "type": "integer",
+            "minimum": 0
+        },
+        "total_events": {
+            "type": "integer",
+            "minimum": 0
+        },
+        "total_relationships": {
+            "type": "integer",
+            "minimum": 0
+        }
+    },
+    "definitions": {
+        "user_profile": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "description": "Nom utilisateur extrait"
+                },
+                "name_confidence": {
+                    "type": "number",
+                    "minimum": 0.0,
+                    "maximum": 1.0
+                },
+                "name_extracted_from": {
+                    "type": "string",
+                    "pattern": "^conv_\\d{8}_\\d+$"
+                },
+                "name_timestamp": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            }
+        },
+        "preference": {
+            "type": "object",
+            "required": [
+                "id",
+                "category",
+                "item",
+                "sentiment",
+                "confidence"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "pattern": "^pref_\\d{3,}$",
+                    "examples": [
+                        "pref_001",
+                        "pref_042"
+                    ]
+                },
+                "category": {
+                    "type": "string",
+                    "description": "Catégorie préférence",
+                    "examples": [
+                        "musique",
+                        "nourriture",
+                        "activité",
+                        "film",
+                        "livre"
+                    ]
+                },
+                "item": {
+                    "type": "string",
+                    "description": "Item spécifique",
+                    "examples": [
+                        "jazz",
+                        "pizza",
+                        "course"
+                    ]
+                },
+                "sentiment": {
+                    "type": "string",
+                    "enum": [
+                        "positive",
+                        "negative"
+                    ],
+                    "description": "J'aime ou je n'aime pas"
+                },
+                "confidence": {
+                    "type": "number",
+                    "minimum": 0.0,
+                    "maximum": 1.0,
+                    "description": "Confiance extraction"
+                },
+                "extracted_from": {
+                    "type": "string",
+                    "pattern": "^conv_\\d{8}_\\d+$"
+                },
+                "timestamp": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "context": {
+                    "type": "string",
+                    "description": "Phrase originale pour vérification"
+                }
+            }
+        },
+        "event": {
+            "type": "object",
+            "required": [
+                "id",
+                "description",
+                "timestamp",
+                "importance"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "pattern": "^event_\\d{3,}$"
+                },
+                "description": {
+                    "type": "string",
+                    "minLength": 5,
+                    "description": "Description événement"
+                },
+                "timestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "Quand événement s'est produit"
+                },
+                "importance": {
+                    "type": "number",
+                    "minimum": 0.0,
+                    "maximum": 1.0,
+                    "description": "Importance 0.0-1.0 (1.0=très important)"
+                },
+                "sentiment": {
+                    "type": "string",
+                    "enum": [
+                        "positive",
+                        "negative",
+                        "neutral"
+                    ]
+                },
+                "extracted_from": {
+                    "type": "string",
+                    "pattern": "^conv_\\d{8}_\\d+$"
+                },
+                "related_topics": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "relationship": {
+            "type": "object",
+            "required": [
+                "id",
+                "entity_1",
+                "relation_type",
+                "entity_2"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "pattern": "^rel_\\d{3,}$"
+                },
+                "entity_1": {
+                    "type": "string",
+                    "description": "Première entité (ex: Alice)"
+                },
+                "relation_type": {
+                    "type": "string",
+                    "description": "Type relation",
+                    "examples": [
+                        "aime",
+                        "déteste",
+                        "veut_apprendre",
+                        "connaît"
+                    ]
+                },
+                "entity_2": {
+                    "type": "string",
+                    "description": "Deuxième entité (ex: Miles Davis)"
+                },
+                "confidence": {
+                    "type": "number",
+                    "minimum": 0.0,
+                    "maximum": 1.0
+                },
+                "extracted_from": {
+                    "type": "string",
+                    "pattern": "^conv_\\d{8}_\\d+$"
+                }
+            }
+        }
+    }
+}
