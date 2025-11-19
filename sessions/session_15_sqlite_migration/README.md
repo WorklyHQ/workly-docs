@@ -1,7 +1,7 @@
 # 🗄️ Session 15 - Migration SQLite (Phase 6)
 
-**Date** : 18-19 novembre 2025  
-**Durée** : ~3 heures  
+**Date** : 18-19 novembre 2025
+**Durée** : ~3 heures
 **Status** : ✅ **COMPLÈTE - 217/217 tests passent (100%)**
 
 ---
@@ -126,23 +126,23 @@ Orchestrateur central : conversations, faits, embeddings, recherche sémantique.
 ## 🔧 Problèmes résolus
 
 ### 1. **Singleton test isolation** ❌→✅
-**Problème** : Tests contaminés (même DB partagée)  
+**Problème** : Tests contaminés (même DB partagée)
 **Solution** : Singleton → Dict[path, instance] (1 DB par chemin)
 
 ### 2. **Signatures API incompatibles** ❌→✅
-**Problème** : `add_conversation()`, `add_fact()`, `add_segment()`, `add_embedding()` ont signatures différentes  
+**Problème** : `add_conversation()`, `add_fact()`, `add_segment()`, `add_embedding()` ont signatures différentes
 **Solution** : Adapter tous les appels avec bons paramètres (timestamp, category, type_, etc.)
 
 ### 3. **Ordre d'initialisation** ❌→✅
-**Problème** : `_get_next_segment_id()` appelé avant init de `self.conversations`  
+**Problème** : `_get_next_segment_id()` appelé avant init de `self.conversations`
 **Solution** : Inverser ordre (charger cache AVANT segment_id)
 
 ### 4. **Tests obsolètes** ❌→✅
-**Problème** : Tests vérifient fichiers JSON disparus  
+**Problème** : Tests vérifient fichiers JSON disparus
 **Solution** : Adapter pour vérifier `workly.db` + requêtes SQLite
 
 ### 5. **Taille fichiers WAL** ❌→✅
-**Problème** : Test limite à 1 MB, WAL fait 4 MB (normal)  
+**Problème** : Test limite à 1 MB, WAL fait 4 MB (normal)
 **Solution** : Augmenter limite à 10 MB pour fichiers `.db*`
 
 ---

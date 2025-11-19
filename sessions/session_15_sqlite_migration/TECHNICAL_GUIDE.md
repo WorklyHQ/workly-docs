@@ -286,10 +286,10 @@ _db_instances: Dict[str, WorklyDatabase] = {}
 def get_database(db_path: str = "data/memory/workly.db") -> WorklyDatabase:
     """Singleton par chemin - permet isolation tests"""
     db_path_abs = os.path.abspath(db_path)
-    
+
     if db_path_abs not in _db_instances:
         _db_instances[db_path_abs] = WorklyDatabase(db_path)
-    
+
     return _db_instances[db_path_abs]
 ```
 
@@ -398,11 +398,11 @@ def test_example(temp_storage):
 ```python
 def test_persistence(memory_manager):
     memory_manager.add_message("user", "Test")
-    
+
     # Vérifier fichier DB existe
     db_path = os.path.join(memory_manager.storage_dir, "workly.db")
     assert os.path.exists(db_path)
-    
+
     # Vérifier données dans DB
     conversations = memory_manager.db.get_conversations()
     assert len(conversations) > 0
@@ -508,22 +508,22 @@ shutil.copy("backup/workly_backup.db", "data/memory/workly.db")
 ## 🚨 Troubleshooting
 
 ### "Database is locked"
-**Cause** : Connexion non fermée ou transaction en cours  
+**Cause** : Connexion non fermée ou transaction en cours
 **Solution** : Fermer connexions, commit transactions
 
 ### WAL trop gros
-**Cause** : Checkpoint pas exécuté  
+**Cause** : Checkpoint pas exécuté
 **Solution** :
 ```python
 db.conn.execute("PRAGMA wal_checkpoint(TRUNCATE)")
 ```
 
 ### Tests qui échouent aléatoirement
-**Cause** : Contamination entre tests (même DB)  
+**Cause** : Contamination entre tests (même DB)
 **Solution** : Vérifier fixtures `tmp_path`, nettoyer singletons
 
 ### Performances lentes
-**Cause** : Pas d'indexes, requêtes non optimisées  
+**Cause** : Pas d'indexes, requêtes non optimisées
 **Solution** : `EXPLAIN QUERY PLAN`, ajouter indexes
 
 ---
