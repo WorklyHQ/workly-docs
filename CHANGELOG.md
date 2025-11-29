@@ -23,9 +23,91 @@ Ce changelog suit le format [Keep a Changelog](https://keepachangelog.com/fr/1.0
 
 ### À venir
 
-- Session 14-15 : Audio & Lip-sync (TTS, voice recognition)
-- Session 16-17 : Interactions avancées (souris, idle animations)
-- Session 18 : Packaging & Distribution (installeur Windows)
+- Session 17 : Tests utilisateur + Optimisations
+- Session 18-19 : Audio & Lip-sync (TTS, voice recognition)
+- Session 20 : Interactions avancées (souris, idle animations)
+- Session 21 : Packaging & Distribution (installeur Windows)
+
+---
+
+## [0.19.0-alpha] - 2025-11-29 ✨ **SESSION 16 - CORRECTIONS DE BUGS CRITIQUES**
+
+### Fixed - 6 bugs majeurs corrigés 🐛
+
+**1. Crash encodage UTF-8** 🔤
+- Problème : `UnicodeEncodeError: 'charmap' codec can't encode character` lors de l'affichage d'emojis (✅, 💡, 🎭) dans la console Windows
+- Cause : Windows utilise l'encodage `cp1252` par défaut
+- Solution :
+  - `src/utils/logger.py` : Wrapper de `sys.stdout` avec `io.TextIOWrapper(encoding='utf-8', errors='replace')`
+  - Ajout `encoding='utf-8'` au `RotatingFileHandler`
+- Résultat : Emojis affichés correctement sans crash
+
+**2. Base de données vide** 🗄️
+- Problème : Conversations non sauvegardées malgré l'envoi de messages
+- Cause : `enable_advanced_ai=False` par défaut dans `get_chat_engine()`
+- Solution : `src/ai/chat_engine.py` - `enable_advanced_ai=True` par défaut (ligne ~445)
+- Résultat : Conversations sauvegardées automatiquement dans `data/memory/workly.db`
+
+**3. Pas de reset database** 💾
+- Problème : Impossible de réinitialiser la base de données corrompue/test
+- Solution : Ajout méthode `reset_database()` dans `src/gui/app.py`
+  - Création backups horodatés dans `data/memory/backups/`
+  - Suppression `workly.db`, `workly.db-shm`, `workly.db-wal`
+  - Réinitialisation DB si IA chargée
+  - Menu : Options > IA > Mémoire > Réinitialiser mémoire...
+- Résultat : Reset sécurisé avec confirmation et backup automatique
+
+**4. UI désorganisée** 🎨
+- Problème : Onglet Options avec éléments disparates
+- Solution : Réorganisation interface
+  - Slider transitions déplacé vers onglet **Animations**
+  - Reset database déplacé vers menu **Options > IA > Mémoire**
+  - Suppression complète onglet Options
+- Résultat : Interface épurée (5 onglets : Connexion, Chat, Discord, Expressions, Animations, Logs)
+
+**5. Personality encore en JSON** 📝
+- Problème : `personality.json` utilisé malgré table `personality_traits` SQLite
+- Solution : Migration complète vers SQLite
+  - `src/ai/personality_engine.py` : Charge/sauvegarde depuis SQLite
+  - `src/ai/database.py` : Ajout `add_personality_evolution()`, modification `set_personality_trait()`
+  - Migration 6 traits : kindness, humor, formality, enthusiasm, empathy, creativity
+  - 6 entrées d'évolution créées (raison : "Initialisation")
+- Résultat : Système de personnalité 100% SQLite avec historique
+
+**6. Icône Windows manquante** 🪟
+- Problème : Icône Workly ne s'affiche pas dans la barre des tâches Windows
+- Cause : Windows nécessite App User Model ID explicite pour apps Python
+- Solution :
+  - Ajout dans `MainWindow.__init__()` (après `super().__init__()`, avant `init_ui()`)
+  - Appel `ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("WorklyHQ.Workly.DesktopApp.1.0")`
+  - Suppression ancien code niveau module (timing incorrect)
+- Résultat : Icône Workly affichée correctement dans taskbar Windows ! 🎉
+
+### Changed
+- `src/utils/logger.py` : UTF-8 console + file handlers
+- `src/ai/chat_engine.py` : `enable_advanced_ai=True` par défaut
+- `src/gui/app.py` : +150 lignes (reset_database, UI reorganization, Windows icon fix)
+- `src/ai/personality_engine.py` : Charge/sauvegarde SQLite au lieu de JSON
+- `src/ai/database.py` : +1 méthode `add_personality_evolution()`, modification `set_personality_trait()`
+
+### Database
+- **personality_traits** : 6 traits migrés (0.3-0.8 valeurs)
+- **personality_evolution** : 6 entrées d'initialisation
+- **Backups** : `data/memory/backups/` pour reset database
+
+**Impact utilisateur** :
+- ✅ Application stable sans crashs encodage
+- ✅ Conversations sauvegardées automatiquement
+- ✅ Reset database sécurisé avec backups
+- ✅ Interface plus claire et organisée
+- ✅ Personnalité évolutive avec historique SQLite
+- ✅ Icône Windows professionnelle
+
+**Documentation** :
+- 📚 [`docs/sessions/session_16_bugfixes/README.md`](sessions/session_16_bugfixes/README.md) (420+ lignes)
+- 📂 `docs/sessions/session_16_bugfixes/scripts/` (5 fichiers Python)
+
+**Tests** : ✅ 6/6 tests manuels passés (tous les bugs corrigés)
 
 ---
 
