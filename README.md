@@ -579,7 +579,7 @@ Ancien dossier - À vérifier et réorganiser si nécessaire
 
 ---
 
-**Dernière mise à jour :** 11 novembre 2025
-**Version du projet :** 0.15.0-alpha (Session 11 Phases 1-3 + Session 12 + Session 13 complétées !)
-**Status :** ✅ Chat 11 Session 13 TERMINÉE → Commit Git + Session 11 Phases 4-6 ! ✨🎭
-**Prochain :** Commit refactoring + Phases 4-6 Session 11 (CPU, GPU, Tests & Docs)
+**Dernière mise à jour :** 29 novembre 2025
+**Version du projet :** 0.16.0-alpha (Session 16 Bugfixes complète !)
+**Status :** ✅ Session 16 TERMINÉE - 6 bugs critiques corrigés ! 🐛✨
+**Prochain :** Tests utilisateur + Session 17 (Optimisations)
